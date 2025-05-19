@@ -27,3 +27,23 @@ The long double precision floating point value ("LDBL_MANT_DIG") has 53 mantissa
 The long double precision epsilon floating point value ("LDBL_EPSILON") is 2.22045e-16
 %
 ```
+By way of comparison the same C code run on MacOS High Sierra 10.13.6
+on an Intel i7 machine outputs: -
+```
+% ./helloWorld -N | tail -14
+The double precision number has a size of ("__SIZEOF_DOUBLE__") 8 bytes
+The double precision maximum floating point value ("DBL_MAX") is 1.79769e+308
+The double precision minimum floating point value ("DBL_MIN") is 2.22507e-308
+The double precision floating point value ("DBL_DIG") has 15 digits
+The double precision floating point value ("DBL_DECIMAL_DIG") has 17 decimal digits
+The double precision floating point value ("DBL_MANT_DIG") has 53 mantissa bits
+The double precision epsilon floating point value ("DBL_EPSILON") is 2.22045e-16
+The long double precision number has a size of ("__SIZEOF_LONG_DOUBLE__") 16 bytes
+The long double precision maximum floating point value ("LDBL_MAX") is 1.18973e+4932
+The long double precision minimum floating point value ("LDBL_MIN") is 3.3621e-4932
+The long double precision floating point value ("LDBL_DIG") has 18 digits
+The long double precision floating point value ("LDBL_DECIMAL_DIG") has 21 decimal digits
+The long double precision floating point value ("LDBL_MANT_DIG") has 64 mantissa bits
+The long double precision epsilon floating point value ("LDBL_EPSILON") is 1.0842e-19
+```
+

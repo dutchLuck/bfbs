@@ -1,0 +1,33 @@
+#! /bin/bash
+#
+# C O N F I G U R E
+#
+# configure last edited on Thu Apr 11 10:30:12 2024 
+#
+NAME1=bfbs
+#
+OP_FILE_NAME=Makefile
+COMPILER=julia
+OPTIONS=""
+LNK_OPTIONS=""
+TRGT=$NAME1.jl
+SRC1=$NAME1.jl
+#
+# echo $OSTYPE
+#
+echo "$TRGT: $SRC1" > $OP_FILE_NAME
+echo -e "\t$COMPILER $SRC1 -h -v" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "check: $TRGT" >> $OP_FILE_NAME
+echo -e "\tcd test; ./check" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "chk: $TRGT" >> $OP_FILE_NAME
+echo -e "\tcd test; ./chk" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "clean:" >> $OP_FILE_NAME
+echo -e "\trm -f $TRGT $TRGT.exe *.o" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#

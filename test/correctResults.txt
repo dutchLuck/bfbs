@@ -1,5 +1,5 @@
 
-++++++++++ julia ../bfbs.jl -d ' ' data.dat +++Small valid 3 column file, no options check++++++++++
+++++++++++ julia ..\bfbs.jl -d " " data.dat +++Small valid 3 column file, no options check++++++++++
 
 Row Sums:
 1.20000000000000000000000000000000000000000000000012e+51
@@ -42,7 +42,7 @@ Column Standard Deviations:
 1.00000000000000000000000000000000000000000000000010e+50
 ++++++++++ Shell got Return code number 0 for small valid file data.dat, no options check++++++++++
 
-++++++++++ julia ../bfbs.jl data.csv  +++Small valid 3 column file, with header option check++++++++++
+++++++++++ julia ..\bfbs.jl data.csv +++Small valid 3 column file, no options check++++++++++
 
 Row Sums:
 1.20000000000000000000000000000000000000120000000000e+51
@@ -83,9 +83,9 @@ Column Standard Deviations:
 1.00000000000000000000000000000000000000100000000000e+50
 1.00000000000000000000000000000000000000100000000000e+50
 1.00000000000000000000000000000000000000100000000000e+50
-++++++++++ Shell got Return code number 0 for small valid file data.csv, with header option check++++++++++
+++++++++++ Shell got Return code number 0 for small valid file data.csv, no options check++++++++++
 
-++++++++++ julia ../bfbs.jl -d '	' data.tab  +++Small valid 3 column file, with header and extra line options check++++++++++
+++++++++++ julia ..\bfbs.jl -d "\t" data.tab +++Small valid 3 column file, no options check++++++++++
 
 Row Sums:
 1.20000000000000000000000000001200000000000000000000e+51
@@ -126,9 +126,9 @@ Column Standard Deviations:
 1.00000000000000000000000000001000000000000000000000e+50
 1.00000000000000000000000000001000000000000000000000e+50
 1.00000000000000000000000000001000000000000000000000e+50
-++++++++++ Shell got Return code number 0 for small valid file data.tab, with header and extra line options check++++++++++
+++++++++++ Shell got Return code number 0 for small valid file data.tab, no options check++++++++++
 
-++++++++++ julia ../bfbs.jl -d ';' data.txt  +++Small valid 3 column file, with header and extra line options check++++++++++
+++++++++++ julia ..\bfbs.jl -d ";" data.txt +++Small valid 3 column file, no options check++++++++++
 
 Row Sums:
 1.20000000012000000000000000000000000000000000000000e+51
@@ -169,8 +169,9 @@ Column Standard Deviations:
 1.00000000010000000000000000000000000000000000000000e+50
 1.00000000010000000000000000000000000000000000000000e+50
 1.00000000010000000000000000000000000000000000000000e+50
-++++++++++ Shell got Return code number 0 for small valid file data.txt, with header and extra line options check++++++++++
-++++++++++ julia ../bfbs.jl cols7rows4.csv +++Small valid 7 column file and no options check++++++++++
+++++++++++ Shell got Return code number 0 for small valid file data.txt, no options check++++++++++
+
+++++++++++ julia ..\bfbs.jl cols7rows4.csv +++Small valid 7 column by 4 row file, no options check++++++++++
 
 Row Sums:
 -2.07000000000000000000000000000000000000000000000000e+00
@@ -231,4 +232,4 @@ Column Standard Deviations:
 4.38347928819105976621686459828131359077044944307740e-03
 4.12635911631549587308150112473978638242120901742125e-03
 4.77638534016484757348320350805106592240509773042420e-03
-++++++++++ Shell got Return code number 0 for small valid file cols7rows4.csv, no options check++++++++++
+++++++++++ Shell got Return code number 0 for small valid file data.txt, no options check++++++++++

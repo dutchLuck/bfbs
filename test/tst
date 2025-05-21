@@ -12,22 +12,22 @@ TEN_PLUSS=++++++++++
 #
 # Test if no options mode has any sensitivity to file length or number of columns
 echo ""
-echo "${TEN_PLUSS} $EXE -d ' ' data.dat +++Small valid 2 column file, no options check${TEN_PLUSS}"
+echo "${TEN_PLUSS} $EXE -d ' ' data.dat +++Small valid 3 column file, no options check${TEN_PLUSS}"
 $EXE -d ' ' data.dat
 echo "${TEN_PLUSS} Shell got Return code number $? for small valid file data.dat, no options check${TEN_PLUSS}"
 #
 echo ""
-echo "${TEN_PLUSS} $EXE data.csv  +++Small valid 2 column file, with header option check${TEN_PLUSS}"
+echo "${TEN_PLUSS} $EXE data.csv  +++Small valid 3 column file, with header option check${TEN_PLUSS}"
 $EXE data.csv
 echo "${TEN_PLUSS} Shell got Return code number $? for small valid file data.csv, with header option check${TEN_PLUSS}"
 #
 echo ""
-echo "${TEN_PLUSS} $EXE -d '\t' data.tab  +++Small valid 2 column file, with header and extra line options check${TEN_PLUSS}"
+echo "${TEN_PLUSS} $EXE -d '\t' data.tab  +++Small valid 3 column file, with header and extra line options check${TEN_PLUSS}"
 $EXE -d '\t' data.tab
 echo "${TEN_PLUSS} Shell got Return code number $? for small valid file data.tab, with header and extra line options check${TEN_PLUSS}"
 #
 echo ""
-echo "${TEN_PLUSS} $EXE -d ';' data.txt  +++Small valid 2 column file, with header and extra line options check${TEN_PLUSS}"
+echo "${TEN_PLUSS} $EXE -d ';' data.txt  +++Small valid 3 column file, with header and extra line options check${TEN_PLUSS}"
 $EXE -d ';' data.txt
 echo "${TEN_PLUSS} Shell got Return code number $? for small valid file data.txt, with header and extra line options check${TEN_PLUSS}"
 #

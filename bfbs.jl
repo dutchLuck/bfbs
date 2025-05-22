@@ -5,7 +5,7 @@
 #
 # Big Float Basic Stats
 #
-# bfbs.jl last updated on Thu May 15 18:09:42 2025 by O.H. as 0v1
+# bfbs.jl last updated on Thu May 22 22:39:32 2025 by O.H. as 0v2
 #
 # Descendant of readdatafile.jl 0v1
 #
@@ -30,6 +30,10 @@
 # ./bfbs.jl -V
 # bfbs version 0v1 (2025-05-15)
 ##
+
+#
+# 0v2 added better handling of non-existent files
+#
 
 using DelimitedFiles
 using Statistics
@@ -144,7 +148,7 @@ function main()
     output_file = get(args, "output", nothing)
 
 	if args["version"]
-		println("bfbs version 0v1 (2025-05-15)")
+		println("bfbs version 0v2 (2025-05-22)")
 	end
 	if isnothing(delimiter_string)
 		delimiter = ','		# set default value
@@ -186,6 +190,11 @@ function main()
 	end
 
     for filepath in files
+		if !isfile(filepath)
+			println("\nWarning: file \"$filepath\" not found?!")
+			continue	# if there are more files on the command line then try to process them
+		end
+	
 		bignum_matrix = read_bignum_matrix(filepath, delimiter, has_header, verbose, skip_lines, comment_start)
 		num_rows, num_cols = size(bignum_matrix)
 

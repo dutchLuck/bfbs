@@ -5,33 +5,39 @@
 #
 # Big Float Basic Stats
 #
-# bfbs.jl last updated on Thu May 22 22:39:32 2025 by O.H. as 0v2
+# bfbs.jl last updated on Sun Jun  1 22:25:17 2025 by O.H. as 0v3
 #
 # Descendant of readdatafile.jl 0v1
 #
 
 # Read in one or more files containing one or more rows and columns
 # of numbers. Then use julia's big float calculation capability to
-# calculate the basic statistics of sum, arithmetic mean,
+# calculate basic statistics like median, arithmetic mean, sum,
 # variance and standard deviation for those rows and columns.
-# Finally output these basic statistics results to the stdout.
+# Finally output the basic statistics results to the stdout.
 
-## Linux install (Ubuntu 22.04 LTS) and run ##
+## Recipe for Linux (Ubuntu 22.04 LTS) julia install, bfbs.jl clone and run ##
 # sudo apt install curl
 # curl -fsSL http://install.julialang.org | sh
 # >Proceed with installation
 # "restart the terminal"
-# cd src/julia/bigfloat/
+# mkdir src
+# cd src
+# mkdir julia
+# cd julia
+# git clone https://github.com/dutchLuck/bfbs
+# cd bfbs
 # chmod u+x bfbs.jl
 # julia
 # ]
 # add ArgParse
 # ^D
 # ./bfbs.jl -V
-# bfbs version 0v1 (2025-05-15)
+# bfbs version 0v3 (2025-06-01)
 ##
 
 #
+# 0v3 added output of count, minimum, median, maximum and range
 # 0v2 added better handling of non-existent files
 #
 
@@ -110,20 +116,31 @@ end
 
 # Function to compute average and stddev for each row
 function row_stats(mat::Matrix{BigFloat})
-    row_sums = [sum(row) for row in eachrow(mat)]
+    row_cnts = [length(row) for row in eachrow(mat)]
+    row_mins = [minimum(row) for row in eachrow(mat)]
+    row_medians = [median(row) for row in eachrow(mat)]
+    row_maxs = [maximum(row) for row in eachrow(mat)]
+	row_ranges = row_maxs - row_mins
     row_means = [mean(row) for row in eachrow(mat)]
+    row_sums = [sum(row) for row in eachrow(mat)]
     row_vars  = [var(row) for row in eachrow(mat)]
     row_stds  = [std(row) for row in eachrow(mat)]
-    return row_sums, row_means, row_vars, row_stds
+    row_medians  = [median(row) for row in eachrow(mat)]
+    return row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds
 end
 
 # Function to compute average and stddev for each column
 function col_stats(mat::Matrix{BigFloat})
-    col_sums = [sum(col) for col in eachcol(mat)]
+    col_cnts = [length(col) for col in eachcol(mat)]
+    col_mins = [minimum(col) for col in eachcol(mat)]
+    col_medians = [median(col) for col in eachcol(mat)]
+    col_maxs = [maximum(col) for col in eachcol(mat)]
+	col_ranges = col_maxs - col_mins
     col_means = [mean(col) for col in eachcol(mat)]
+    col_sums = [sum(col) for col in eachcol(mat)]
     col_vars  = [var(col) for col in eachcol(mat)]
     col_stds  = [std(col) for col in eachcol(mat)]
-    return col_sums, col_means, col_vars, col_stds
+    return col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds 
 end
 
 # Print a matrix of BigFloats with high precision
@@ -148,7 +165,7 @@ function main()
     output_file = get(args, "output", nothing)
 
 	if args["version"]
-		println("bfbs version 0v2 (2025-05-22)")
+		println("bfbs version 0v3 (2025-06-01)")
 	end
 	if isnothing(delimiter_string)
 		delimiter = ','		# set default value
@@ -156,7 +173,7 @@ function main()
 		if delimiter_string[begin] == '\\' && delimiter_string[begin+1] == 't'
 			delimiter = '\t'	# set tab character
 		else
-			delimiter = delimiter_string[begin]
+			delimiter = delimiter_string[begin]		# set supplied char as delimiter
 		end
 	end
 	if isnothing(comment_delimiter_string)
@@ -207,28 +224,50 @@ function main()
 		# Now compute stats with high precision
 		if !args["no_row_stats"] && num_cols > 1		# Don't calc row stats unless more than 1 column
 			# Calculate row results with high precision
-			row_sums, row_means, row_vars, row_stds = row_stats(bignum_matrix)
+			row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds = row_stats(bignum_matrix)
+			# Display rows results
+			println("\nRow Counts:")
+			foreach(x -> @printf("%d\n", x), row_cnts)
 			# Display row results with precision
-			println("\nRow Sums:")
-			foreach(x -> @printf("%.50e\n", x), row_sums)
-			println("\nRow Means:")
+			println("Row Minimums:")
+			foreach(x -> @printf("%.50e\n", x), row_mins)
+			println("Row Medians:")
+			foreach(x -> @printf("%.50e\n", x), row_medians)
+			println("Row Maximums:")
+			foreach(x -> @printf("%.50e\n", x), row_maxs)
+			println("Row Ranges:")
+			foreach(x -> @printf("%.50e\n", x), row_ranges)
+			println("Row Means:")
 			foreach(x -> @printf("%.50e\n", x), row_means)
-			println("\nRow Variances:")
+			println("Row Sums:")
+			foreach(x -> @printf("%.50e\n", x), row_sums)
+			println("Row Variances:")
 			foreach(x -> @printf("%.50e\n", x), row_vars)
-			println("\nRow Standard Deviations:")
+			println("Row Standard Deviations:")
 			foreach(x -> @printf("%.50e\n", x), row_stds)
 		end
 		if !args["no_column_stats"] && num_rows > 1		# Don't calc column stats unless more than 1 row
 			# Calculate column results with high precision
-			col_sums, col_means, col_vars, col_stds = col_stats(bignum_matrix)
+			col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds = col_stats(bignum_matrix)
+			# Display column results
+			println("\nColumn Counts:")
+			foreach(x -> @printf("%d\n", x), col_cnts)
 			# Display column results with high precision
-			println("\nColumn Sums:")
-			foreach(x -> @printf("%.50e\n", x), col_sums)
-			println("\nColumn Means:")
+			println("Column Minimums:")
+			foreach(x -> @printf("%.50e\n", x), col_mins)
+			println("Column Medians:")
+			foreach(x -> @printf("%.50e\n", x), col_medians)
+			println("Column Maximums:")
+			foreach(x -> @printf("%.50e\n", x), col_maxs)
+			println("Column Ranges:")
+			foreach(x -> @printf("%.50e\n", x), col_ranges)
+			println("Column Means:")
 			foreach(x -> @printf("%.50e\n", x), col_means)
-			println("\nColumn Variances:")
+			println("Column Sums:")
+			foreach(x -> @printf("%.50e\n", x), col_sums)
+			println("Column Variances:")
 			foreach(x -> @printf("%.50e\n", x), col_vars)
-			println("\nColumn Standard Deviations:")
+			println("Column Standard Deviations:")
 			foreach(x -> @printf("%.50e\n", x), col_stds)
 		end
     end

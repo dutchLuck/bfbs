@@ -5,7 +5,7 @@
 #
 # Big Float Basic Stats
 #
-# bfbs.jl last updated on Sun Jun  1 22:25:17 2025 by O.H. as 0v3
+# bfbs.jl last updated on Mon Jun  2 22:02:04 2025 by O.H. as 0v4
 #
 # Descendant of readdatafile.jl 0v1
 #
@@ -37,6 +37,7 @@
 ##
 
 #
+# 0v4 added control of precision used in output format with -p option
 # 0v3 added output of count, minimum, median, maximum and range
 # 0v2 added better handling of non-existent files
 #
@@ -69,6 +70,10 @@ function parse_arguments()
         "--output", "-o"
         arg_type = String
         help = "Write output to a file named \"OUTPUT\". If not provided, output goes to stdout."
+
+        "--precision", "-p"
+        arg_type = String
+        help = "Write output with \"PRECISION\" digits. If not provided, 25 digit output precision is used."
 
         "--no_row_stats", "-R"
         action = :store_true
@@ -163,9 +168,10 @@ function main()
     delimiter_string = get(args, "delimiter_char", nothing)
     skip_lines_string = get(args, "skip", nothing)
     output_file = get(args, "output", nothing)
+    precision_string = get(args, "precision", nothing)
 
 	if args["version"]
-		println("bfbs version 0v3 (2025-06-01)")
+		println("bfbs version 0v4 (2025-06-02)")
 	end
 	if isnothing(delimiter_string)
 		delimiter = ','		# set default value
@@ -188,6 +194,15 @@ function main()
 		if skip_lines < 0		# Don't allow negetive skip value
 			println("Warning: Unable to skip $skip_lines lines - defaulting to zero")
 			skip_lines = 0
+		end
+	end
+	if isnothing(precision_string)
+		precision = 25		# set default value
+	else
+		precision = parse(Int64, precision_string)
+		if precision < 0 || precision > 50		# Don't allow negetive skip value
+			println("Warning: Unable to set precision to $precision - defaulting to 25 digits")
+			precision = 25
 		end
 	end
 
@@ -230,21 +245,21 @@ function main()
 			foreach(x -> @printf("%d\n", x), row_cnts)
 			# Display row results with precision
 			println("Row Minimums:")
-			foreach(x -> @printf("%.50e\n", x), row_mins)
+			foreach(x -> @printf("%.*e\n", precision, x), row_mins)
 			println("Row Medians:")
-			foreach(x -> @printf("%.50e\n", x), row_medians)
+			foreach(x -> @printf("%.*e\n", precision, x), row_medians)
 			println("Row Maximums:")
-			foreach(x -> @printf("%.50e\n", x), row_maxs)
+			foreach(x -> @printf("%.*e\n", precision, x), row_maxs)
 			println("Row Ranges:")
-			foreach(x -> @printf("%.50e\n", x), row_ranges)
+			foreach(x -> @printf("%.*e\n", precision, x), row_ranges)
 			println("Row Means:")
-			foreach(x -> @printf("%.50e\n", x), row_means)
+			foreach(x -> @printf("%.*e\n", precision, x), row_means)
 			println("Row Sums:")
-			foreach(x -> @printf("%.50e\n", x), row_sums)
+			foreach(x -> @printf("%.*e\n", precision, x), row_sums)
 			println("Row Variances:")
-			foreach(x -> @printf("%.50e\n", x), row_vars)
+			foreach(x -> @printf("%.*e\n", precision, x), row_vars)
 			println("Row Standard Deviations:")
-			foreach(x -> @printf("%.50e\n", x), row_stds)
+			foreach(x -> @printf("%.*e\n", precision, x), row_stds)
 		end
 		if !args["no_column_stats"] && num_rows > 1		# Don't calc column stats unless more than 1 row
 			# Calculate column results with high precision
@@ -254,21 +269,21 @@ function main()
 			foreach(x -> @printf("%d\n", x), col_cnts)
 			# Display column results with high precision
 			println("Column Minimums:")
-			foreach(x -> @printf("%.50e\n", x), col_mins)
+			foreach(x -> @printf("%.*e\n", precision, x), col_mins)
 			println("Column Medians:")
-			foreach(x -> @printf("%.50e\n", x), col_medians)
+			foreach(x -> @printf("%.*e\n", precision, x), col_medians)
 			println("Column Maximums:")
-			foreach(x -> @printf("%.50e\n", x), col_maxs)
+			foreach(x -> @printf("%.*e\n", precision, x), col_maxs)
 			println("Column Ranges:")
-			foreach(x -> @printf("%.50e\n", x), col_ranges)
+			foreach(x -> @printf("%.*e\n", precision, x), col_ranges)
 			println("Column Means:")
-			foreach(x -> @printf("%.50e\n", x), col_means)
+			foreach(x -> @printf("%.*e\n", precision, x), col_means)
 			println("Column Sums:")
-			foreach(x -> @printf("%.50e\n", x), col_sums)
+			foreach(x -> @printf("%.*e\n", precision, x), col_sums)
 			println("Column Variances:")
-			foreach(x -> @printf("%.50e\n", x), col_vars)
+			foreach(x -> @printf("%.*e\n", precision, x), col_vars)
 			println("Column Standard Deviations:")
-			foreach(x -> @printf("%.50e\n", x), col_stds)
+			foreach(x -> @printf("%.*e\n", precision, x), col_stds)
 		end
     end
 end

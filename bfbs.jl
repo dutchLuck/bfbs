@@ -5,7 +5,7 @@
 #
 # Big Float Basic Stats
 #
-# bfbs.jl last updated on Mon Jun  2 22:02:04 2025 by O.H. as 0v4
+# bfbs.jl last updated on Tue Jun  3 21:39:38 2025 by O.H. as 0v5
 #
 # Descendant of readdatafile.jl 0v1
 #
@@ -37,6 +37,7 @@
 ##
 
 #
+# 0v5 added -D option to enable debug level of information output
 # 0v4 added control of precision used in output format with -p option
 # 0v3 added output of count, minimum, median, maximum and range
 # 0v2 added better handling of non-existent files
@@ -62,6 +63,10 @@ function parse_arguments()
         "--delimiter_char", "-d"
         arg_type = String
         help = "Define the Column Delimiter character as \"DELIMITER_CHAR\". If not provided, comma (\",\") is used."
+
+        "--debug", "-D"
+        action = :store_true
+        help = "Provide copious amounts of information about the current run and the data."
 
         "--header", "-H"
         action = :store_true
@@ -149,11 +154,11 @@ function col_stats(mat::Matrix{BigFloat})
 end
 
 # Print a matrix of BigFloats with high precision
-function print_bigfloat_matrix(mat::Matrix{BigFloat})
-    println("BigFloat Matrix:")
+function print_bigfloat_matrix(mat::Matrix{BigFloat}, digits::Int64)
+    println("\nBigFloat Matrix:")
     for row in eachrow(mat)
         for val in row
-            @printf("%.50e ", val)
+            @printf("%.*e ", digits, val)	# print in e format with digits number of digits
         end
         println()
     end
@@ -161,34 +166,37 @@ end
 
 function main()
     args = parse_arguments()
-    has_header = args["header"]
-	verbose = args["verbose"]
-    files = args["files"]
-    comment_delimiter_string = get(args, "comment_char", nothing)
-    delimiter_string = get(args, "delimiter_char", nothing)
-    skip_lines_string = get(args, "skip", nothing)
-    output_file = get(args, "output", nothing)
-    precision_string = get(args, "precision", nothing)
+	comment_delimiter_string = get(args, "comment_char", nothing)	# --comment_char command line argument
+	delimiter_string = get(args, "delimiter_char", nothing)			# --delimiter_char command line argument
+	has_header = args["header"]		# --header command line argument
+	output_file = get(args, "output", nothing)				# --output command line argument
+	precision_string = get(args, "precision", nothing)		# --precision command line argument
+	skip_lines_string = get(args, "skip", nothing)			# --skip_lines_string command line argument
+	verbose = args["verbose"]		# --verbose command line argument
+	files = args["files"]			# names of data files 
 
-	if args["version"]
-		println("bfbs version 0v4 (2025-06-02)")
+	if args["version"] || args["debug"]
+		println("bfbs version 0v5 (2025-06-03)")
 	end
+
 	if isnothing(delimiter_string)
-		delimiter = ','		# set default value
+		delimiter = ','		# set default column delimiter value to comma
 	else
 		if delimiter_string[begin] == '\\' && delimiter_string[begin+1] == 't'
-			delimiter = '\t'	# set tab character
+			delimiter = '\t'	# set tab character as delimiter
 		else
-			delimiter = delimiter_string[begin]		# set supplied char as delimiter
+			delimiter = delimiter_string[begin]		# set supplied char as column delimiter
 		end
 	end
+
 	if isnothing(comment_delimiter_string)
-		comment_start = '#'		# set default value
+		comment_start = '#'		# set default comment delimiter value to hash
 	else
-		comment_start = comment_delimiter_string[begin]
+		comment_start = comment_delimiter_string[begin]		# set supplied char as comment delimiter
 	end
+
 	if isnothing(skip_lines_string)
-		skip_lines = 0		# set default value
+		skip_lines = 0			# set default lines to skip to 0 value
 	else
 		skip_lines = parse(Int64, skip_lines_string)
 		if skip_lines < 0		# Don't allow negetive skip value
@@ -196,17 +204,21 @@ function main()
 			skip_lines = 0
 		end
 	end
+
 	if isnothing(precision_string)
-		precision = 25		# set default value
+		precision = 25			# set default value of output format to effectively "%.25e"
 	else
 		precision = parse(Int64, precision_string)
-		if precision < 0 || precision > 50		# Don't allow negetive skip value
-			println("Warning: Unable to set precision to $precision - defaulting to 25 digits")
-			precision = 25
+		if precision < 0		# Don't allow negetive numbers in the "%.*e" output format
+			println("Warning: Unable to set precision to \"$precision\" digits - limiting to 0 digits")
+			precision = 0
+		elseif precision > 50	# Limit the precision to 50 digits
+			println("Warning: Unable to set precision to \"$precision\" digits - limiting to 50 digits")
+			precision = 50
 		end
 	end
 
-	if verbose
+	if verbose || args["debug"]
 		println("Column delimiter is: '$delimiter'")
 		println("Start of Comment delimiter is: '$comment_start'")
 		println("Skip lines before starting to read data: $skip_lines")
@@ -218,7 +230,7 @@ function main()
 	end
 
 	if args["version"]
-		return		# stop and terminate (a bit like the help option)
+		return		# terminate the execution (a bit like the help option)
 	end
 
     for filepath in files
@@ -231,9 +243,9 @@ function main()
 		num_rows, num_cols = size(bignum_matrix)
 
 		# Show matrix with full BigFloat precision
-		if verbose
+		if args["debug"]
 			println("Data dimensions are $num_cols columns x $num_rows rows")
-			#print_bigfloat_matrix(bignum_matrix)
+			print_bigfloat_matrix(bignum_matrix, precision)
 		end
 
 		# Now compute stats with high precision

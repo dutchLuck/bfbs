@@ -658,7 +658,7 @@ Column Standard Deviations:
 ++++++++++ Shell got Return code number 0 for 4th NIST numerical accuracy file (10000000.2, 0.1)++++++++++
 
 ++++++++++ julia ../bfbs.jl -h  +++Usage/help and information check++++++++++
-usage: bfbs.jl [-c COMMENT_CHAR] [-C] [-d DELIMITER_CHAR] [-H]
+usage: bfbs.jl [-c COMMENT_CHAR] [-C] [-d DELIMITER_CHAR] [-D] [-H]
                [-o OUTPUT] [-p PRECISION] [-R] [-s SKIP] [-v] [-V]
                [-h] [files...]
 
@@ -679,6 +679,8 @@ optional arguments:
                         Define the Column Delimiter character as
                         "DELIMITER_CHAR". If not provided, comma (",")
                         is used.
+  -D, --debug           Provide copious amounts of information about
+                        the current run and the data.
   -H, --header          The first row is treated as a header.
   -o, --output OUTPUT   Write output to a file named "OUTPUT". If not
                         provided, output goes to stdout.

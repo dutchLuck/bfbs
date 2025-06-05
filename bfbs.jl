@@ -5,7 +5,7 @@
 #
 # Big Float Basic Stats
 #
-# bfbs.jl last updated on Tue Jun  3 21:39:38 2025 by O.H. as 0v5
+# bfbs.jl last updated on Tue Jun  3 21:39:38 2025 by O.H. as 0v6
 #
 # Descendant of readdatafile.jl 0v1
 #
@@ -37,8 +37,9 @@
 ##
 
 #
+# 0v6 added -n option to swap from n-1 to n as the Standard Deviation divisor
 # 0v5 added -D option to enable debug level of information output
-# 0v4 added control of precision used in output format with -p option
+# 0v4 added control of print_digits used in output format with -p option
 # 0v3 added output of count, minimum, median, maximum and range
 # 0v2 added better handling of non-existent files
 #
@@ -72,13 +73,17 @@ function parse_arguments()
         action = :store_true
         help = "The first row is treated as a header."
 
+        "--n_divisor", "-n"
+        action = :store_true
+        help = "Use the actual number of samples n as the Standard Deviation divisor, rather than n-1."
+
         "--output", "-o"
         arg_type = String
         help = "Write output to a file named \"OUTPUT\". If not provided, output goes to stdout."
 
-        "--precision", "-p"
+        "--print_digits", "-p"
         arg_type = String
-        help = "Write output with \"PRECISION\" digits. If not provided, 25 digit output precision is used."
+        help = "Write output with \"PRINT-DIGITS\" digits. If not provided, 25 output digits are used."
 
         "--no_row_stats", "-R"
         action = :store_true
@@ -125,7 +130,7 @@ function read_bignum_matrix(filepath::String, delimiter::Char, header::Bool, ver
 end
 
 # Function to compute average and stddev for each row
-function row_stats(mat::Matrix{BigFloat})
+function row_stats(mat::Matrix{BigFloat}, use_n::Bool )
     row_cnts = [length(row) for row in eachrow(mat)]
     row_mins = [minimum(row) for row in eachrow(mat)]
     row_medians = [median(row) for row in eachrow(mat)]
@@ -134,13 +139,13 @@ function row_stats(mat::Matrix{BigFloat})
     row_means = [mean(row) for row in eachrow(mat)]
     row_sums = [sum(row) for row in eachrow(mat)]
     row_vars  = [var(row) for row in eachrow(mat)]
-    row_stds  = [std(row) for row in eachrow(mat)]
+    row_stds  = [std(row; corrected = !use_n) for row in eachrow(mat)]
     row_medians  = [median(row) for row in eachrow(mat)]
     return row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds
 end
 
 # Function to compute average and stddev for each column
-function col_stats(mat::Matrix{BigFloat})
+function col_stats(mat::Matrix{BigFloat}, use_n::Bool)
     col_cnts = [length(col) for col in eachcol(mat)]
     col_mins = [minimum(col) for col in eachcol(mat)]
     col_medians = [median(col) for col in eachcol(mat)]
@@ -149,7 +154,7 @@ function col_stats(mat::Matrix{BigFloat})
     col_means = [mean(col) for col in eachcol(mat)]
     col_sums = [sum(col) for col in eachcol(mat)]
     col_vars  = [var(col) for col in eachcol(mat)]
-    col_stds  = [std(col) for col in eachcol(mat)]
+    col_stds  = [std(col; corrected = !use_n) for col in eachcol(mat)]
     return col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds 
 end
 
@@ -169,8 +174,9 @@ function main()
 	comment_delimiter_string = get(args, "comment_char", nothing)	# --comment_char command line argument
 	delimiter_string = get(args, "delimiter_char", nothing)			# --delimiter_char command line argument
 	has_header = args["header"]		# --header command line argument
+	n_divisor = args["n_divisor"]	# --n_divisor command line argument
 	output_file = get(args, "output", nothing)				# --output command line argument
-	precision_string = get(args, "precision", nothing)		# --precision command line argument
+	print_digits_string = get(args, "print_digits", nothing)		# --print_digits command line argument
 	skip_lines_string = get(args, "skip", nothing)			# --skip_lines_string command line argument
 	verbose = args["verbose"]		# --verbose command line argument
 	files = args["files"]			# names of data files 
@@ -205,15 +211,15 @@ function main()
 		end
 	end
 
-	if isnothing(precision_string)
+	if isnothing(print_digits_string)
 		precision = 25			# set default value of output format to effectively "%.25e"
 	else
-		precision = parse(Int64, precision_string)
+		precision = parse(Int64, print_digits_string)
 		if precision < 0		# Don't allow negetive numbers in the "%.*e" output format
-			println("Warning: Unable to set precision to \"$precision\" digits - limiting to 0 digits")
+			println("Warning: Unable to set print_digits to \"$precision\" digits - limiting to 0 digits")
 			precision = 0
-		elseif precision > 50	# Limit the precision to 50 digits
-			println("Warning: Unable to set precision to \"$precision\" digits - limiting to 50 digits")
+		elseif precision > 50	# Limit the print_digits to 50 digits
+			println("Warning: Unable to set print_digits to \"$precision\" digits - limiting to 50 digits")
 			precision = 50
 		end
 	end
@@ -222,6 +228,7 @@ function main()
 		println("Column delimiter is: '$delimiter'")
 		println("Start of Comment delimiter is: '$comment_start'")
 		println("Skip lines before starting to read data: $skip_lines")
+		println("Use number of samples n as devisor in Standard Deviation: $n_divisor")
 		if isnothing(output_file)
 			println("No output file is defined")
 		else
@@ -238,6 +245,10 @@ function main()
 			println("\nWarning: file \"$filepath\" not found?!")
 			continue	# if there are more files on the command line then try to process them
 		end
+
+		if verbose
+			println("Basic Statistics for Data from file: \"$filepath\"")
+		end
 	
 		bignum_matrix = read_bignum_matrix(filepath, delimiter, has_header, verbose, skip_lines, comment_start)
 		num_rows, num_cols = size(bignum_matrix)
@@ -251,9 +262,9 @@ function main()
 		# Now compute stats with high precision
 		if !args["no_row_stats"] && num_cols > 1		# Don't calc row stats unless more than 1 column
 			# Calculate row results with high precision
-			row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds = row_stats(bignum_matrix)
+			row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds = row_stats(bignum_matrix, n_divisor)
 			# Display rows results
-			println("\nRow Counts:")
+			println("Row Counts:")
 			foreach(x -> @printf("%d\n", x), row_cnts)
 			# Display row results with precision
 			println("Row Minimums:")
@@ -275,9 +286,9 @@ function main()
 		end
 		if !args["no_column_stats"] && num_rows > 1		# Don't calc column stats unless more than 1 row
 			# Calculate column results with high precision
-			col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds = col_stats(bignum_matrix)
+			col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds = col_stats(bignum_matrix, n_divisor)
 			# Display column results
-			println("\nColumn Counts:")
+			println("Column Counts:")
 			foreach(x -> @printf("%d\n", x), col_cnts)
 			# Display column results with high precision
 			println("Column Minimums:")

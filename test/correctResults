@@ -1,6 +1,5 @@
 
 ++++++++++ julia ../bfbs.jl -d ' ' data.dat +++Small valid 3 column file, no options check++++++++++
-
 Row Counts:
 3
 3
@@ -37,7 +36,6 @@ Row Standard Deviations:
 3.0000000000000000000000000e+50
 3.0000000000000000000000000e+50
 3.0000000000000000000000000e+50
-
 Column Counts:
 3
 3
@@ -77,7 +75,6 @@ Column Standard Deviations:
 ++++++++++ Shell got Return code number 0 for small valid file data.dat, no options check++++++++++
 
 ++++++++++ julia ../bfbs.jl data.csv  +++Small valid 3 column file, with header option check++++++++++
-
 Row Counts:
 3
 3
@@ -114,7 +111,6 @@ Row Standard Deviations:
 3.0000000000000000000000000e+50
 3.0000000000000000000000000e+50
 3.0000000000000000000000000e+50
-
 Column Counts:
 3
 3
@@ -154,7 +150,6 @@ Column Standard Deviations:
 ++++++++++ Shell got Return code number 0 for small valid file data.csv, with header option check++++++++++
 
 ++++++++++ julia ../bfbs.jl -d '	' data.tab  +++Small valid 3 column file, with header and extra line options check++++++++++
-
 Row Counts:
 3
 3
@@ -191,7 +186,6 @@ Row Standard Deviations:
 3.0000000000000000000000000e+50
 3.0000000000000000000000000e+50
 3.0000000000000000000000000e+50
-
 Column Counts:
 3
 3
@@ -231,7 +225,6 @@ Column Standard Deviations:
 ++++++++++ Shell got Return code number 0 for small valid file data.tab, with header and extra line options check++++++++++
 
 ++++++++++ julia ../bfbs.jl -d ';' data.txt  +++Small valid 3 column file, with header and extra line options check++++++++++
-
 Row Counts:
 3
 3
@@ -268,7 +261,6 @@ Row Standard Deviations:
 3.0000000003000000000000000e+50
 3.0000000003000000000000000e+50
 3.0000000003000000000000000e+50
-
 Column Counts:
 3
 3
@@ -306,8 +298,8 @@ Column Standard Deviations:
 1.0000000001000000000000000e+50
 1.0000000001000000000000000e+50
 ++++++++++ Shell got Return code number 0 for small valid file data.txt, with header and extra line options check++++++++++
-++++++++++ julia ../bfbs.jl cols7rows4.csv +++Small valid 7 column file and no options check++++++++++
 
+++++++++++ julia ../bfbs.jl cols7rows4.csv +++Small valid 7 column file and no options check++++++++++
 Row Counts:
 7
 7
@@ -353,7 +345,6 @@ Row Standard Deviations:
 3.9733238360801671210544560e-01
 3.9733238360801671210544560e-01
 4.3538707463807967516465157e-01
-
 Column Counts:
 4
 4
@@ -429,7 +420,6 @@ Column Standard Deviations:
 ++++++++++ Shell got Return code number 0 for small valid file cols7rows4.csv, no options check++++++++++
 
 ++++++++++ julia ../bfbs.jl -R heights.csv +++Somewhat longer file with 2 columns, 1 column the reverse of the other++++++++++
-
 Column Counts:
 2113
 2113
@@ -460,7 +450,6 @@ Column Standard Deviations:
 ++++++++++ Shell got Return code number 0 for longer file with lengthier lines++++++++++
 
 ++++++++++ julia ../bfbs.jl NIST_StRD_PiDigits.dat +++Long file of 1 column of single digits, no options check++++++++++
-
 Column Counts:
 5000
 Column Minimums:
@@ -482,7 +471,6 @@ Column Standard Deviations:
 ++++++++++ Shell got Return code number 0 for long file with single column (4.5348, 2.86733906028871)++++++++++
 
 ++++++++++ julia ../bfbs.jl NIST_StRD_Lew.dat +++Long file of 1 column of single digits, no options check++++++++++
-
 Column Counts:
 200
 Column Minimums:
@@ -504,7 +492,6 @@ Column Standard Deviations:
 ++++++++++ Shell got Return code number 0 for 200 long file with single column (-177.435, 277.332168044316)++++++++++
 
 ++++++++++ julia ../bfbs.jl NIST_StRD_Lottery.dat +++Long file of 1 column of single digits, no options check++++++++++
-
 Column Counts:
 218
 Column Minimums:
@@ -526,7 +513,6 @@ Column Standard Deviations:
 ++++++++++ Shell got Return code number 0 for 218 long file with single column (518.958715596330, 291.699727470969)++++++++++
 
 ++++++++++ julia ../bfbs.jl NIST_StRD_Mavro.dat +++Long file of 1 column of single digits, no options check++++++++++
-
 Column Counts:
 50
 Column Minimums:
@@ -548,7 +534,6 @@ Column Standard Deviations:
 ++++++++++ Shell got Return code number 0 for 50 long file with single column (2.001856, 0.000429123454003053)++++++++++
 
 ++++++++++ julia ../bfbs.jl NIST_StRD_Michelso.dat +++Long file of 1 column of single digits, no options check++++++++++
-
 Column Counts:
 100
 Column Minimums:
@@ -570,7 +555,6 @@ Column Standard Deviations:
 ++++++++++ Shell got Return code number 0 for 100 long file with single column (299.8524, 0.0790105478190518)++++++++++
 
 ++++++++++ julia ../bfbs.jl NIST_StRD_NumAcc1.dat  +++NIST numerical accurracy file of 3 large close numbers++++++++++
-
 Column Counts:
 3
 Column Minimums:
@@ -592,7 +576,6 @@ Column Standard Deviations:
 ++++++++++ Shell got Return code number 0 for 1st NIST numerical accuracy file ( 10000002, 1)++++++++++
 
 ++++++++++ julia ../bfbs.jl NIST_StRD_NumAcc2.dat  +++NIST numerical accurracy file of close numbers++++++++++
-
 Column Counts:
 1001
 Column Minimums:
@@ -614,7 +597,6 @@ Column Standard Deviations:
 ++++++++++ Shell got Return code number 0 for 2nd NIST numerical accuracy file ( 1.2, 0.1)++++++++++
 
 ++++++++++ julia ../bfbs.jl NIST_StRD_NumAcc3.dat  +++NIST numerical accurracy file of close numbers++++++++++
-
 Column Counts:
 1001
 Column Minimums:
@@ -636,7 +618,6 @@ Column Standard Deviations:
 ++++++++++ Shell got Return code number 0 for 3rd NIST numerical accuracy file (1000000.2, 0.1)++++++++++
 
 ++++++++++ julia ../bfbs.jl NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers++++++++++
-
 Column Counts:
 1001
 Column Minimums:
@@ -657,10 +638,101 @@ Column Standard Deviations:
 1.0000000000000000000000000e-01
 ++++++++++ Shell got Return code number 0 for 4th NIST numerical accuracy file (10000000.2, 0.1)++++++++++
 
+++++++++++ julia ../bfbs.jl -n -v -p 10 NIST_StRD_NumAcc*.dat  +++NIST numerical accurracy files of large close numbers++++++++++
+Column delimiter is: ','
+Start of Comment delimiter is: '#'
+Skip lines before starting to read data: 0
+Use number of samples n as devisor in Standard Deviation: true
+No output file is defined
+Basic Statistics for Data from file: "NIST_StRD_NumAcc1.dat"
+Column Counts:
+3
+Column Minimums:
+1.0000001000e+07
+Column Medians:
+1.0000002000e+07
+Column Maximums:
+1.0000003000e+07
+Column Ranges:
+2.0000000000e+00
+Column Means:
+1.0000002000e+07
+Column Sums:
+3.0000006000e+07
+Column Variances:
+1.0000000000e+00
+Column Standard Deviations:
+8.1649658093e-01
+Basic Statistics for Data from file: "NIST_StRD_NumAcc2.dat"
+Column Counts:
+1001
+Column Minimums:
+1.1000000000e+00
+Column Medians:
+1.2000000000e+00
+Column Maximums:
+1.3000000000e+00
+Column Ranges:
+2.0000000000e-01
+Column Means:
+1.2000000000e+00
+Column Sums:
+1.2012000000e+03
+Column Variances:
+1.0000000000e-02
+Column Standard Deviations:
+9.9950037469e-02
+Basic Statistics for Data from file: "NIST_StRD_NumAcc3.dat"
+Column Counts:
+1001
+Column Minimums:
+1.0000001000e+06
+Column Medians:
+1.0000002000e+06
+Column Maximums:
+1.0000003000e+06
+Column Ranges:
+2.0000000000e-01
+Column Means:
+1.0000002000e+06
+Column Sums:
+1.0010002002e+09
+Column Variances:
+1.0000000000e-02
+Column Standard Deviations:
+9.9950037469e-02
+Basic Statistics for Data from file: "NIST_StRD_NumAcc4.dat"
+Column Counts:
+1001
+Column Minimums:
+1.0000000100e+07
+Column Medians:
+1.0000000200e+07
+Column Maximums:
+1.0000000300e+07
+Column Ranges:
+2.0000000000e-01
+Column Means:
+1.0000000200e+07
+Column Sums:
+1.0010000200e+10
+Column Variances:
+1.0000000000e-02
+Column Standard Deviations:
+9.9950037469e-02
+++++++++++ Shell got Return code number 0 for NIST numerical accuracy files ++++++++++
+
+++++++++++ julia ../bfbs.jl -C non_existent_file.csv test/data.csv  +++Handles non-existent file check++++++++++
+
+Warning: file "non_existent_file.csv" not found?!
+
+Warning: file "test/data.csv" not found?!
+++++++++++ Shell got Return code number 0 for Handles non-existent file options++++++++++
+
 ++++++++++ julia ../bfbs.jl -h  +++Usage/help and information check++++++++++
 usage: bfbs.jl [-c COMMENT_CHAR] [-C] [-d DELIMITER_CHAR] [-D] [-H]
-               [-o OUTPUT] [-p PRECISION] [-R] [-s SKIP] [-v] [-V]
-               [-h] [files...]
+               [-n] [-o OUTPUT] [-p PRINT_DIGITS] [-R] [-s SKIP] [-v]
+               [-V] [-h] [files...]
 
 positional arguments:
   files                 Input files containing 1 or more columns of
@@ -682,11 +754,13 @@ optional arguments:
   -D, --debug           Provide copious amounts of information about
                         the current run and the data.
   -H, --header          The first row is treated as a header.
+  -n, --n_divisor       Use the actual number of samples n as the
+                        Standard Deviation divisor, rather than n-1.
   -o, --output OUTPUT   Write output to a file named "OUTPUT". If not
                         provided, output goes to stdout.
-  -p, --precision PRECISION
-                        Write output with "PRECISION" digits. If not
-                        provided, 25 digit output precision is used.
+  -p, --print_digits PRINT_DIGITS
+                        Write output with "PRINT-DIGITS" digits. If
+                        not provided, 25 output digits are used.
   -R, --no_row_stats    Disable row statistics calculation and output.
   -s, --skip SKIP       Skip first "SKIP" lines in data file(s). If
                         not provided, zero lines are skipped.
@@ -696,10 +770,3 @@ optional arguments:
   -h, --help            show this help message and exit
 
 ++++++++++ Shell got Return code number 0 for usage/help, options++++++++++
-
-++++++++++ julia ../bfbs.jl -C non_existent_file.csv test/data.csv  +++Handles non-existent file check++++++++++
-
-Warning: file "non_existent_file.csv" not found?!
-
-Warning: file "test/data.csv" not found?!
-++++++++++ Shell got Return code number 0 for Handles non-existent file options++++++++++

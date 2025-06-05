@@ -10,37 +10,43 @@
 EXE="julia ../bfbs.jl"
 TEN_PLUSS=++++++++++
 #
-# Test if no options mode has any sensitivity to file length or number of columns
+# Test space as a column separator mode
 echo ""
 echo "${TEN_PLUSS} $EXE -d ' ' data.dat +++Small valid 3 column file, no options check${TEN_PLUSS}"
 $EXE -d ' ' data.dat
 echo "${TEN_PLUSS} Shell got Return code number $? for small valid file data.dat, no options check${TEN_PLUSS}"
 #
+# Test default case: read a CSV file and output stats with default number of digits
 echo ""
 echo "${TEN_PLUSS} $EXE data.csv  +++Small valid 3 column file, with header option check${TEN_PLUSS}"
 $EXE data.csv
 echo "${TEN_PLUSS} Shell got Return code number $? for small valid file data.csv, with header option check${TEN_PLUSS}"
 #
+# Test horizontal tab as the column separator mode
 echo ""
 echo "${TEN_PLUSS} $EXE -d '\t' data.tab  +++Small valid 3 column file, with header and extra line options check${TEN_PLUSS}"
 $EXE -d '\t' data.tab
 echo "${TEN_PLUSS} Shell got Return code number $? for small valid file data.tab, with header and extra line options check${TEN_PLUSS}"
 #
+# Test semi-colon as the column separator mode
 echo ""
 echo "${TEN_PLUSS} $EXE -d ';' data.txt  +++Small valid 3 column file, with header and extra line options check${TEN_PLUSS}"
 $EXE -d ';' data.txt
 echo "${TEN_PLUSS} Shell got Return code number $? for small valid file data.txt, with header and extra line options check${TEN_PLUSS}"
 #
-#echo ""
+# Test data in 7 columns and 4 rows
+echo ""
 echo "${TEN_PLUSS} $EXE cols7rows4.csv +++Small valid 7 column file and no options check${TEN_PLUSS}"
 $EXE cols7rows4.csv
 echo "${TEN_PLUSS} Shell got Return code number $? for small valid file cols7rows4.csv, no options check${TEN_PLUSS}"
 #
+# Test data order sensitivity with the first column the reverse of the second
 echo ""
 echo "${TEN_PLUSS} $EXE -R heights.csv +++Somewhat longer file with 2 columns, 1 column the reverse of the other${TEN_PLUSS}"
 $EXE -R heights.csv
 echo "${TEN_PLUSS} Shell got Return code number $? for longer file with lengthier lines${TEN_PLUSS}"
 #
+# Test NIST file with known results
 echo ""
 echo "${TEN_PLUSS} $EXE NIST_StRD_PiDigits.dat +++Long file of 1 column of single digits, no options check${TEN_PLUSS}"
 $EXE NIST_StRD_PiDigits.dat
@@ -86,13 +92,21 @@ echo "${TEN_PLUSS} $EXE NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file 
 $EXE NIST_StRD_NumAcc4.dat
 echo "${TEN_PLUSS} Shell got Return code number $? for 4th NIST numerical accuracy file (10000000.2, 0.1)${TEN_PLUSS}"
 #
+# Test multiple data file handling and smaller number of output digits
 echo ""
-echo "${TEN_PLUSS} $EXE -h  +++Usage/help and information check${TEN_PLUSS}"
-$EXE -h
-echo "${TEN_PLUSS} Shell got Return code number $? for usage/help, options${TEN_PLUSS}"
+echo "${TEN_PLUSS} $EXE -n -v -p 10 NIST_StRD_NumAcc*.dat  +++NIST numerical accurracy files of large close numbers${TEN_PLUSS}"
+$EXE -n -v -p 10 NIST_StRD_NumAcc*.dat
+echo "${TEN_PLUSS} Shell got Return code number $? for NIST numerical accuracy files ${TEN_PLUSS}"
 #
+# Test multiple data file handling including a missing file
 echo ""
 echo "${TEN_PLUSS} $EXE -C non_existent_file.csv test/data.csv  +++Handles non-existent file check${TEN_PLUSS}"
 $EXE -C non_existent_file.csv test/data.csv
 echo "${TEN_PLUSS} Shell got Return code number $? for Handles non-existent file options${TEN_PLUSS}"
+#
+# Test usage messages
+echo ""
+echo "${TEN_PLUSS} $EXE -h  +++Usage/help and information check${TEN_PLUSS}"
+$EXE -h
+echo "${TEN_PLUSS} Shell got Return code number $? for usage/help, options${TEN_PLUSS}"
 #

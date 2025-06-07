@@ -5,7 +5,7 @@
 #
 # Big Float Basic Stats
 #
-# bfbs.jl last updated on Tue Jun  3 21:39:38 2025 by O.H. as 0v6
+# bfbs.jl last updated on Sat Jun  7 21:37:14 2025 by O.H. as 0v6
 #
 # Descendant of readdatafile.jl 0v1
 #
@@ -33,10 +33,11 @@
 # add ArgParse
 # ^D
 # ./bfbs.jl -V
-# bfbs version 0v3 (2025-06-01)
+# bfbs version 0v7 (2025-06-07)
 ##
 
 #
+# 0v7 removed unused --output option and rationalized print output 
 # 0v6 added -n option to swap from n-1 to n as the Standard Deviation divisor
 # 0v5 added -D option to enable debug level of information output
 # 0v4 added control of print_digits used in output format with -p option
@@ -76,10 +77,6 @@ function parse_arguments()
         "--n_divisor", "-n"
         action = :store_true
         help = "Use the actual number of samples n as the Standard Deviation divisor, rather than n-1."
-
-        "--output", "-o"
-        arg_type = String
-        help = "Write output to a file named \"OUTPUT\". If not provided, output goes to stdout."
 
         "--print_digits", "-p"
         arg_type = String
@@ -169,20 +166,42 @@ function print_bigfloat_matrix(mat::Matrix{BigFloat}, digits::Int64)
     end
 end
 
+function print_basic_statistics(str::String, precision::Int64, cnts, mins, medians, maxs, ranges, means, sums, vars, stds)
+	# Display rows results
+	println("$str Counts:")
+	foreach(x -> @printf("%d\n", x), cnts)
+	# Display row results with precision
+	println("$str Minimums:")
+	foreach(x -> @printf("%.*e\n", precision, x), mins)
+	println("$str Medians:")
+	foreach(x -> @printf("%.*e\n", precision, x), medians)
+	println("$str Maximums:")
+	foreach(x -> @printf("%.*e\n", precision, x), maxs)
+	println("$str Ranges:")
+	foreach(x -> @printf("%.*e\n", precision, x), ranges)
+	println("$str Means:")
+	foreach(x -> @printf("%.*e\n", precision, x), means)
+	println("$str Sums:")
+	foreach(x -> @printf("%.*e\n", precision, x), sums)
+	println("$str Variances:")
+	foreach(x -> @printf("%.*e\n", precision, x), vars)
+	println("$str Standard Deviations:")
+	foreach(x -> @printf("%.*e\n", precision, x), stds)
+end
+
 function main()
     args = parse_arguments()
 	comment_delimiter_string = get(args, "comment_char", nothing)	# --comment_char command line argument
 	delimiter_string = get(args, "delimiter_char", nothing)			# --delimiter_char command line argument
 	has_header = args["header"]		# --header command line argument
 	n_divisor = args["n_divisor"]	# --n_divisor command line argument
-	output_file = get(args, "output", nothing)				# --output command line argument
 	print_digits_string = get(args, "print_digits", nothing)		# --print_digits command line argument
 	skip_lines_string = get(args, "skip", nothing)			# --skip_lines_string command line argument
 	verbose = args["verbose"]		# --verbose command line argument
 	files = args["files"]			# names of data files 
 
 	if args["version"] || args["debug"]
-		println("bfbs version 0v5 (2025-06-03)")
+		println("bfbs version 0v7 (2025-06-07)")
 	end
 
 	if isnothing(delimiter_string)
@@ -229,31 +248,28 @@ function main()
 		println("Start of Comment delimiter is: '$comment_start'")
 		println("Skip lines before starting to read data: $skip_lines")
 		println("Use number of samples n as devisor in Standard Deviation: $n_divisor")
-		if isnothing(output_file)
-			println("No output file is defined")
-		else
-			println("Outputting statistics information to file: $output_file")
-		end
 	end
 
 	if args["version"]
 		return		# terminate the execution (a bit like the help option)
 	end
 
+	# Loop through any file names on the command line
     for filepath in files
 		if !isfile(filepath)
 			println("\nWarning: file \"$filepath\" not found?!")
-			continue	# if there are more files on the command line then try to process them
+			continue	# skip this one, but if there are more files on the command line then try to process them
 		end
 
 		if verbose
 			println("Basic Statistics for Data from file: \"$filepath\"")
 		end
 	
+		# Read data from the file into a matrix
 		bignum_matrix = read_bignum_matrix(filepath, delimiter, has_header, verbose, skip_lines, comment_start)
 		num_rows, num_cols = size(bignum_matrix)
 
-		# Show matrix with full BigFloat precision
+		# Show matrix with full BigFloat precision if Debug mode is active
 		if args["debug"]
 			println("Data dimensions are $num_cols columns x $num_rows rows")
 			print_bigfloat_matrix(bignum_matrix, precision)
@@ -264,49 +280,13 @@ function main()
 			# Calculate row results with high precision
 			row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds = row_stats(bignum_matrix, n_divisor)
 			# Display rows results
-			println("Row Counts:")
-			foreach(x -> @printf("%d\n", x), row_cnts)
-			# Display row results with precision
-			println("Row Minimums:")
-			foreach(x -> @printf("%.*e\n", precision, x), row_mins)
-			println("Row Medians:")
-			foreach(x -> @printf("%.*e\n", precision, x), row_medians)
-			println("Row Maximums:")
-			foreach(x -> @printf("%.*e\n", precision, x), row_maxs)
-			println("Row Ranges:")
-			foreach(x -> @printf("%.*e\n", precision, x), row_ranges)
-			println("Row Means:")
-			foreach(x -> @printf("%.*e\n", precision, x), row_means)
-			println("Row Sums:")
-			foreach(x -> @printf("%.*e\n", precision, x), row_sums)
-			println("Row Variances:")
-			foreach(x -> @printf("%.*e\n", precision, x), row_vars)
-			println("Row Standard Deviations:")
-			foreach(x -> @printf("%.*e\n", precision, x), row_stds)
+			print_basic_statistics("Row", precision, row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds)
 		end
 		if !args["no_column_stats"] && num_rows > 1		# Don't calc column stats unless more than 1 row
 			# Calculate column results with high precision
 			col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds = col_stats(bignum_matrix, n_divisor)
 			# Display column results
-			println("Column Counts:")
-			foreach(x -> @printf("%d\n", x), col_cnts)
-			# Display column results with high precision
-			println("Column Minimums:")
-			foreach(x -> @printf("%.*e\n", precision, x), col_mins)
-			println("Column Medians:")
-			foreach(x -> @printf("%.*e\n", precision, x), col_medians)
-			println("Column Maximums:")
-			foreach(x -> @printf("%.*e\n", precision, x), col_maxs)
-			println("Column Ranges:")
-			foreach(x -> @printf("%.*e\n", precision, x), col_ranges)
-			println("Column Means:")
-			foreach(x -> @printf("%.*e\n", precision, x), col_means)
-			println("Column Sums:")
-			foreach(x -> @printf("%.*e\n", precision, x), col_sums)
-			println("Column Variances:")
-			foreach(x -> @printf("%.*e\n", precision, x), col_vars)
-			println("Column Standard Deviations:")
-			foreach(x -> @printf("%.*e\n", precision, x), col_stds)
+			print_basic_statistics("Column", precision, col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds)
 		end
     end
 end

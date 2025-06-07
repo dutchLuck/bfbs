@@ -643,7 +643,6 @@ Column delimiter is: ','
 Start of Comment delimiter is: '#'
 Skip lines before starting to read data: 0
 Use number of samples n as devisor in Standard Deviation: true
-No output file is defined
 Basic Statistics for Data from file: "NIST_StRD_NumAcc1.dat"
 Column Counts:
 3
@@ -731,8 +730,8 @@ Warning: file "test/data.csv" not found?!
 
 ++++++++++ julia ../bfbs.jl -h  +++Usage/help and information check++++++++++
 usage: bfbs.jl [-c COMMENT_CHAR] [-C] [-d DELIMITER_CHAR] [-D] [-H]
-               [-n] [-o OUTPUT] [-p PRINT_DIGITS] [-R] [-s SKIP] [-v]
-               [-V] [-h] [files...]
+               [-n] [-p PRINT_DIGITS] [-R] [-s SKIP] [-v] [-V] [-h]
+               [files...]
 
 positional arguments:
   files                 Input files containing 1 or more columns of
@@ -756,8 +755,6 @@ optional arguments:
   -H, --header          The first row is treated as a header.
   -n, --n_divisor       Use the actual number of samples n as the
                         Standard Deviation divisor, rather than n-1.
-  -o, --output OUTPUT   Write output to a file named "OUTPUT". If not
-                        provided, output goes to stdout.
   -p, --print_digits PRINT_DIGITS
                         Write output with "PRINT-DIGITS" digits. If
                         not provided, 25 output digits are used.

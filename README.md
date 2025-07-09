@@ -4,12 +4,20 @@ containing columns of numbers and outputs the basic statistics of the file conte
 The bfbs.jl code is written in the julia language, as the .jl implies, and
 uses the julia big float number type to calculate statistics like sum, mean,
 variance and standard deviation to a higher precision than the usual floating point
-number types. The "bfbs" name stands for "big float basic statistics".
+number types. The "bfbs" name stands for "big float basic statistics". (N.B.
+Other word choices fit "bfbs" too. For instance although big float may reduce worry about
+truncation, cancellation and accumulation error types effecting the results, other factors
+about the data can still make using the results output by bfbs just BS.)
+
 The input data files (or file) are assumed by default to be in comma separated value (CSV)
-format. All data files are assumed to have no missing entries and
-no NaN values in the columns of numbers. The data files may contain blank lines
-and these are ignored. It may also contain comment lines, which also are ignored.
-Comment lines by default are assumed to start with the hash ("#") character.
+format. (See
+<a href="https://www.ietf.org/rfc/rfc4180.txt">RFC 4180</a>
+for a formal CSV definition.)
+All data files are assumed to have no missing entries and
+no NaN values in the columns of numbers. Unlike the RFC 4180 standard bfbs accepts data files
+that contain blank lines and these are ignored. It also accepts data files that contain
+comment lines, which also are ignored. Comment lines by default are assumed to start with
+the hash ("#") character.
 
 A suitable, but contrived file of test data has the following contents; -
 ```

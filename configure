@@ -2,7 +2,7 @@
 #
 # C O N F I G U R E
 #
-# configure last edited on Thu Apr 11 10:30:12 2024 
+# configure last edited on Sun Aug  3 22:13:13 2025 
 #
 NAME1=bfbs
 #
@@ -13,10 +13,9 @@ LNK_OPTIONS=""
 TRGT=$NAME1.jl
 SRC1=$NAME1.jl
 #
-# echo $OSTYPE
 #
-echo "$TRGT: $SRC1" > $OP_FILE_NAME
-echo -e "\t$COMPILER $SRC1 -h -v" >> $OP_FILE_NAME
+echo "$TRGT: configure Makefile" > $OP_FILE_NAME
+echo -e "\t$COMPILER $SRC1 --version" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "check: $TRGT" >> $OP_FILE_NAME
@@ -28,6 +27,18 @@ echo -e "\tcd test; ./chk" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "clean:" >> $OP_FILE_NAME
-echo -e "\trm -f $TRGT $TRGT.exe *.o" >> $OP_FILE_NAME
+echo -e "\trm -f *.tmp" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "debug:" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $SRC1 --debug --verbose" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "version:" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $SRC1 --version" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "help:" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $SRC1 --help" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #

@@ -1,16 +1,20 @@
 //
 // B F B S . R S
 //
-// main.rs last edited on Fri Aug 29 23:55:19 2025
+// main.rs last edited on Sat Aug 30 00:29:58 2025
 //
 // This ChatGPT code appears to calculate test cases correctly
 // However cargo did not successfully compile the needed 
 // dependencies on Windows, like it did on linux and MacOS.
 //
+// The rug crate provides arbitrary precision calculation
+// capability and the csv crate provides the ability to
+// read in comma separated variable data.
+//
 // requires Cargo.toml as follows; -
 // [package]
 // name = "bfbs"
-// version = "0.1.1"
+// version = "0.1.2"
 // edition = "2024"
 //
 // [dependencies]
@@ -18,7 +22,7 @@
 // rug = "1"
 // clap = { version = "4", features = ["derive"] }
 //
-//
+
 use clap::Parser;
 use csv::ReaderBuilder;
 use std::io::{BufRead, BufReader};
@@ -33,8 +37,9 @@ const DEFAULT_DIGITS: usize= 40;
 
 /// Command-line arguments
 #[derive(Parser, Debug)]
-#[command(name = "CSV Stats")]
+#[command(name = "bfbs:")]
 #[command(about = "Calculate stats (sum, mean, variance, stddev) from CSV columns")]
+#[clap(author, version, about = None, long_about = None)]
 struct Args {
     /// Input CSV files
     #[arg(required = true)]
@@ -64,6 +69,11 @@ struct Args {
     /// Number of lines to skip at the start of each file
     #[arg(short = 's', long = "skip", default_value_t = 0)]
     skip_lines: usize,
+
+    /// Output extra information
+    #[arg(short = 'v', long = "verbose")]
+    verbose: bool,
+    
 }
 
 #[derive(Debug)]
@@ -230,12 +240,14 @@ fn main() {
 
     for file in args.files.iter() {
         println!("Processing file: {:?}", file);
-        println!(
-            "Using {} bit precision for calculation and {} digit {} print out.\n",
-            args.precision, args.digits,
-            if args.scientific { "scientific" } else { "decimal" }
-        );
-
+        if args.verbose {
+            println!(
+                "Using {} bit precision for calculation and {} digit {} print out.",
+                args.precision, args.digits,
+                if args.scientific { "scientific" } else { "decimal" }
+            );
+        }
+        println!();
 
         match process_file(
             file,

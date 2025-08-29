@@ -1,7 +1,7 @@
 //
 // B F B S . R S
 //
-// main.rs last edited on Fri Aug 29 22:55:46 2025
+// main.rs last edited on Fri Aug 29 23:55:19 2025
 //
 // This ChatGPT code appears to calculate test cases correctly
 // However cargo did not successfully compile the needed 
@@ -10,7 +10,7 @@
 // requires Cargo.toml as follows; -
 // [package]
 // name = "bfbs"
-// version = "0.1.0"
+// version = "0.1.1"
 // edition = "2024"
 //
 // [dependencies]
@@ -29,6 +29,7 @@ use std::path::PathBuf;
 
 /// Default precision to use for calculations (in bits)
 const DEFAULT_PRECISION: u32 = 160;
+const DEFAULT_DIGITS: usize= 40;
 
 /// Command-line arguments
 #[derive(Parser, Debug)]
@@ -43,9 +44,17 @@ struct Args {
     #[arg(short = 'c', long = "comment_char", default_value = "#")]
     comment_char: char,
 
+    /// Display numbers using scientific notation
+    #[arg(short = 'e', long = "scientific" )]
+    scientific: bool,
+
     /// Specify if the CSV has a header row
     #[arg(short = 'H', long = "header")]
     has_header: bool,
+
+    /// Number of digits to show in output
+    #[arg(short = 'p', long = "print_digits", default_value_t = DEFAULT_DIGITS)]
+    digits: usize,
 
     /// Bit precision for calculations (between 16 and 1024)
     #[arg(short = 'P', long = "precision", default_value_t = DEFAULT_PRECISION,
@@ -105,6 +114,14 @@ impl ColumnStats {
 
     fn stddev(&self, precision: u32) -> Float {
         self.variance(precision).sqrt()
+    }
+}
+
+fn format_float(value: &Float, scientific: bool, digits: usize) -> String {
+    if scientific {
+        format!("{:.*e}", digits, value)
+    } else {
+        format!("{:.*}", digits, value)
     }
 }
 
@@ -207,11 +224,19 @@ fn process_file(
 }
 
 fn main() {
-    let args = Args::parse();
+    let mut args = Args::parse();
+    args.digits = args.digits.clamp(0, 256);    // No user warning, but limit number of digits to output
+    args.skip_lines = args.skip_lines.clamp(0, 2048);    // No user warning, but limit skipped input lines
 
     for file in args.files.iter() {
         println!("Processing file: {:?}", file);
-        println!("Using precision: {} bits\n", args.precision);
+        println!(
+            "Using {} bit precision for calculation and {} digit {} print out.\n",
+            args.precision, args.digits,
+            if args.scientific { "scientific" } else { "decimal" }
+        );
+
+
         match process_file(
             file,
             args.precision,
@@ -222,17 +247,10 @@ fn main() {
             Ok(stats) => {
                 for (col, data) in stats {
                     println!("Column: {}", col);
-                    println!("  Count   : {}", data.count);
-                    println!("  Sum     : {}", data.sum(args.precision).to_string_radix(10, None));
-                    println!("  Mean    : {}", data.mean(args.precision).to_string_radix(10, None));
-                    println!(
-                        "  Variance: {}",
-                        data.variance(args.precision).to_string_radix(10, None)
-                    );
-                    println!(
-                        "  StdDev  : {}",
-                        data.stddev(args.precision).to_string_radix(10, None)
-                    );
+                    println!("  Sum     : {}", format_float(data.sum(args.precision), args.scientific, args.digits));
+                    println!("  Mean    : {}", format_float(&data.mean(args.precision), args.scientific, args.digits));
+                    println!("  Variance: {}", format_float(&data.variance(args.precision), args.scientific, args.digits));
+                    println!("  StdDev  : {}", format_float(&data.stddev(args.precision), args.scientific, args.digits));
                     println!();
                 }
             }

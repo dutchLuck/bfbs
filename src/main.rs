@@ -1,15 +1,15 @@
 //
 // B F B S . R S
 //
-// main.rs last edited on Sat Aug 30 00:29:58 2025
+// main.rs last edited on Sun Aug 31 23:37:43 2025
 //
 // This ChatGPT code appears to calculate test cases correctly
 // However cargo did not successfully compile the needed 
 // dependencies on Windows, like it did on linux and MacOS.
 //
 // The rug crate provides arbitrary precision calculation
-// capability and the csv crate provides the ability to
-// read in comma separated variable data.
+// capability (using gmp-mpfr-sys) and the csv crate provides
+// the ability to read in comma separated variable data.
 //
 // requires Cargo.toml as follows; -
 // [package]
@@ -21,6 +21,17 @@
 // csv = "1"
 // rug = "1"
 // clap = { version = "4", features = ["derive"] }
+//
+// Build with `cargo build --release`
+// Run with `cargo run -- <options> <csv file>`
+// Options are shown with `cargo run -- --help`
+//
+// Usage examples:
+//   cargo run -- test/heights.csv
+//   cargo r -- -P 80 -p 16 -s 60 test/NIST_StRD_NumAcc4.dat
+//
+// Building on Ubuntu may require installation of m4 (i.e. sudo apt install m4)
+// to allow gmp-mpfr-sys to build correctly.
 //
 
 use clap::Parser;
@@ -34,6 +45,8 @@ use std::path::PathBuf;
 /// Default precision to use for calculations (in bits)
 const DEFAULT_PRECISION: u32 = 160;
 const DEFAULT_DIGITS: usize= 40;
+pub const MAIN_NAME: &'static str = env!("CARGO_PKG_NAME");
+pub const MAIN_VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
 /// Command-line arguments
 #[derive(Parser, Debug)]
@@ -182,7 +195,7 @@ fn process_file(
 
         let col_count = first_record.len();
         headers = (1..=col_count)
-            .map(|i| format!("col{}", i))
+            .map(|i| format!("{}", i))
             .collect();
 
         stats = headers
@@ -238,16 +251,16 @@ fn main() {
     args.digits = args.digits.clamp(0, 256);    // No user warning, but limit number of digits to output
     args.skip_lines = args.skip_lines.clamp(0, 2048);    // No user warning, but limit skipped input lines
 
+    // Output version and environment information
+    println!("{}.rs v{}", MAIN_NAME, MAIN_VERSION);
+    println!(
+        "Using {} bit precision for calculation and {} digit {} print out.",
+        args.precision, args.digits,
+        if args.scientific { "scientific" } else { "decimal" }
+    );
+
     for file in args.files.iter() {
-        println!("Processing file: {:?}", file);
-        if args.verbose {
-            println!(
-                "Using {} bit precision for calculation and {} digit {} print out.",
-                args.precision, args.digits,
-                if args.scientific { "scientific" } else { "decimal" }
-            );
-        }
-        println!();
+        println!("\nProcessing file: {:?}", file);
 
         match process_file(
             file,
@@ -259,11 +272,10 @@ fn main() {
             Ok(stats) => {
                 for (col, data) in stats {
                     println!("Column: {}", col);
-                    println!("  Sum     : {}", format_float(data.sum(args.precision), args.scientific, args.digits));
-                    println!("  Mean    : {}", format_float(&data.mean(args.precision), args.scientific, args.digits));
-                    println!("  Variance: {}", format_float(&data.variance(args.precision), args.scientific, args.digits));
-                    println!("  StdDev  : {}", format_float(&data.stddev(args.precision), args.scientific, args.digits));
-                    println!();
+                    println!("  Sum       : {}", format_float(data.sum(args.precision), args.scientific, args.digits));
+                    println!("  Mean      : {}", format_float(&data.mean(args.precision), args.scientific, args.digits));
+                    println!("  Variance  : {}", format_float(&data.variance(args.precision), args.scientific, args.digits));
+                    println!("  Std. Dev. : {}", format_float(&data.stddev(args.precision), args.scientific, args.digits));
                 }
             }
             Err(e) => eprintln!("Error processing {:?}: {}\n", file, e),

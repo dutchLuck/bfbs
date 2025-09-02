@@ -21,12 +21,14 @@
 //  3. Please adjust the code so that when more than one file is provided
 //  that the stats are reset for the new files data columns
 //  and also output the name of each file as it is processed.
-//
+//  4. Please enhance the code to include column headers if they exist,
+//  and to handle blank rows and handle missing values more gracefully.
 
 package main
 
 import (
 	"encoding/csv"
+	"flag"
 	"fmt"
 	"log"
 	"math/big"
@@ -36,11 +38,12 @@ import (
 
 const (
 	programName    = "bfbs.go"
-	programVersion = "v0.0.1"
+	programVersion = "v0.0.2"
 )
 
 // ColumnStats holds data and stats for a single column
 type ColumnStats struct {
+	Header string
 	Values []*big.Float
 	Sum    *big.Float
 	Mean   *big.Float
@@ -49,13 +52,17 @@ type ColumnStats struct {
 }
 
 func main() {
+	headersFlag := flag.Bool("headers", false, "Indicates that the first row of the CSV contains headers")
+	flag.Parse()
+	files := flag.Args()
+
 	fmt.Printf("%s %s\n", programName, programVersion)
 
-	if len(os.Args) < 2 {
-		log.Fatalf("Usage: %s <file1.csv> [file2.csv] ...", os.Args[0])
+	if len(files) == 0 {
+		log.Fatalf("Usage: %s [--headers] <file1.csv> [file2.csv] ...", os.Args[0])
 	}
 
-	for _, filename := range os.Args[1:] {
+	for _, filename := range files {
 		fmt.Printf("Processing file: %s\n", filename)
 
 		file, err := os.Open(filename)
@@ -66,24 +73,61 @@ func main() {
 
 		reader := csv.NewReader(file)
 
+		// Read header row if needed
+		var headers []string
+		if *headersFlag {
+			headerRow, err := reader.Read()
+			if err != nil {
+				log.Fatalf("Failed to read header row in file %s: %v", filename, err)
+			}
+			headers = headerRow
+		}
+
 		// Reset stats per file
 		columns := make(map[int]*ColumnStats)
 
+		rowIndex := 1
 		for {
 			record, err := reader.Read()
 			if err != nil {
-				break
+				break // EOF or error
+			}
+			rowIndex++
+
+			// Skip completely blank rows
+			allBlank := true
+			for _, field := range record {
+				if strings.TrimSpace(field) != "" {
+					allBlank = false
+					break
+				}
+			}
+			if allBlank {
+				continue
 			}
 
 			for i, field := range record {
 				trimmed := strings.TrimSpace(field)
+
+				if trimmed == "" {
+					continue // skip missing values
+				}
+
 				val, _, err := big.ParseFloat(trimmed, 10, 256, big.ToNearestEven)
 				if err != nil {
-					log.Fatalf("Failed to parse float (from \"%s\" at line %d in file \"%s\"): %v", trimmed, i+1, filename, err)
+					fmt.Fprintf(os.Stderr, "Warning: skipping invalid value '%s' at row %d, column %d in file %s\n",
+						field, rowIndex, i+1, filename)
+					continue
 				}
 
 				if _, exists := columns[i]; !exists {
+					header := fmt.Sprintf("Column %d", i+1)
+					if i < len(headers) {
+						header = headers[i]
+					}
+
 					columns[i] = &ColumnStats{
+						Header: header,
 						Sum:    big.NewFloat(0),
 						Mean:   big.NewFloat(0),
 						Var:    big.NewFloat(0),
@@ -96,8 +140,14 @@ func main() {
 			}
 		}
 
-		// Calculate stats per column
-		for idx, stats := range columns {
+		// Calculate and print stats
+		for i := 0; i < len(columns); i++ {
+			stats, ok := columns[i]
+			if !ok || len(stats.Values) == 0 {
+				fmt.Printf("  %s: No valid data\n", getColumnName(headers, i))
+				continue
+			}
+
 			n := big.NewFloat(float64(len(stats.Values)))
 
 			// Mean = Sum / n
@@ -111,17 +161,17 @@ func main() {
 				sumSquares.Add(sumSquares, square)
 			}
 
-			nMinus1 := new(big.Float).Sub(n, big.NewFloat(1))
 			if len(stats.Values) <= 1 {
 				stats.Var.SetFloat64(0)
 				stats.StdDev.SetFloat64(0)
 			} else {
+				nMinus1 := new(big.Float).Sub(n, big.NewFloat(1))
 				stats.Var.Quo(sumSquares, nMinus1)
 				stats.StdDev.Sqrt(stats.Var)
 			}
 
-			// Output stats
-			fmt.Printf("  Column %d:\n", idx+1)
+			// Output
+			fmt.Printf("  %s:\n", stats.Header)
 			fmt.Printf("    Count:  %s\n", n.Text('f', -1))
 			fmt.Printf("    Sum:    %s\n", stats.Sum.Text('f', -1))
 			fmt.Printf("    Mean:   %s\n", stats.Mean.Text('f', -1))
@@ -130,4 +180,12 @@ func main() {
 			fmt.Println()
 		}
 	}
+}
+
+// getColumnName returns header name or fallback column number
+func getColumnName(headers []string, index int) string {
+	if index < len(headers) {
+		return headers[index]
+	}
+	return fmt.Sprintf("Column %d", index+1)
 }

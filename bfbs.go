@@ -23,6 +23,10 @@
 //  and also output the name of each file as it is processed.
 //  4. Please enhance the code to include column headers if they exist,
 //  and to handle blank rows and handle missing values more gracefully.
+//  5. Please enhance the code to ignore lines that
+//  begin with the hash character as comment lines
+//  and allow a number of lines at the start of each file
+//  to be skipped as specified by a command line option.
 
 package main
 
@@ -38,7 +42,7 @@ import (
 
 const (
 	programName    = "bfbs.go"
-	programVersion = "v0.0.2"
+	programVersion = "v0.0.3"
 )
 
 // ColumnStats holds data and stats for a single column
@@ -52,14 +56,15 @@ type ColumnStats struct {
 }
 
 func main() {
-	headersFlag := flag.Bool("headers", false, "Indicates that the first row of the CSV contains headers")
+	headersFlag := flag.Bool("headers", false, "Indicates that the first non-skipped row of the CSV contains headers")
+	skipLines := flag.Int("skip", 0, "Number of lines to skip at the start of each file (before headers or data)")
 	flag.Parse()
 	files := flag.Args()
 
 	fmt.Printf("%s %s\n", programName, programVersion)
 
 	if len(files) == 0 {
-		log.Fatalf("Usage: %s [--headers] <file1.csv> [file2.csv] ...", os.Args[0])
+		log.Fatalf("Usage: %s [--headers] [--skip N] <file1.csv> [file2.csv] ...", os.Args[0])
 	}
 
 	for _, filename := range files {
@@ -73,36 +78,46 @@ func main() {
 
 		reader := csv.NewReader(file)
 
-		// Read header row if needed
 		var headers []string
-		if *headersFlag {
-			headerRow, err := reader.Read()
+		var columns = make(map[int]*ColumnStats)
+
+		// Skip specified lines and comments
+		linesRead := 0
+		for linesRead < *skipLines {
+			_, err := reader.Read()
 			if err != nil {
-				log.Fatalf("Failed to read header row in file %s: %v", filename, err)
+				log.Fatalf("Failed while skipping lines in %s: %v", filename, err)
 			}
-			headers = headerRow
+			linesRead++
 		}
 
-		// Reset stats per file
-		columns := make(map[int]*ColumnStats)
+		// Read header if needed
+		if *headersFlag {
+			for {
+				record, err := reader.Read()
+				if err != nil {
+					log.Fatalf("Error reading header in %s: %v", filename, err)
+				}
+				linesRead++
 
-		rowIndex := 1
+				if isCommentOrBlank(record) {
+					continue
+				}
+
+				headers = record
+				break
+			}
+		}
+
+		rowIndex := linesRead
 		for {
 			record, err := reader.Read()
 			if err != nil {
-				break // EOF or error
+				break // EOF
 			}
 			rowIndex++
 
-			// Skip completely blank rows
-			allBlank := true
-			for _, field := range record {
-				if strings.TrimSpace(field) != "" {
-					allBlank = false
-					break
-				}
-			}
-			if allBlank {
+			if isCommentOrBlank(record) {
 				continue
 			}
 
@@ -110,7 +125,7 @@ func main() {
 				trimmed := strings.TrimSpace(field)
 
 				if trimmed == "" {
-					continue // skip missing values
+					continue // skip blank/missing
 				}
 
 				val, _, err := big.ParseFloat(trimmed, 10, 256, big.ToNearestEven)
@@ -123,7 +138,7 @@ func main() {
 				if _, exists := columns[i]; !exists {
 					header := fmt.Sprintf("Column %d", i+1)
 					if i < len(headers) {
-						header = headers[i]
+						header = strings.TrimSpace(headers[i])
 					}
 
 					columns[i] = &ColumnStats{
@@ -140,7 +155,7 @@ func main() {
 			}
 		}
 
-		// Calculate and print stats
+		// Compute and print stats
 		for i := 0; i < len(columns); i++ {
 			stats, ok := columns[i]
 			if !ok || len(stats.Values) == 0 {
@@ -149,11 +164,8 @@ func main() {
 			}
 
 			n := big.NewFloat(float64(len(stats.Values)))
-
-			// Mean = Sum / n
 			stats.Mean.Quo(stats.Sum, n)
 
-			// Sample Variance = sum((x - mean)^2) / (n - 1)
 			sumSquares := big.NewFloat(0)
 			for _, x := range stats.Values {
 				diff := new(big.Float).Sub(x, stats.Mean)
@@ -170,7 +182,6 @@ func main() {
 				stats.StdDev.Sqrt(stats.Var)
 			}
 
-			// Output
 			fmt.Printf("  %s:\n", stats.Header)
 			fmt.Printf("    Count:  %s\n", n.Text('f', -1))
 			fmt.Printf("    Sum:    %s\n", stats.Sum.Text('f', -1))
@@ -182,10 +193,29 @@ func main() {
 	}
 }
 
-// getColumnName returns header name or fallback column number
+// getColumnName returns the header name or fallback label
 func getColumnName(headers []string, index int) string {
 	if index < len(headers) {
-		return headers[index]
+		return strings.TrimSpace(headers[index])
 	}
 	return fmt.Sprintf("Column %d", index+1)
+}
+
+// isCommentOrBlank returns true if the line is blank or starts with '#'
+func isCommentOrBlank(record []string) bool {
+	if len(record) == 0 {
+		return true
+	}
+	allBlank := true
+	for _, field := range record {
+		if strings.TrimSpace(field) != "" {
+			allBlank = false
+			break
+		}
+	}
+	if allBlank {
+		return true
+	}
+	firstField := strings.TrimSpace(record[0])
+	return strings.HasPrefix(firstField, "#")
 }

@@ -1,14 +1,27 @@
 # bfbs
-The bfbs.jl program is a command line utility that reads 1 or more data files
-containing columns of numbers and outputs the basic statistics of the file contents.
+The big float basic statistics (bfbs) project has morphed from a julia language
+big float exploration into an arbitrary-precision arithmetic multi-language project.
+Each bfbs program is a command line utility that reads data files containing comma
+separated values (CSV), and outputs the basic statistics for each column in the file.
+The minimum set of basic statistics are sum, mean, variance and standard deviation.
+There are quite a few languages that have arbitrary-precision arithmetic available.
+(See
+<a href="https://en.wikipedia.org/wiki/List_of_arbitrary-precision_arithmetic_software">
+Wikipedia's List of arbitrary-precision arithmetic software</a>
+for more detail.)
+Some languages like python and ruby don't just have arbitrary-precision integer capability,
+but have decimal floating point packages. Compiled languages like rust and go also have
+arbitrary-precision floating point capabilty.
+# bfbs.jl
 The bfbs.jl code is written in the julia language, as the .jl implies, and
-uses the julia big float number type to calculate statistics like sum, mean,
+uses the julia big float number type to calculate basic statistics like sum, mean,
 variance and standard deviation to a higher precision than the usual floating point
-number types. The "bfbs" name stands for "big float basic statistics". (N.B.
-Other word choices fit "bfbs" too. For instance although big float may reduce worry about
-truncation, cancellation and accumulation error types effecting the results, other factors
+number types.
+(N.B. Other word choices fit "bfbs" too. For instance although extra precision provided
+by big float floating point arithmetic may reduce worry about
+truncation, cancellation and accumulation errors effecting the results, other factors
 about the data can still make using the results output by bfbs just BS.)
-
+# CSV data files
 The input data files (or file) are assumed by default to be in comma separated value (CSV)
 format. (See
 <a href="https://www.ietf.org/rfc/rfc4180.txt">RFC 4180</a>
@@ -151,7 +164,7 @@ optional arguments:
 
 %
 ```
-This code was produced out of a combination of curiosity as to what julia would be like
+This bfbs.jl code was produced out of a combination of curiosity as to what julia would be like
 to code in and a desire to have better than double precision floating point
 statistic calculations on my Apple Silicon laptop. Apple computers with Intel CPU's
 appear to have (80 bit?) long double precision floating point available,

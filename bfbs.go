@@ -1,5 +1,6 @@
 //
-// B F B S 0 . G O
+//
+// B F B S . G O
 //
 // bfbs.go last edited on Sun Aug 24 18:34:41 2025
 //
@@ -17,6 +18,10 @@
 //  and writes out the results grouped by column number.
 //  2. Please adjust the code to tolerate leading
 //  spaces in front of the numbers.
+//  3. Please adjust the code so that when more than one file is provided
+//  that the stats are reset for the new files data columns
+//  and also output the name of each file as it is processed.
+//
 
 package main
 
@@ -26,12 +31,12 @@ import (
 	"log"
 	"math/big"
 	"os"
-	"strings" // help deal with leading spaces
+	"strings"
 )
 
 const (
 	programName    = "bfbs.go"
-	programVersion = "v0.0.0"
+	programVersion = "v0.0.1"
 )
 
 // ColumnStats holds data and stats for a single column
@@ -50,10 +55,9 @@ func main() {
 		log.Fatalf("Usage: %s <file1.csv> [file2.csv] ...", os.Args[0])
 	}
 
-	// Map column index to stats
-	columns := make(map[int]*ColumnStats)
-
 	for _, filename := range os.Args[1:] {
+		fmt.Printf("Processing file: %s\n", filename)
+
 		file, err := os.Open(filename)
 		if err != nil {
 			log.Fatalf("Failed to open file %s: %v", filename, err)
@@ -61,6 +65,10 @@ func main() {
 		defer file.Close()
 
 		reader := csv.NewReader(file)
+
+		// Reset stats per file
+		columns := make(map[int]*ColumnStats)
+
 		for {
 			record, err := reader.Read()
 			if err != nil {
@@ -68,17 +76,17 @@ func main() {
 			}
 
 			for i, field := range record {
-				trimmed := strings.TrimSpace(field) // Trim leading/trailing spaces
+				trimmed := strings.TrimSpace(field)
 				val, _, err := big.ParseFloat(trimmed, 10, 256, big.ToNearestEven)
 				if err != nil {
-					log.Fatalf("Failed to parse float (from \"%s\" at line %d): %v", trimmed, i+1, err)
+					log.Fatalf("Failed to parse float (from \"%s\" at line %d in file \"%s\"): %v", trimmed, i+1, filename, err)
 				}
 
 				if _, exists := columns[i]; !exists {
 					columns[i] = &ColumnStats{
 						Sum:    big.NewFloat(0),
-						Var:    big.NewFloat(0),
 						Mean:   big.NewFloat(0),
+						Var:    big.NewFloat(0),
 						StdDev: big.NewFloat(0),
 					}
 				}
@@ -87,39 +95,39 @@ func main() {
 				columns[i].Sum.Add(columns[i].Sum, val)
 			}
 		}
-	}
 
-	// Now calculate statistics
-	for idx, stats := range columns {
-		n := big.NewFloat(float64(len(stats.Values)))
+		// Calculate stats per column
+		for idx, stats := range columns {
+			n := big.NewFloat(float64(len(stats.Values)))
 
-		// Mean = Sum / n
-		stats.Mean.Quo(stats.Sum, n)
+			// Mean = Sum / n
+			stats.Mean.Quo(stats.Sum, n)
 
-		// Sample Variance = sum((x - mean)^2) / (n - 1)
-		sumSquares := big.NewFloat(0)
-		for _, x := range stats.Values {
-			diff := new(big.Float).Sub(x, stats.Mean)
-			square := new(big.Float).Mul(diff, diff)
-			sumSquares.Add(sumSquares, square)
+			// Sample Variance = sum((x - mean)^2) / (n - 1)
+			sumSquares := big.NewFloat(0)
+			for _, x := range stats.Values {
+				diff := new(big.Float).Sub(x, stats.Mean)
+				square := new(big.Float).Mul(diff, diff)
+				sumSquares.Add(sumSquares, square)
+			}
+
+			nMinus1 := new(big.Float).Sub(n, big.NewFloat(1))
+			if len(stats.Values) <= 1 {
+				stats.Var.SetFloat64(0)
+				stats.StdDev.SetFloat64(0)
+			} else {
+				stats.Var.Quo(sumSquares, nMinus1)
+				stats.StdDev.Sqrt(stats.Var)
+			}
+
+			// Output stats
+			fmt.Printf("  Column %d:\n", idx+1)
+			fmt.Printf("    Count:  %s\n", n.Text('f', -1))
+			fmt.Printf("    Sum:    %s\n", stats.Sum.Text('f', -1))
+			fmt.Printf("    Mean:   %s\n", stats.Mean.Text('f', -1))
+			fmt.Printf("    Var:    %s\n", stats.Var.Text('f', -1))
+			fmt.Printf("    StdDev: %s\n", stats.StdDev.Text('f', -1))
+			fmt.Println()
 		}
-
-		nMinus1 := new(big.Float).Sub(n, big.NewFloat(1))
-		if n.Cmp(big.NewFloat(1)) <= 0 {
-			stats.Var.SetFloat64(0) // Avoid division by zero if n <= 1
-			stats.StdDev.SetFloat64(0)
-		} else {
-			stats.Var.Quo(sumSquares, nMinus1)
-			stats.StdDev.Sqrt(stats.Var)
-		}
-
-		// Print results
-		fmt.Printf("Column %d:\n", idx+1)
-		fmt.Printf("  Count: %s\n", n.Text('f', -1))
-		fmt.Printf("  Sum:   %s\n", stats.Sum.Text('f', -1))
-		fmt.Printf("  Mean:  %s\n", stats.Mean.Text('f', -1))
-		fmt.Printf("  Var:   %s\n", stats.Var.Text('f', -1))
-		fmt.Printf("  StdDev:%s\n", stats.StdDev.Text('f', -1))
-		fmt.Println()
 	}
 }

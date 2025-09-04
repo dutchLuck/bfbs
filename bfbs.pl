@@ -2,7 +2,7 @@
 #
 # B F B S . P L
 #
-# bfbs.pl last edited on Wed Sep  3 22:09:34 2025
+# bfbs.pl last edited on Wed Sep  3 22:12:34 2025
 #
 # This script reads one or more CSV files, containing one or more columns of
 # numbers and calculates basic statistics for each column (including sum,
@@ -26,38 +26,45 @@ use Math::BigFloat;
 # on numbers, blank rows in files and comment lines
 # beginning with a hash. Allow the precision to be
 # controlled by the user from the command line.
+# 2. Please make the calculated variance the sample form
+# of variance i.e. = sum((x - mean)^2) / (n - 1)
+# unless the user sets an option in the command line.
 
-# Default precision
+# Default settings
 my $precision = 40;
-GetOptions("precision=i" => \$precision) or die "Usage: $0 [--precision=N] file1.csv file2.csv ...\n";
+my $use_population = 0;
+
+GetOptions(
+    "precision=i"   => \$precision,
+    "population"    => \$use_population,
+) or die "Usage: $0 [--precision=N] [--population] file1.csv file2.csv ...\n";
 
 # Set global Math::BigFloat precision
-Math::BigFloat->precision(-$precision);  # negative precision = significant digits
+Math::BigFloat->precision(-$precision);  # Negative means significant digits
 
-# Check for files
-@ARGV or die "Usage: $0 [--precision=N] file1.csv file2.csv ...\n";
+# Require at least one file
+@ARGV or die "Usage: $0 [--precision=N] [--population] file1.csv file2.csv ...\n";
 
 foreach my $file (@ARGV) {
     open my $fh, '<', $file or die "Cannot open $file: $!";
 
     print "\nFile: $file\n";
 
-    my @columns;  # array of arrayrefs, one per column
+    my @columns;  # Array of arrayrefs, one per column
 
     while (my $line = <$fh>) {
         chomp $line;
-        $line =~ s/\r//g;  # Handle Windows line endings
+        $line =~ s/\r//g;
 
-        next if $line =~ /^\s*$/;        # Skip blank lines
-        next if $line =~ /^\s*#/;        # Skip comment lines
+        next if $line =~ /^\s*$/;    # Blank lines
+        next if $line =~ /^\s*#/;    # Comments
 
         my @fields = split /\s*,\s*/, $line;
 
         for my $i (0 .. $#fields) {
             my $val = $fields[$i];
-            $val =~ s/^\s+//;  # Remove leading whitespace
+            $val =~ s/^\s+//;
 
-            # Initialize column if not exists
             $columns[$i] ||= [];
             push @{$columns[$i]}, Math::BigFloat->new($val);
         }
@@ -65,7 +72,6 @@ foreach my $file (@ARGV) {
 
     close $fh;
 
-    # Compute statistics for each column
     for my $i (0 .. $#columns) {
         my $data = $columns[$i];
         next unless @$data;
@@ -76,20 +82,32 @@ foreach my $file (@ARGV) {
 
         my $mean = $sum->copy()->bdiv($n);
 
-        # Variance = sum((x - mean)^2) / n
+        # Variance calculation
         my $var_sum = Math::BigFloat->new(0);
         for my $x (@$data) {
             my $diff = $x->copy()->bsub($mean);
             $var_sum->badd($diff->bpow(2));
         }
-        my $variance = $var_sum->copy()->bdiv($n);
+
+        my $divisor;
+        if ($use_population) {
+            $divisor = Math::BigFloat->new($n);
+        } else {
+            if ($n <= 1) {
+                warn "Not enough data in column ", $i+1, " to compute sample variance (n = $n)\n";
+                next;
+            }
+            $divisor = Math::BigFloat->new($n - 1);
+        }
+
+        my $variance = $var_sum->copy()->bdiv($divisor);
         my $stddev = $variance->copy()->bsqrt();
 
         print "\nColumn ", $i + 1, ":\n";
         print "  Count     : $n\n";
         print "  Sum       : $sum\n";
         print "  Mean      : $mean\n";
-        print "  Variance  : $variance\n";
-        print "  Std Dev   : $stddev\n";
+        print "  Variance  : $variance ", ($use_population ? "(population)" : "(sample)"), "\n";
+        print "  Std Dev   : $stddev ", ($use_population ? "(population)" : "(sample)"), "\n";
     }
 }

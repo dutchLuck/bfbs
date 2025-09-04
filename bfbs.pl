@@ -14,7 +14,7 @@ use warnings;
 use Getopt::Long;
 use Math::BigFloat;
 
-# ChatGPT prompts that produced thid bfbs.pl script; -
+# ChatGPT prompts that produced this bfbs.pl script; -
 # 1. Please write a perl script that reads one or more 
 #    comma separated value data files containing one or more
 #    columns of numbers and calculates the sum, mean,
@@ -31,28 +31,35 @@ use Math::BigFloat;
 #    unless the user sets an option in the command line.
 # 3. Please enhance the script to calculate and output
 #    min, median, max and range.
+# 4. Please enhance the script to handle headers in the
+#    top of row of the CSV columns when the user flags
+#    this in the command line.
 
 # Default settings
 my $precision = 40;
 my $use_population = 0;
+my $use_header = 0;
 
 GetOptions(
     "precision=i"   => \$precision,
     "population"    => \$use_population,
-) or die "Usage: $0 [--precision=N] [--population] file1.csv file2.csv ...\n";
+    "header"        => \$use_header,
+) or die "Usage: $0 [--precision=N] [--population] [--header] file1.csv file2.csv ...\n";
 
 # Set global Math::BigFloat precision
 Math::BigFloat->precision(-$precision);  # Negative => significant digits
 
 # Require at least one file
-@ARGV or die "Usage: $0 [--precision=N] [--population] file1.csv file2.csv ...\n";
+@ARGV or die "Usage: $0 [--precision=N] [--population] [--header] file1.csv file2.csv ...\n";
 
 foreach my $file (@ARGV) {
     open my $fh, '<', $file or die "Cannot open $file: $!";
 
     print "\nFile: $file\n";
 
-    my @columns;  # Array of arrayrefs, one per column
+    my @columns;       # Array of arrayrefs for column data
+    my @headers;       # Column headers
+    my $header_found = 0;
 
     while (my $line = <$fh>) {
         chomp $line;
@@ -62,6 +69,12 @@ foreach my $file (@ARGV) {
         next if $line =~ /^\s*#/;    # Comments
 
         my @fields = split /\s*,\s*/, $line;
+
+        if ($use_header && !$header_found) {
+            @headers = @fields;
+            $header_found = 1;
+            next;
+        }
 
         for my $i (0 .. $#fields) {
             my $val = $fields[$i];
@@ -77,6 +90,8 @@ foreach my $file (@ARGV) {
     for my $i (0 .. $#columns) {
         my $data = $columns[$i];
         next unless @$data;
+
+        my $label = $use_header ? ($headers[$i] // "Column " . ($i + 1)) : "Column " . ($i + 1);
 
         my $n = scalar @$data;
         my $sum = Math::BigFloat->new(0);
@@ -96,7 +111,7 @@ foreach my $file (@ARGV) {
             $divisor = Math::BigFloat->new($n);
         } else {
             if ($n <= 1) {
-                warn "Not enough data in column ", $i+1, " to compute sample variance (n = $n)\n";
+                warn "Not enough data in $label to compute sample variance (n = $n)\n";
                 next;
             }
             $divisor = Math::BigFloat->new($n - 1);
@@ -105,7 +120,7 @@ foreach my $file (@ARGV) {
         my $variance = $var_sum->copy()->bdiv($divisor);
         my $stddev   = $variance->copy()->bsqrt();
 
-        # Sort data for min, max, median
+        # Min, Median, Max, Range
         my @sorted = sort { $a->bcmp($b) } @$data;
         my $min    = $sorted[0]->copy();
         my $max    = $sorted[-1]->copy();
@@ -113,16 +128,14 @@ foreach my $file (@ARGV) {
         my $median;
 
         if ($n % 2 == 1) {
-            # Odd number of elements
             $median = $sorted[int($n / 2)]->copy();
         } else {
-            # Even number of elements: average of middle two
             my $mid1 = $sorted[$n/2 - 1]->copy();
             my $mid2 = $sorted[$n/2]->copy();
             $median = $mid1->badd($mid2)->bdiv(2);
         }
 
-        print "\nColumn ", $i + 1, ":\n";
+        print "\n$label:\n";
         print "  Count     : $n\n";
         print "  Min       : $min\n";
         print "  Median    : $median\n";

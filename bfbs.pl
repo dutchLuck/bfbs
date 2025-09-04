@@ -2,17 +2,12 @@
 #
 # B F B S . P L
 #
-# bfbs.pl last edited on Wed Sep  3 22:29:34 2025
+# bfbs.pl last edited on Thu Sep  4 14:23:59 2025
 #
 # This script reads one or more CSV files, containing one or more columns of
 # numbers and calculates basic statistics for each column (including sum,
 # average, variance and standard deviation) and outputs the results.
 #
-
-use strict;
-use warnings;
-use Getopt::Long;
-use Math::BigFloat;
 
 # ChatGPT prompts that produced this bfbs.pl script; -
 # 1. Please write a perl script that reads one or more 
@@ -34,24 +29,55 @@ use Math::BigFloat;
 # 4. Please enhance the script to handle headers in the
 #    top of row of the CSV columns when the user flags
 #    this in the command line.
+# 5. Please add a command line option to make the output
+#    use scientific format e.g. 1.0e1
+# 6. ~ Fix errors
+# 7. Please add announcement info at the start of output
+#    that has the program name and version number,
+#    then the version of perl that is running the code and
+#    then the version numbers of the packages used if they
+#    exist and finally output the precision and output format
+#    being used.
 
-# Default settings
-my $precision = 40;
-my $use_population = 0;
-my $use_header = 0;
+#!/usr/bin/perl
+use strict;
+use warnings;
+use Getopt::Long;
+use Math::BigFloat;
+
+# === Program Info ===
+my $PROGRAM_NAME    = "bfbs.pl";
+my $PROGRAM_VERSION = "0.0.5";
+
+# === Settings ===
+my $precision       = 40;
+my $use_population  = 0;
+my $use_header      = 0;
+my $use_scientific  = 0;
+my $helpMsg         = "[--header] [--population] [--precision=N] [--scientific] file1.csv [file2.csv ...]";
 
 GetOptions(
     "precision=i"   => \$precision,
     "population"    => \$use_population,
     "header"        => \$use_header,
-) or die "Usage: $0 [--precision=N] [--population] [--header] file1.csv file2.csv ...\n";
+    "scientific"    => \$use_scientific,
+) or die "Usage: $0 $helpMsg\n";
 
 # Set global Math::BigFloat precision
 Math::BigFloat->precision(-$precision);  # Negative => significant digits
 
 # Require at least one file
-@ARGV or die "Usage: $0 [--precision=N] [--population] [--header] file1.csv file2.csv ...\n";
+@ARGV or die "Usage: $0 $helpMsg\n";
 
+# === Announce Info ===
+print "$PROGRAM_NAME version $PROGRAM_VERSION\n";
+print "Perl version: $^V\n";
+print "Getopt::Long Version: ", ($Getopt::Long::VERSION // 'unknown'), "\n";
+print "Math::BigFloat Version: ", ($Math::BigFloat::VERSION // 'unknown'), "\n";
+print "Precision: $precision digits\n";
+print "Output Format: ", ($use_scientific ? "Scientific" : "Decimal"), "\n";
+
+# === File Processing ===
 foreach my $file (@ARGV) {
     open my $fh, '<', $file or die "Cannot open $file: $!";
 
@@ -91,7 +117,7 @@ foreach my $file (@ARGV) {
         my $data = $columns[$i];
         next unless @$data;
 
-        my $label = $use_header ? ($headers[$i] // "Column " . ($i + 1)) : "Column " . ($i + 1);
+        my $label = $use_header ? ($headers[$i] // ($i + 1)) : ($i + 1);
 
         my $n = scalar @$data;
         my $sum = Math::BigFloat->new(0);
@@ -135,15 +161,15 @@ foreach my $file (@ARGV) {
             $median = $mid1->badd($mid2)->bdiv(2);
         }
 
-        print "\n$label:\n";
+        print "\nColumn: $label\n";
         print "  Count     : $n\n";
-        print "  Min       : $min\n";
-        print "  Median    : $median\n";
-        print "  Max       : $max\n";
-        print "  Range     : $range\n";
-        print "  Sum       : $sum\n";
-        print "  Mean      : $mean\n";
-        print "  Variance  : $variance ", ($use_population ? "(population)" : "(sample)"), "\n";
-        print "  Std Dev   : $stddev ", ($use_population ? "(population)" : "(sample)"), "\n";
+        print "  Min       : ", ($use_scientific ? $min->bnstr() : $min->bstr()), "\n";
+        print "  Median    : ", ($use_scientific ? $median->bnstr() : $median->bstr()), "\n";
+        print "  Max       : ", ($use_scientific ? $max->bnstr() : $max->bstr()), "\n";
+        print "  Range     : ", ($use_scientific ? $range->bnstr() : $range->bstr()), "\n";
+        print "  Sum       : ", ($use_scientific ? $sum->bnstr() : $sum->bstr()), "\n";
+        print "  Mean      : ", ($use_scientific ? $mean->bnstr() : $mean->bstr()), "\n";
+        print "  Variance  : ", ($use_scientific ? $variance->bnstr() : $variance->bstr()), " ", ($use_population ? "(population)" : "(sample)"), "\n";
+        print "  Std Dev   : ", ($use_scientific ? $stddev->bnstr() : $stddev->bstr()), " ", ($use_population ? "(population)" : "(sample)"),"\n";
     }
 }

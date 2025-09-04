@@ -37,6 +37,7 @@
 ##
 
 #
+# 0v8 added --precision option and limited print_digits to 100 digits 
 # 0v7 removed unused --output option and rationalized print output 
 # 0v6 added -n option to swap from n-1 to n as the Standard Deviation divisor
 # 0v5 added -D option to enable debug level of information output
@@ -49,6 +50,7 @@ using DelimitedFiles
 using Statistics
 using Printf
 using ArgParse
+using InteractiveUtils	# for versioninfo()
 
 function parse_arguments()
     s = ArgParseSettings()
@@ -81,6 +83,10 @@ function parse_arguments()
         "--print_digits", "-p"
         arg_type = String
         help = "Write output with \"PRINT-DIGITS\" digits. If not provided, 25 output digits are used."
+
+        "--precision", "-P"
+        arg_type = String
+        help = "Calculate using \"PRECISION\" bits. If not provided, 256 bits of precision are used."
 
         "--no_row_stats", "-R"
         action = :store_true
@@ -190,20 +196,22 @@ function print_basic_statistics(str::String, precision::Int64, cnts, mins, media
 end
 
 function main()
+	println("bfbs version 0v8 (2025-09-04)")
+
+	# Parse command line arguments
     args = parse_arguments()
 	comment_delimiter_string = get(args, "comment_char", nothing)	# --comment_char command line argument
 	delimiter_string = get(args, "delimiter_char", nothing)			# --delimiter_char command line argument
 	has_header = args["header"]		# --header command line argument
 	n_divisor = args["n_divisor"]	# --n_divisor command line argument
-	print_digits_string = get(args, "print_digits", nothing)		# --print_digits command line argument
-	skip_lines_string = get(args, "skip", nothing)			# --skip_lines_string command line argument
+	print_digits_string = get(args, "print_digits", nothing)	# --print_digits command line argument
+	precision_bits_string = get(args, "precision", nothing)		# --precision command line argument
+	skip_lines_string = get(args, "skip", nothing)				# --skip_lines_string command line argument
 	verbose = args["verbose"]		# --verbose command line argument
 	files = args["files"]			# names of data files 
 
-	if args["version"] || args["debug"]
-		println("bfbs version 0v7 (2025-06-07)")
-	end
-
+	# Set default values for options if not provided on command line
+	# and check for valid values if provided
 	if isnothing(delimiter_string)
 		delimiter = ','		# set default column delimiter value to comma
 	else
@@ -237,11 +245,36 @@ function main()
 		if precision < 0		# Don't allow negetive numbers in the "%.*e" output format
 			println("Warning: Unable to set print_digits to \"$precision\" digits - limiting to 0 digits")
 			precision = 0
-		elseif precision > 50	# Limit the print_digits to 50 digits
-			println("Warning: Unable to set print_digits to \"$precision\" digits - limiting to 50 digits")
-			precision = 50
+		elseif precision > 100	# Limit the print_digits to 100 digits
+			println("Warning: Unable to set print_digits to \"$precision\" digits - limiting to 100 digits")
+			precision = 100
 		end
 	end
+
+	if isnothing(precision_bits_string)
+		precision_bits = 256			# set default value of calculation precision to effectively "256 bits"
+	else
+		precision_bits = parse(Int64, precision_bits_string)
+		if precision_bits < 16		# Don't allow negetive or too small precision value
+			println("Warning: Unable to set calculation precision to \"$precision_bits\" bits - limiting to 16 bits")
+			precision_bits = 16
+		elseif precision_bits > 1024	# Limit the print_digits to 1024 digits
+			println("Warning: Unable to set calculation precision to \"$precision_bits\" bits - limiting to 1024 bits")
+			precision_bits = 1024
+		end
+	end
+
+	# Announce Julia version
+	if verbose || args["debug"]
+		versioninfo()	# Show Julia version information
+	else
+		println("Julia version $(VERSION)")
+	end
+
+	# Report current precision and settings if verbose or debug mode is active
+	setprecision(BigFloat, precision_bits)	# Defaults to set BigFloat precision to 256 bits (about 77 decimal digits)
+	println("Current BigFloat precision is $precision_bits bits")
+	# (approximately $(floor(Int64, current_precision * log10(2))) decimal digits)")
 
 	if verbose || args["debug"]
 		println("Column delimiter is: '$delimiter'")
@@ -261,9 +294,7 @@ function main()
 			continue	# skip this one, but if there are more files on the command line then try to process them
 		end
 
-		if verbose
-			println("Basic Statistics for Data from file: \"$filepath\"")
-		end
+		println("\nBasic Statistics for Data from file: \"$filepath\"")
 	
 		# Read data from the file into a matrix
 		bignum_matrix = read_bignum_matrix(filepath, delimiter, has_header, verbose, skip_lines, comment_start)

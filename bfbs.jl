@@ -1,11 +1,10 @@
 #! /usr/bin/env julia
-
 #
 # B F B S . J L
 #
-# Big Float Basic Stats
+# Big Float Basic Statistics
 #
-# bfbs.jl last updated on Sat Jun  7 21:37:14 2025 by O.H. as 0v6
+# bfbs.jl last updated on Fri Sep  5 19:54:07 2025 by O.H. as 0v9
 #
 # Descendant of readdatafile.jl 0v1
 #
@@ -33,10 +32,12 @@
 # add ArgParse
 # ^D
 # ./bfbs.jl -V
-# bfbs version 0v7 (2025-06-07)
+# bfbs version 0v9 (2025-09-05)
 ##
 
 #
+# 0v9 output Results digits and changed grouping of row/column stats
+#     output and added --scientific -e option for scientific format
 # 0v8 added --precision option and limited print_digits to 100 digits 
 # 0v7 removed unused --output option and rationalized print output 
 # 0v6 added -n option to swap from n-1 to n as the Standard Deviation divisor
@@ -95,6 +96,10 @@ function parse_arguments()
         "--skip", "-s"
         arg_type = String
         help = "Skip first \"SKIP\" lines in data file(s). If not provided, zero lines are skipped."
+
+        "--scientific", "-e"
+        action = :store_true
+        help = "Output statistics results in scientific format."
 
         "--verbose", "-v"
         action = :store_true
@@ -195,8 +200,44 @@ function print_basic_statistics(str::String, precision::Int64, cnts, mins, media
 	foreach(x -> @printf("%.*e\n", precision, x), stds)
 end
 
+function print_basic_stats_e_format(str::String, precision::Int64, cnts, mins, medians, maxs, ranges, means, sums, vars, stds)
+	# Display rows or column results
+	i = 1
+	for x in cnts
+		@printf("%s: %d\n", str, i)
+		@printf(" Count     : %d\n", x)
+		@printf(" Minimum   : %.*e\n", precision, mins[i])
+		@printf(" Median    : %.*e\n", precision, medians[i])
+		@printf(" Maximum   : %.*e\n", precision, maxs[i])
+		@printf(" Range     : %.*e\n", precision, ranges[i])
+		@printf(" Mean      : %.*e\n", precision, means[i])
+		@printf(" Sum       : %.*e\n", precision, sums[i])
+		@printf(" Variance  : %.*e\n", precision, vars[i])
+		@printf(" Std. Dev. : %.*e\n", precision, stds[i])
+		i += 1
+	end
+end
+
+function print_basic_stats_g_format(str::String, precision::Int64, cnts, mins, medians, maxs, ranges, means, sums, vars, stds)
+	# Display rows or column results
+	i = 1
+	for x in cnts
+		@printf("%s: %d\n", str, i)
+		@printf(" Count     : %d\n", x)
+		@printf(" Minimum   : %.*g\n", precision, mins[i])
+		@printf(" Median    : %.*g\n", precision, medians[i])
+		@printf(" Maximum   : %.*g\n", precision, maxs[i])
+		@printf(" Range     : %.*g\n", precision, ranges[i])
+		@printf(" Mean      : %.*g\n", precision, means[i])
+		@printf(" Sum       : %.*g\n", precision, sums[i])
+		@printf(" Variance  : %.*g\n", precision, vars[i])
+		@printf(" Std. Dev. : %.*g\n", precision, stds[i])
+		i += 1
+	end
+end
+
 function main()
-	println("bfbs version 0v8 (2025-09-04)")
+	println("bfbs version 0v9 (2025-09-05)")
 
 	# Parse command line arguments
     args = parse_arguments()
@@ -239,15 +280,15 @@ function main()
 	end
 
 	if isnothing(print_digits_string)
-		precision = 25			# set default value of output format to effectively "%.25e"
+		precision = 64			# set default value of output format to effectively "%.64g" or "%.64e"
 	else
 		precision = parse(Int64, print_digits_string)
 		if precision < 0		# Don't allow negetive numbers in the "%.*e" output format
 			println("Warning: Unable to set print_digits to \"$precision\" digits - limiting to 0 digits")
 			precision = 0
-		elseif precision > 100	# Limit the print_digits to 100 digits
-			println("Warning: Unable to set print_digits to \"$precision\" digits - limiting to 100 digits")
-			precision = 100
+		elseif precision > 256	# Limit the print_digits to 256 digits
+			println("Warning: Unable to set print_digits to \"$precision\" digits - limiting to 256 digits")
+			precision = 256
 		end
 	end
 
@@ -273,8 +314,13 @@ function main()
 
 	# Report current precision and settings if verbose or debug mode is active
 	setprecision(BigFloat, precision_bits)	# Defaults to set BigFloat precision to 256 bits (about 77 decimal digits)
-	println("Current BigFloat precision is $precision_bits bits")
-	# (approximately $(floor(Int64, current_precision * log10(2))) decimal digits)")
+	println("BigFloat precision: $precision_bits bits")
+	print("Results output using $precision digits in ")
+	if args["scientific"]
+		println("scientific format")
+	else
+		println("general format")
+	end
 
 	if verbose || args["debug"]
 		println("Column delimiter is: '$delimiter'")
@@ -311,13 +357,21 @@ function main()
 			# Calculate row results with high precision
 			row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds = row_stats(bignum_matrix, n_divisor)
 			# Display rows results
-			print_basic_statistics("Row", precision, row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds)
+			if args["scientific"]
+				print_basic_stats_e_format("Row", precision, row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds)
+			else
+				print_basic_stats_g_format("Row", precision, row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds)
+			end
 		end
 		if !args["no_column_stats"] && num_rows > 1		# Don't calc column stats unless more than 1 row
 			# Calculate column results with high precision
 			col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds = col_stats(bignum_matrix, n_divisor)
 			# Display column results
-			print_basic_statistics("Column", precision, col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds)
+			if args["scientific"]
+				print_basic_stats_e_format("Column", precision, col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds)
+			else
+				print_basic_stats_g_format("Column", precision, col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds)
+			end
 		end
     end
 end

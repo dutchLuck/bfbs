@@ -36,6 +36,7 @@
 ##
 
 #
+# 0v10 corrected --help message
 # 0v9 output Results digits and changed grouping of row/column stats
 #     output and added --scientific -e option for scientific format
 # 0v8 added --precision option and limited print_digits to 100 digits 
@@ -73,6 +74,10 @@ function parse_arguments()
         action = :store_true
         help = "Provide copious amounts of information about the current run and the data."
 
+        "--scientific", "-e"
+        action = :store_true
+        help = "Output statistics results in scientific number format."
+
         "--header", "-H"
         action = :store_true
         help = "The first row is treated as a header."
@@ -83,7 +88,7 @@ function parse_arguments()
 
         "--print_digits", "-p"
         arg_type = String
-        help = "Write output with \"PRINT-DIGITS\" digits. If not provided, 25 output digits are used."
+        help = "Write output with \"PRINT-DIGITS\" digits. If not provided, 64 output digits are used."
 
         "--precision", "-P"
         arg_type = String
@@ -96,10 +101,6 @@ function parse_arguments()
         "--skip", "-s"
         arg_type = String
         help = "Skip first \"SKIP\" lines in data file(s). If not provided, zero lines are skipped."
-
-        "--scientific", "-e"
-        action = :store_true
-        help = "Output statistics results in scientific format."
 
         "--verbose", "-v"
         action = :store_true
@@ -237,7 +238,7 @@ function print_basic_stats_g_format(str::String, precision::Int64, cnts, mins, m
 end
 
 function main()
-	println("bfbs version 0v9 (2025-09-05)")
+	println("bfbs version 0v10 (2025-09-05)")
 
 	# Parse command line arguments
     args = parse_arguments()
@@ -317,9 +318,9 @@ function main()
 	println("BigFloat precision: $precision_bits bits")
 	print("Results output using $precision digits in ")
 	if args["scientific"]
-		println("scientific format")
+		println("scientific number format")
 	else
-		println("general format")
+		println("general number format")
 	end
 
 	if verbose || args["debug"]

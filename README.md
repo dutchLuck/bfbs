@@ -1,6 +1,6 @@
 # bfbs
-The big float basic statistics (bfbs) project has morphed from a julia language
-big float exploration into an arbitrary-precision arithmetic multi-language project.
+The "big float basic statistics" (bfbs) project has morphed from a julia language
+BigFloat exploration into an arbitrary-precision arithmetic multi-language project.
 Each bfbs program is a command line utility that reads data files containing comma
 separated values (CSV), and outputs the basic statistics for each column in the file.
 The minimum set of basic statistics are sum, mean, variance and standard deviation.
@@ -12,16 +12,48 @@ for more detail.)
 Some languages like python and ruby don't just have arbitrary-precision integer capability,
 but have decimal floating point packages. Compiled languages like rust and go also have
 arbitrary-precision floating point capabilty.
-# bfbs.jl
-The bfbs.jl code is written in the julia language, as the .jl implies, and
-uses the julia big float number type to calculate basic statistics like sum, mean,
-variance and standard deviation to a higher precision than the usual floating point
-number types.
 (N.B. Other word choices fit "bfbs" too. For instance although extra precision provided
-by big float floating point arithmetic may reduce worry about
+by arbitrary precision (big float) floating point arithmetic may reduce worry about
 truncation, cancellation and accumulation errors effecting the results, other factors
 about the data can still make using the results output by bfbs just BS.)
-# CSV data files
+## bfbs.go
+The golang version of bfbs uses the math/big package and builds and runs without trouble
+on Linux, MacOS and Windows. It outputs min, median, max, range, skew and kurtosis in
+addition to sum, mean, variance and standard deviation. N.B. that the skew and kurtosis
+are float64 calculations in the current (v0.0.5) version. The results are produced without
+any noticable delay.
+## bfbs.rs
+The rust version of bfbs uses the rug crate and builds and runs without trouble
+on MacOS. On Ubuntu Linux the m4 macro processor needed to be installed before the
+build was successful. It did not build for me on Windows and looks like it may require
+Microsoft Visual C tooling? It outputs sum, mean, variance and standard deviation. The
+results are produced without any noticable delay.
+## bfbs.jl
+The julia bfbs code uses the built-in BigFloat number type and runs ok on Linux, 
+MacOS and Windows. It outputs min, median, max, range in addition to sum, mean,
+variance and standard deviation. There is a noticiable delay before results appear
+particularly on computers with modest specs. This code outputs stats for all rows
+as well as columns of numbers, unless the -R option is specified.
+## bfbs.pl
+The perl bfbs code uses the Math::BigFloat package, which does decimal arbitrary-precision
+calculations and runs ok on Linux, MacOS and Windows. It outputs min, median, max, range
+in addition to sum, mean, variance and standard deviation. Even though perl uses an
+interpreter there is only a minor delay before results appear on the computer
+with modest specs.
+## bfbs.py
+The python3 bfbs code uses the Decimal module, which does decimal arbitrary-precision
+calculations and runs ok on Linux, MacOS and Windows. It outputs min, max, range
+in addition to sum, mean, variance and standard deviation. Even though python uses an
+interpreter there isn't a noticable delay before results appear. However this maybe due
+to median not being calculated and output.
+## bfbs.rb
+The ruby bfbs code uses the bigdecimal module, which does decimal arbitrary-precision
+calculations and runs ok on Linux, MacOS and Windows. It outputs the minimal set of sum,
+mean, variance and standard deviation. Even though ruby uses an interpreter there is
+only a slight delay before results appear. However, like python, this maybe due to what
+is not calculated and output by the ruby code which is median, min and max for each
+column of numbers.
+## CSV data files
 The input data files (or file) are assumed by default to be in comma separated value (CSV)
 format. (See
 <a href="https://www.ietf.org/rfc/rfc4180.txt">RFC 4180</a>

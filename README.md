@@ -1,21 +1,36 @@
 # bfbs
 The "big float basic statistics" (bfbs) project has morphed from a julia language
-BigFloat exploration into an arbitrary-precision arithmetic multi-language project.
-Each bfbs program is a command line utility that reads data files containing comma
-separated values (CSV), and outputs the basic statistics for each column in the file.
-The minimum set of basic statistics are sum, mean, variance and standard deviation.
-There are quite a few languages that have arbitrary-precision arithmetic available.
-(See
+BigFloat exploration into an arbitrary-precision arithmetic multi-language basic
+statistics project. Each bfbs program is a command line utility that reads data
+files containing comma separated values (CSV), and outputs at least some of the
+basic statistics for each column in the file. In this project the minimum set of
+basic statistics are taken to be sum, mean, variance and standard deviation. So far
+this project has golang, julia, perl, python, ruby and rust language examples. This
+does not exhaust the list of languages that have arbitrary-precision arithmetic
+capability by any means as there are quite a lot of languages that have arbitrary-
+precision arithmetic available. (See
 <a href="https://en.wikipedia.org/wiki/List_of_arbitrary-precision_arithmetic_software">
 Wikipedia's List of arbitrary-precision arithmetic software</a>
 for more detail.)
 Some languages like python and ruby don't just have arbitrary-precision integer capability,
 but have decimal floating point packages. Compiled languages like rust and go also have
-arbitrary-precision floating point capabilty.
+arbitrary-precision floating point capability. Even if a language does not have this
+capability it does not mean it cannot be used to do basic statistics as lower precision
+may be perfectly acceptable. If the original data being explored was acquired with a
+high level of uncertainty then statistical analysis may of great help, but this does
+not imply that high precision statistical calculations are required.
 (N.B. Other word choices fit "bfbs" too. For instance although extra precision provided
 by arbitrary precision (big float) floating point arithmetic may reduce worry about
 truncation, cancellation and accumulation errors effecting the results, other factors
 about the data can still make using the results output by bfbs just BS.)
+There are examples of basic statistics calculations in a large variety of computer
+languages on the
+<a href="https://rosettacode.org/wiki/Statistics/Basic">rosettacode.org</a> website.
+There are examples of data files with known values of mean and standard deviation
+in the
+<a href="https://www.itl.nist.gov/div898/strd/univ/homepage.html">
+Univariate Summary Statistics</a> section of the
+<a href="https://www.itl.nist.gov/div898/strd/">NIST Statistical Reference Dataset</a> website.
 ## bfbs.go
 The golang version of bfbs uses the math/big package and builds and runs without trouble
 on Linux, MacOS and Windows. It outputs min, median, max, range, skew and kurtosis in
@@ -33,7 +48,11 @@ The julia bfbs code uses the built-in BigFloat number type and runs ok on Linux,
 MacOS and Windows. It outputs min, median, max, range in addition to sum, mean,
 variance and standard deviation. There is a noticiable delay before results appear
 particularly on computers with modest specs. This code outputs stats for all rows
-as well as columns of numbers, unless the -R option is specified.
+as well as columns of numbers, unless the -R option is specified. Analyzing rows
+may be useful if the data was created by data acquisition software that sampled a
+signal a number of time at a given set of test conditions and wrote all the data
+for that set of test conditions into the same row, before taking the data for the
+next and subsequent set of test conditions on following rows in the results file.
 ## bfbs.pl
 The perl bfbs code uses the Math::BigFloat package, which does decimal arbitrary-precision
 calculations and runs ok on Linux, MacOS and Windows. It outputs min, median, max, range

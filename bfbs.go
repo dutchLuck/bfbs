@@ -53,6 +53,8 @@
 // correctly with Go 1.25.0 on MacOS Sequoia. It should work on
 // any platform that supports Go and the math/big package.
 
+// v0.0.6 2025-09-12 Added Big kurtosis & skewness calculation and output.
+
 package main
 
 import (
@@ -70,7 +72,7 @@ import (
 
 const (
 	programName    = "bfbs.go"
-	programVersion = "v0.0.5"
+	programVersion = "v0.0.6"
 )
 
 type ColumnStats struct {
@@ -80,10 +82,14 @@ type ColumnStats struct {
 	Mean     *big.Float
 	Var      *big.Float
 	StdDev   *big.Float
+	VarN     *big.Float
+	StdDevN  *big.Float
 	Min      *big.Float
 	Max      *big.Float
 	Median   *big.Float
 	Range    *big.Float
+	SkewBig  *big.Float
+	KurtBig  *big.Float
 	Skew     float64
 	Kurtosis float64
 }
@@ -208,11 +214,17 @@ func main() {
 						header = strings.TrimSpace(headers[i])
 					}
 					columns[i] = &ColumnStats{
-						Header: header,
-						Sum:    newFloatWithPrec(*precisionFlag),
-						Mean:   newFloatWithPrec(*precisionFlag),
-						Var:    newFloatWithPrec(*precisionFlag),
-						StdDev: newFloatWithPrec(*precisionFlag),
+						Header:  header,
+						Sum:     newFloatWithPrec(*precisionFlag),
+						Mean:    newFloatWithPrec(*precisionFlag),
+						Var:     newFloatWithPrec(*precisionFlag),
+						StdDev:  newFloatWithPrec(*precisionFlag),
+						VarN:    newFloatWithPrec(*precisionFlag),
+						StdDevN: newFloatWithPrec(*precisionFlag),
+						SkewBig: newFloatWithPrec(*precisionFlag),
+						KurtBig: newFloatWithPrec(*precisionFlag),
+						Min:     newFloatWithPrec(*precisionFlag),
+						Max:     newFloatWithPrec(*precisionFlag),
 					}
 				}
 
@@ -233,19 +245,35 @@ func main() {
 			stats.Mean.Quo(stats.Sum, n)
 
 			sumSquares := newFloatWithPrec(*precisionFlag)
+			sumCubes := newFloatWithPrec(*precisionFlag)
+			sum4thPowers := newFloatWithPrec(*precisionFlag)
 			for _, x := range stats.Values {
 				diff := newFloatWithPrec(*precisionFlag).Sub(x, stats.Mean)
 				square := newFloatWithPrec(*precisionFlag).Mul(diff, diff)
 				sumSquares.Add(sumSquares, square)
+				cube := newFloatWithPrec(*precisionFlag).Mul(square, diff)
+				sumCubes.Add(sumCubes, cube)
+				fourthPower := newFloatWithPrec(*precisionFlag).Mul(cube, diff)
+				sum4thPowers.Add(sum4thPowers, fourthPower)
 			}
 
 			if len(stats.Values) <= 1 {
 				stats.Var.SetFloat64(0)
 				stats.StdDev.SetFloat64(0)
+				stats.SkewBig.SetFloat64(0)
 			} else {
 				nMinus1 := newFloatWithPrec(*precisionFlag).Sub(n, big.NewFloat(1))
 				stats.Var.Quo(sumSquares, nMinus1)
 				stats.StdDev.Sqrt(stats.Var)
+				stats.VarN.Quo(sumSquares, n)
+				stats.StdDevN.Sqrt(stats.VarN)
+				stats.SkewBig.Quo(sumCubes, n)
+				stats.SkewBig.Quo(stats.SkewBig, stats.VarN)
+				stats.SkewBig.Quo(stats.SkewBig, stats.StdDevN)
+				stats.KurtBig.Quo(sum4thPowers, n)
+				stats.KurtBig.Quo(stats.KurtBig, stats.VarN)
+				stats.KurtBig.Quo(stats.KurtBig, stats.VarN)
+				stats.KurtBig.Sub(stats.KurtBig, big.NewFloat(3)) // Excess kurtosis
 			}
 
 			// Sort values for median, min, max
@@ -288,17 +316,21 @@ func main() {
 
 			// Output results to stdout
 			fmt.Printf("  %s:\n", stats.Header)
-			fmt.Printf("    Count     : %s\n", n.Text('g', -1))
-			fmt.Printf("    Min       : %s\n", stats.Min.Text(format, *outputDigits))
-			fmt.Printf("    Median    : %s\n", stats.Median.Text(format, *outputDigits))
-			fmt.Printf("    Max       : %s\n", stats.Max.Text(format, *outputDigits))
-			fmt.Printf("    Range     : %s\n", stats.Range.Text(format, *outputDigits))
-			fmt.Printf("    Sum       : %s\n", stats.Sum.Text(format, *outputDigits))
-			fmt.Printf("    Mean      : %s\n", stats.Mean.Text(format, *outputDigits))
-			fmt.Printf("    Variance  : %s\n", stats.Var.Text(format, *outputDigits))
-			fmt.Printf("    Std. Dev. : %s\n", stats.StdDev.Text(format, *outputDigits))
-			fmt.Printf("    Skew      : %.6f\n", stats.Skew)
-			fmt.Printf("    Kurtosis  : %.6f\n", stats.Kurtosis)
+			fmt.Printf("    Count      : %s\n", n.Text('g', -1))
+			fmt.Printf("    Min        : %s\n", stats.Min.Text(format, *outputDigits))
+			fmt.Printf("    Median     : %s\n", stats.Median.Text(format, *outputDigits))
+			fmt.Printf("    Max        : %s\n", stats.Max.Text(format, *outputDigits))
+			fmt.Printf("    Range      : %s\n", stats.Range.Text(format, *outputDigits))
+			fmt.Printf("    Sum        : %s\n", stats.Sum.Text(format, *outputDigits))
+			fmt.Printf("    Mean       : %s\n", stats.Mean.Text(format, *outputDigits))
+			fmt.Printf("    Variance   : %s\n", stats.Var.Text(format, *outputDigits))
+			fmt.Printf("    Std. Dev.  : %s\n", stats.StdDev.Text(format, *outputDigits))
+			fmt.Printf("    VarianceN  : %s\n", stats.VarN.Text(format, *outputDigits))
+			fmt.Printf("    Std. Dev.N : %s\n", stats.StdDevN.Text(format, *outputDigits))
+			fmt.Printf("    Skewness   : %s\n", stats.SkewBig.Text(format, *outputDigits))
+			fmt.Printf("    Excess Kurt: %s\n", stats.KurtBig.Text(format, *outputDigits))
+			fmt.Printf("    f64 Skew   : %.6f\n", stats.Skew)
+			fmt.Printf("    f64 Kurt   : %.6f\n", stats.Kurtosis)
 			fmt.Println()
 
 			// Output results to CSV if requested

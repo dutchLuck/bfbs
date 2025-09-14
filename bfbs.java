@@ -3,7 +3,7 @@
 //
 // Big Float Basic Statistics
 //
-// bfbs.java last updated on Fri Sep 14 22:25:07 2025 by O.H. as 0v1
+// bfbs.java last updated on Sun Sep 14 22:45:07 2025 by O.H. as 0v2
 //
 
 //
@@ -14,7 +14,7 @@
 //  java bfbs 40 data.csv
 //
 // Usage; -
-//  Usage: java bfbs <precision> <file1.csv> [file2.csv] ...
+//  Usage: java bfbs <precision> [--has-header] <file1.csv> [file2.csv] ...
 //
 
 //
@@ -28,6 +28,8 @@
 // spaces on numbers, blank rows in files and comment lines beginning with a hash. Allow
 // the precision to be controlled by the user from the command line.
 //
+// 2. Please enhance the code to handle headers in the top of row of the CSV columns when
+// the user flags this in the command line.
 
 import java.io.*;
 import java.math.*;
@@ -38,45 +40,80 @@ public class bfbs {
 
     public static void main(String[] args) throws IOException {
         if (args.length < 2) {
-            System.err.println("Usage: java bfbs <precision> <file1.csv> [file2.csv] ...");
+            System.err.println("Usage: java bfbs <precision> [--has-header] <file1.csv> [file2.csv] ...");
             return;
         }
 
-        int precision;
+        int precision = 0;
+        boolean hasHeader = false;
+        List<String> fileNames = new ArrayList<>();
+
+        // Parse arguments
         try {
             precision = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
-            System.err.println("Precision must be an integer.");
+            System.err.println("First argument must be the desired precision (an integer).");
+            return;
+        }
+
+        for (int i = 1; i < args.length; i++) {
+            if (args[i].equalsIgnoreCase("--has-header")) {
+                hasHeader = true;
+            } else {
+                fileNames.add(args[i]);
+            }
+        }
+
+        if (fileNames.isEmpty()) {
+            System.err.println("Please provide at least one CSV file.");
             return;
         }
 
         MathContext mc = new MathContext(precision, RoundingMode.HALF_UP);
 
-        for (int i = 1; i < args.length; i++) {
-            String fileName = args[i];
+        for (String fileName : fileNames) {
             System.out.println("Processing file: " + fileName);
-            List<List<BigDecimal>> columns = readCSV(fileName);
+            List<String> headers = new ArrayList<>();
+            List<List<BigDecimal>> columns = readCSV(fileName, hasHeader, headers);
+
             for (int colIndex = 0; colIndex < columns.size(); colIndex++) {
                 List<BigDecimal> column = columns.get(colIndex);
                 if (column.isEmpty()) continue;
+
                 Collections.sort(column);
-                System.out.println("Column " + (colIndex + 1) + ":");
+                String label = hasHeader && colIndex < headers.size()
+                        ? headers.get(colIndex)
+                        : "Column " + (colIndex + 1);
+
+                System.out.println(label + ":");
                 printStats(column, mc);
                 System.out.println();
             }
         }
     }
 
-    private static List<List<BigDecimal>> readCSV(String fileName) throws IOException {
+    // Read CSV and optionally extract header labels
+    private static List<List<BigDecimal>> readCSV(String fileName, boolean hasHeader, List<String> headers) throws IOException {
         List<List<BigDecimal>> columns = new ArrayList<>();
+        boolean headerRead = false;
 
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
+
                 if (line.isEmpty() || line.startsWith("#")) continue;
 
                 String[] tokens = line.split(",");
+
+                if (hasHeader && !headerRead) {
+                    for (String token : tokens) {
+                        headers.add(token.trim());
+                    }
+                    headerRead = true;
+                    continue;
+                }
+
                 for (int i = 0; i < tokens.length; i++) {
                     String token = tokens[i].trim();
                     if (token.isEmpty()) continue;
@@ -85,12 +122,13 @@ public class bfbs {
                     try {
                         value = new BigDecimal(token);
                     } catch (NumberFormatException e) {
-                        continue; // Skip invalid numbers
+                        continue; // skip invalid numbers
                     }
 
                     while (columns.size() <= i) {
                         columns.add(new ArrayList<>());
                     }
+
                     columns.get(i).add(value);
                 }
             }

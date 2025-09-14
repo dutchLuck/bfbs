@@ -3,7 +3,7 @@
 //
 // Big Float Basic Statistics
 //
-// bfbs.java last updated on Sun Sep 14 23:10:07 2025 by O.H. as 0v4
+// bfbs.java last updated on Sun Sep 14 23:17:07 2025 by O.H. as 0v5
 //
 
 //
@@ -11,10 +11,10 @@
 //  javac bfbs.java
 //
 // Run with; -
-//  java bfbs 40 data.csv
+//  java bfbs data.csv
 //
 // Usage; -
-//  Usage: java bfbs --precision=<n> [--round=<n>] [--has-header] <file1.csv> [file2.csv] ...
+//  Usage: Usage: java bfbs [--precision=<n>] [--round=<n>] [--has-header] <file1.csv> [file2.csv] ...
 //
 
 //
@@ -36,6 +36,10 @@
 // 4. Please change the precision positional number on the command line to an optional
 // precision after the same style as "--round=4"
 //
+// 5. Please make the --precision=<n> optional and if it is not specified then use a default
+// value of 40
+//
+//
 
 import java.io.*;
 import java.math.*;
@@ -45,12 +49,8 @@ import java.util.*;
 public class bfbs {
 
     public static void main(String[] args) throws IOException {
-        if (args.length < 2) {
-            System.err.println("Usage: java bfbs --precision=<n> [--round=<n>] [--has-header] <file1.csv> [file2.csv] ...");
-            return;
-        }
-
-        Integer precision = null;
+        // Default precision if not provided
+        int precision = 40;
         boolean hasHeader = false;
         int roundDigits = -1; // -1 = full precision
         List<String> fileNames = new ArrayList<>();
@@ -78,13 +78,8 @@ public class bfbs {
             }
         }
 
-        if (precision == null) {
-            System.err.println("Missing required argument: --precision=<n>");
-            return;
-        }
-
         if (fileNames.isEmpty()) {
-            System.err.println("Please provide at least one CSV file.");
+            System.err.println("Usage: java bfbs [--precision=<n>] [--round=<n>] [--has-header] <file1.csv> [file2.csv] ...");
             return;
         }
 

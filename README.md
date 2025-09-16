@@ -73,13 +73,20 @@ mean, variance and standard deviation. Even though ruby uses an interpreter ther
 only a slight delay before results appear. However, like python, this maybe due to what
 is not calculated and output by the ruby code which is median, min and max for each
 column of numbers. The current code does not handle comments in the CSV file.
+## bfbs.java
+The java bfbs code uses the java.math.BigDecimal package, which is part of the standard
+library. It provides decimal arbitrary-precision calculations and bfbs.java compiles ok
+and runs ok on Windows with the JDK 24 installed. The java code outputs min, median, max,
+range in addition to sum, mean, variance and standard deviation. There is no observable
+delay before results appear.
+
 ## CSV data files
 The input data files (or file) are assumed by default to be in comma separated value (CSV)
 format. (See
 <a href="https://www.ietf.org/rfc/rfc4180.txt">RFC 4180</a>
 for a formal CSV definition.)
-All data files are assumed to have no missing entries and
-no NaN values in the columns of numbers. Unlike the RFC 4180 standard bfbs accepts data files
+All data files are assumed to have no missing entries and no NaN values
+in the columns of numbers. Unlike the RFC 4180 standard bfbs.jl accepts data files
 that contain blank lines and these are ignored. It also accepts data files that contain
 comment lines, which also are ignored. Comment lines by default are assumed to start with
 the hash ("#") character.
@@ -383,4 +390,50 @@ Column: 3
   Variance  : 10000000000000000000000000000000000000020000000000000000000000000000000000000010000000000000000000000.0 (sample)
   Std Dev   : 100000000000000000000000000000000000000100000000000.0 (sample)
 %
+```
+### java
+```
+>java bfbs --precision=340 --round=1 test\data.csv
+bfbs 0v7
+Running on Java version: 24.0.2
+Using java.math.BigDecimal (standard library)
+Calculation precision: 340 digits
+Output rounding: 1 decimal places
+
+Processing file: test\data.csv
+Column 1:
+  Count:            3
+  Min:              100000000000000000000000000000000000000100000000000.0
+  Median:           200000000000000000000000000000000000000200000000000.0
+  Max:              300000000000000000000000000000000000000300000000000.0
+  Range:            200000000000000000000000000000000000000200000000000.0
+  Sum:              600000000000000000000000000000000000000600000000000.0
+  Mean:             200000000000000000000000000000000000000200000000000.0
+  Sample Variance:  10000000000000000000000000000000000000020000000000000000000000000000000000000010000000000000000000000.0
+  Sample Std Dev:   100000000000000000000000000000000000000100000000000.0
+
+Column 2:
+  Count:            3
+  Min:              400000000000000000000000000000000000000400000000000.0
+  Median:           500000000000000000000000000000000000000500000000000.0
+  Max:              600000000000000000000000000000000000000600000000000.0
+  Range:            200000000000000000000000000000000000000200000000000.0
+  Sum:              1500000000000000000000000000000000000001500000000000.0
+  Mean:             500000000000000000000000000000000000000500000000000.0
+  Sample Variance:  10000000000000000000000000000000000000020000000000000000000000000000000000000010000000000000000000000.0
+  Sample Std Dev:   100000000000000000000000000000000000000100000000000.0
+
+Column 3:
+  Count:            3
+  Min:              700000000000000000000000000000000000000700000000000.0
+  Median:           800000000000000000000000000000000000000800000000000.0
+  Max:              900000000000000000000000000000000000000900000000000.0
+  Range:            200000000000000000000000000000000000000200000000000.0
+  Sum:              2400000000000000000000000000000000000002400000000000.0
+  Mean:             800000000000000000000000000000000000000800000000000.0
+  Sample Variance:  10000000000000000000000000000000000000020000000000000000000000000000000000000010000000000000000000000.0
+  Sample Std Dev:   100000000000000000000000000000000000000100000000000.0
+
+
+>
 ```

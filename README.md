@@ -35,8 +35,8 @@ Univariate Summary Statistics</a> section of the
 The golang version of bfbs uses the math/big package and builds and runs without trouble
 on Linux, MacOS and Windows. It outputs min, median, max, range, skew and kurtosis in
 addition to sum, mean, variance and standard deviation. N.B. that the skew and kurtosis
-are float64 calculations in the current (v0.0.5) version. The results are produced without
-any noticable delay.
+are calculated as float64 values and big float values in the current (v0.0.6) version.
+The results are produced without any noticable delay.
 ## bfbs.rs
 The rust version of bfbs uses the rug crate and builds and runs without trouble
 on MacOS. On Ubuntu Linux the m4 macro processor needed to be installed before the
@@ -76,8 +76,8 @@ column of numbers. The current code does not handle comments in the CSV file.
 ## bfbs.java
 The java bfbs code uses the java.math.BigDecimal package, which is part of the standard
 library. It provides decimal arbitrary-precision calculations and bfbs.java compiles ok
-and runs ok on Windows with the JDK 24 installed. The java code outputs min, median, max,
-range in addition to sum, mean, variance and standard deviation. There is no observable
+and runs ok on open JDK 21. The java code outputs min, median, max and range
+in addition to sum, mean, variance and standard deviation. There is no observable
 delay before results appear.
 
 ## CSV data files
@@ -393,9 +393,9 @@ Column: 3
 ```
 ### java
 ```
->java bfbs --precision=340 --round=1 test\data.csv
+> java bfbs --precision=340 --round=1 test\data.csv
 bfbs 0v7
-Running on Java version: 24.0.2
+Running on Java version: 21.0.8
 Using java.math.BigDecimal (standard library)
 Calculation precision: 340 digits
 Output rounding: 1 decimal places
@@ -433,7 +433,6 @@ Column 3:
   Mean:             800000000000000000000000000000000000000800000000000.0
   Sample Variance:  10000000000000000000000000000000000000020000000000000000000000000000000000000010000000000000000000000.0
   Sample Std Dev:   100000000000000000000000000000000000000100000000000.0
-
 
 >
 ```

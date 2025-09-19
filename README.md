@@ -1,5 +1,6 @@
 # bfbs
-The "big float basic statistics" (bfbs) project has morphed from a julia language
+The "big float basic statistics" (bfbs) project has morphed from a
+<a href="https://julialang.org/">Julia</a> language
 BigFloat exploration into an arbitrary-precision arithmetic multi-language basic
 statistics project. Each bfbs program is a command line utility that reads data
 files containing comma separated values (CSV), and outputs at least some of the
@@ -32,19 +33,23 @@ in the
 Univariate Summary Statistics</a> section of the
 <a href="https://www.itl.nist.gov/div898/strd/">NIST Statistical Reference Dataset</a> website.
 ## bfbs.go
-The golang version of bfbs uses the math/big package and builds and runs without trouble
+The golang version of bfbs uses the
+<a href="https://pkg.go.dev/math/big">math/big</a> package and builds and runs without trouble
 on Linux, MacOS and Windows. It outputs min, median, max, range, skew and kurtosis in
 addition to sum, mean, variance and standard deviation. N.B. that the skew and kurtosis
 are calculated as float64 values and big float values in the current (v0.0.6) version.
 The results are produced without any noticable delay.
 ## bfbs.rs
-The rust version of bfbs uses the rug crate and builds and runs without trouble
+The rust version of bfbs uses the
+<a href="https://crates.io/crates/rug">rug crate</a> and builds and runs without trouble
 on MacOS. On Ubuntu Linux the m4 macro processor needed to be installed before the
 build was successful. It did not build for me on Windows and looks like it may require
 Microsoft Visual C tooling? It outputs sum, mean, variance and standard deviation. The
 results are produced without any noticable delay.
 ## bfbs.jl
-The julia bfbs code uses the built-in BigFloat number type and runs ok on Linux, 
+The julia bfbs code uses the built-in
+<a href="https://docs.julialang.org/en/v1/manual/integers-and-floating-point-numbers/#Arbitrary-Precision-Arithmetic">
+BigFloat</a> number type and runs ok on Linux, 
 MacOS and Windows. It outputs min, median, max, range in addition to sum, mean,
 variance and standard deviation. There is a noticiable delay before results appear
 particularly on computers with modest specs. This code outputs stats for all rows
@@ -54,27 +59,35 @@ signal a number of time at a given set of test conditions and wrote all the data
 for that set of test conditions into the same row, before taking the data for the
 next and subsequent set of test conditions on following rows in the results file.
 ## bfbs.pl
-The perl bfbs code uses the Math::BigFloat package, which does decimal arbitrary-precision
+The perl bfbs code uses the
+<a href="https://perldoc.perl.org/Math::BigFloat">Math::BigFloat</a>
+package, which does decimal arbitrary-precision
 calculations and runs ok on Linux, MacOS and Windows. It outputs min, median, max, range
 in addition to sum, mean, variance and standard deviation. Even though perl uses an
 interpreter there is only a minor delay before results appear on the computer
 with modest specs.
 ## bfbs.py
-The python3 bfbs code uses the Decimal module, which does decimal arbitrary-precision
+The python3 bfbs code uses the
+<a href="https://docs.python.org/3/library/decimal.html">Decimal</a>
+module, which does decimal arbitrary-precision
 calculations and runs ok on Linux, MacOS and Windows. It outputs min, max, range
 in addition to sum, mean, variance and standard deviation. Even though python uses an
 interpreter there isn't a noticable delay before results appear. However this maybe due
 to median not being calculated and output. The current code does not handle comments
 in the CSV file.
 ## bfbs.rb
-The ruby bfbs code uses the bigdecimal module, which does decimal arbitrary-precision
+The ruby bfbs code uses the
+<a href="https://ruby-doc.org/stdlib-3.1.0/libdoc/bigdecimal/rdoc/BigDecimal.html">bigdecimal</a>
+module, which does decimal arbitrary-precision
 calculations and runs ok on Linux, MacOS and Windows. It outputs the minimal set of sum,
 mean, variance and standard deviation. Even though ruby uses an interpreter there is
 only a slight delay before results appear. However, like python, this maybe due to what
 is not calculated and output by the ruby code which is median, min and max for each
 column of numbers. The current code does not handle comments in the CSV file.
 ## bfbs.java
-The java bfbs code uses the java.math.BigDecimal package, which is part of the standard
+The java bfbs code uses the
+<a href="https://docs.oracle.com/javase/10/docs/api/index.html?java/math/BigDecimal.html">java.math.BigDecimal</a>
+package, which is part of the standard
 library. It provides decimal arbitrary-precision calculations and bfbs.java compiles ok
 and runs ok on open JDK 21. The java code outputs min, median, max and range
 in addition to sum, mean, variance and standard deviation. There is no observable

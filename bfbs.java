@@ -3,7 +3,7 @@
 //
 // Big Float Basic Statistics
 //
-// bfbs.java last updated on Mon Sep 15 19:15:07 2025 by O.H. as 0v7
+// bfbs.java last updated on Mon Sep 22 22:55:07 2025 by O.H. as 0v8
 //
 
 //
@@ -47,6 +47,7 @@
 //
 
 //
+// 0v8 Rearrange order of output and make output a bit more consistant with other bfbs programs
 // 0v7 Handle file not found and check user supplied integers
 //
 
@@ -119,7 +120,7 @@ public class bfbs {
         }
 
         // 🎉 Program info banner
-        System.out.println("bfbs 0v7");
+        System.out.println("bfbs 0v8");
         String javaVersion = System.getProperty("java.version");
         System.out.println("Running on Java version: " + javaVersion);
         System.out.println("Using java.math.BigDecimal (standard library)");
@@ -239,15 +240,15 @@ public class bfbs {
         BigDecimal sampleStdDev = sqrt(sampleVariance, mc);
 
         // Display results (rounded if requested)
-        System.out.println("  Count:            " + n);
-        System.out.println("  Min:              " + format(min, roundDigits));
-        System.out.println("  Median:           " + format(median, roundDigits));
-        System.out.println("  Max:              " + format(max, roundDigits));
-        System.out.println("  Range:            " + format(range, roundDigits));
-        System.out.println("  Sum:              " + format(sum, roundDigits));
-        System.out.println("  Mean:             " + format(mean, roundDigits));
-        System.out.println("  Sample Variance:  " + format(sampleVariance, roundDigits));
-        System.out.println("  Sample Std Dev:   " + format(sampleStdDev, roundDigits));
+        System.out.println("  Count            : " + n);
+        System.out.println("  Minimum          : " + format(min, roundDigits));
+        System.out.println("  Mean             : " + format(mean, roundDigits));
+        System.out.println("  Median           : " + format(median, roundDigits));
+        System.out.println("  Maximum          : " + format(max, roundDigits));
+        System.out.println("  Range            : " + format(range, roundDigits));
+        System.out.println("  Sum              : " + format(sum, roundDigits));
+        System.out.println("  Sample Variance  : " + format(sampleVariance, roundDigits));
+        System.out.println("  Sample Std. Dev. : " + format(sampleStdDev, roundDigits));
     }
 
     private static String format(BigDecimal value, int roundDigits) {

@@ -2,7 +2,7 @@
 #
 # B F B S . P L
 #
-# bfbs.pl last edited on Thu Sep  4 14:23:59 2025
+# bfbs.pl last edited on Sat Sep 20 21:45:59 2025
 #
 # This script reads one or more CSV files, containing one or more columns of
 # numbers and calculates basic statistics for each column (including sum,
@@ -39,7 +39,10 @@
 #    exist and finally output the precision and output format
 #    being used.
 
-#!/usr/bin/perl
+#
+# 0v6 Cosmetic changes to output labels
+#
+
 use strict;
 use warnings;
 use Getopt::Long;
@@ -47,7 +50,7 @@ use Math::BigFloat;
 
 # === Program Info ===
 my $PROGRAM_NAME    = "bfbs.pl";
-my $PROGRAM_VERSION = "0.0.5";
+my $PROGRAM_VERSION = "0v6 (2025-09-20)";
 
 # === Settings ===
 my $precision       = 40;
@@ -163,13 +166,13 @@ foreach my $file (@ARGV) {
 
         print "\nColumn: $label\n";
         print "  Count     : $n\n";
-        print "  Min       : ", ($use_scientific ? $min->bnstr() : $min->bstr()), "\n";
+        print "  Minimum   : ", ($use_scientific ? $min->bnstr() : $min->bstr()), "\n";
+        print "  Mean      : ", ($use_scientific ? $mean->bnstr() : $mean->bstr()), "\n";
         print "  Median    : ", ($use_scientific ? $median->bnstr() : $median->bstr()), "\n";
-        print "  Max       : ", ($use_scientific ? $max->bnstr() : $max->bstr()), "\n";
+        print "  Maximum   : ", ($use_scientific ? $max->bnstr() : $max->bstr()), "\n";
         print "  Range     : ", ($use_scientific ? $range->bnstr() : $range->bstr()), "\n";
         print "  Sum       : ", ($use_scientific ? $sum->bnstr() : $sum->bstr()), "\n";
-        print "  Mean      : ", ($use_scientific ? $mean->bnstr() : $mean->bstr()), "\n";
         print "  Variance  : ", ($use_scientific ? $variance->bnstr() : $variance->bstr()), " ", ($use_population ? "(population)" : "(sample)"), "\n";
-        print "  Std Dev   : ", ($use_scientific ? $stddev->bnstr() : $stddev->bstr()), " ", ($use_population ? "(population)" : "(sample)"),"\n";
+        print "  Std. Dev. : ", ($use_scientific ? $stddev->bnstr() : $stddev->bstr()), " ", ($use_population ? "(population)" : "(sample)"),"\n";
     }
 }

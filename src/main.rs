@@ -1,7 +1,7 @@
 //
 // B F B S . R S
 //
-// main.rs last edited on Sun Aug 31 23:37:43 2025
+// main.rs last edited on Tue Sep 23 23:05:43 2025
 //
 // This ChatGPT code appears to calculate test cases correctly
 // However cargo did not successfully compile the needed 
@@ -14,7 +14,7 @@
 // requires Cargo.toml as follows; -
 // [package]
 // name = "bfbs"
-// version = "0.1.2"
+// version = "0.1.3"
 // edition = "2024"
 //
 // [dependencies]
@@ -34,6 +34,10 @@
 // to allow gmp-mpfr-sys to build correctly.
 //
 
+//
+// v0.1.3 Added minimum, maximum and range to output
+//
+
 use clap::Parser;
 use csv::ReaderBuilder;
 use std::io::{BufRead, BufReader};
@@ -43,15 +47,16 @@ use std::fs::File;
 use std::path::PathBuf;
 
 /// Default precision to use for calculations (in bits)
-const DEFAULT_PRECISION: u32 = 160;
-const DEFAULT_DIGITS: usize= 40;
+const DEFAULT_PRECISION: u32 = 256;
+const DEFAULT_DIGITS: usize= 64;
+
 pub const MAIN_NAME: &'static str = env!("CARGO_PKG_NAME");
 pub const MAIN_VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
 /// Command-line arguments
 #[derive(Parser, Debug)]
 #[command(name = "bfbs:")]
-#[command(about = "Calculate stats (sum, mean, variance, stddev) from CSV columns")]
+#[command(about = "Calculate stats (minimum, mean, maximum, range, sum, variance, stddev) from CSV columns")]
 #[clap(author, version, about = None, long_about = None)]
 struct Args {
     /// Input CSV files
@@ -93,6 +98,8 @@ struct Args {
 struct ColumnStats {
     count: usize,
     sum: Float,
+    max: Float,
+    min: Float,
     values: Vec<Float>,
 }
 
@@ -101,18 +108,43 @@ impl ColumnStats {
         Self {
             count: 0,
             sum: Float::with_val(precision, 0),
+            max: Float::with_val(precision, 0),
+            min: Float::with_val(precision, 0),
             values: Vec::new(),
         }
     }
 
     fn add(&mut self, value: Float) {
         self.sum += &value;
+        if self.count == 0 {
+            self.max = value.clone();
+            self.min = value.clone();
+        } else {
+            if self.max < value {
+                self.max = value.clone()
+            }
+            if self.min > value {
+                self.min = value.clone()
+            } 
+        }
         self.values.push(value);
         self.count += 1;
     }
 
     fn sum(&self, _precision: u32) -> &Float {
         &self.sum
+    }
+
+    fn maximum(&self, _precision: u32) -> &Float {
+        &self.max
+    }
+
+    fn minimum(&self, _precision: u32) -> &Float {
+        &self.min
+    }
+
+    fn range(&self, _precision: u32) -> Float {
+        &self.max - self.min.clone()
     }
 
     fn mean(&self, precision: u32) -> Float {
@@ -252,7 +284,7 @@ fn main() {
     args.skip_lines = args.skip_lines.clamp(0, 2048);    // No user warning, but limit skipped input lines
 
     // Output version and environment information
-    println!("{}.rs v{}", MAIN_NAME, MAIN_VERSION);
+    println!("{}.rs version v{}", MAIN_NAME, MAIN_VERSION);
     println!(
         "Using {} bit precision for calculation and {} digit {} print out.",
         args.precision, args.digits,
@@ -272,8 +304,11 @@ fn main() {
             Ok(stats) => {
                 for (col, data) in stats {
                     println!("Column: {}", col);
-                    println!("  Sum       : {}", format_float(data.sum(args.precision), args.scientific, args.digits));
+                    println!("  Minimum   : {}", format_float(&data.minimum(args.precision), args.scientific, args.digits));
                     println!("  Mean      : {}", format_float(&data.mean(args.precision), args.scientific, args.digits));
+                    println!("  Maximum   : {}", format_float(&data.maximum(args.precision), args.scientific, args.digits));
+                    println!("  Range     : {}", format_float(&data.range(args.precision), args.scientific, args.digits));
+                    println!("  Sum       : {}", format_float(data.sum(args.precision), args.scientific, args.digits));
                     println!("  Variance  : {}", format_float(&data.variance(args.precision), args.scientific, args.digits));
                     println!("  Std. Dev. : {}", format_float(&data.stddev(args.precision), args.scientific, args.digits));
                 }

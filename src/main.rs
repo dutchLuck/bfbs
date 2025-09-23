@@ -1,7 +1,7 @@
 //
 // B F B S . R S
 //
-// main.rs last edited on Tue Sep 23 23:05:43 2025
+// main.rs last edited on Tue Sep 23 23:35:43 2025
 //
 // This ChatGPT code appears to calculate test cases correctly
 // However cargo did not successfully compile the needed 
@@ -129,6 +129,10 @@ impl ColumnStats {
         }
         self.values.push(value);
         self.count += 1;
+    }
+
+    fn cnt(&self) -> &usize {
+        &self.count
     }
 
     fn sum(&self, _precision: u32) -> &Float {
@@ -304,6 +308,7 @@ fn main() {
             Ok(stats) => {
                 for (col, data) in stats {
                     println!("Column: {}", col);
+                    println!("  Count     : {}", data.cnt());
                     println!("  Minimum   : {}", format_float(&data.minimum(args.precision), args.scientific, args.digits));
                     println!("  Mean      : {}", format_float(&data.mean(args.precision), args.scientific, args.digits));
                     println!("  Maximum   : {}", format_float(&data.maximum(args.precision), args.scientific, args.digits));

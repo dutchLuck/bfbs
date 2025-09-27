@@ -3,7 +3,7 @@
 //
 // Big Float Basic Statistics
 //
-// bfbs.cpp last updated on Fri Sep 26 21:00:07 2025 by O.H. as 0v1
+// bfbs.cpp last updated on Sat Sep 27 22:50:13 2025 by O.H. as 0v1
 //
 
 //
@@ -40,6 +40,9 @@
 // instead of numbers.
 //
 
+//
+// 0v2 Added --quiet option to suppress version info and increase output digits to 64
+//
 
 #include <iostream>
 #include <fstream>
@@ -53,7 +56,7 @@
 using namespace std;
 
 #define PROGRAM_NAME "bfbs"
-#define PROGRAM_VERSION "0v1"
+#define PROGRAM_VERSION "0v2"
 
 // RAII Wrapper for mpfr_t
 class MpfrFloat {
@@ -91,8 +94,10 @@ public:
 
 struct Options {
     int precision = 256;
-    int digits = 40;
+    int digits = 64;
     bool hasHeader = false;
+    bool quiet = false;
+    bool help = false;
     vector<string> files;
 };
 
@@ -106,27 +111,33 @@ Options parseArgs(int argc, char* argv[]) {
             opts.digits = stoi(argv[++i]);
         } else if (arg == "--header") {
             opts.hasHeader = true;
+        } else if (arg == "--quiet") {
+            opts.quiet = true;
+        } else if (arg == "--help") {
+            opts.help = true;
         } else {
             opts.files.push_back(arg);
         }
     }
-    if (opts.files.empty()) {
-        cerr << "Usage: ./bfbs file1.csv [file2.csv ...] [--header] [--precision N] [--digits N]\n";
+    if (opts.files.empty() || opts.help) {
+        cerr << "Usage:" << endl;
+        cerr << " ./bfbs file1.csv [file2.csv ...] [--help] [--quiet] [--header] [--precision N] [--digits N]\n";
         exit(1);
     }
     return opts;
 }
 
 void printBanner(const Options& opts) {
-    cout << PROGRAM_NAME << " version " << PROGRAM_VERSION << endl;
-    cout << "Compiler version: " << __VERSION__ << endl;
+    if( ! opts.quiet ) {
+        cout << PROGRAM_NAME << " version " << PROGRAM_VERSION << endl;
+        cout << "Compiler version: " << __VERSION__ << endl;
 
-    cout << "MPFR version: " << mpfr_get_version() << endl;
-    cout << "GMP version:  " << gmp_version << endl;
-
-    cout << "Calculation precision: " << opts.precision << " bits" << endl;
-    cout << "Output precision: " << opts.digits << " digits" << endl;
-    cout << "Rounding mode: MPFR_RNDN (round to nearest)" << endl;
+        cout << "MPFR version: " << mpfr_get_version() << endl;
+        cout << "GMP version:  " << gmp_version << endl;
+    }
+    cout << "Using " << opts.precision << " bits Calculation precision ";
+    cout << "and " << opts.digits << " digits Output precision ";
+    cout << "with Rounding mode: MPFR_RNDN (round to nearest)" << endl;
     cout << endl;
 }
 

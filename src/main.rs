@@ -1,7 +1,7 @@
 //
 // B F B S . R S
 //
-// main.rs last edited on Tue Sep 23 23:35:43 2025
+// main.rs last edited on Sat Sep 27 23:09:26 2025
 //
 // This ChatGPT code appears to calculate test cases correctly
 // However cargo did not successfully compile the needed 
@@ -14,11 +14,11 @@
 // requires Cargo.toml as follows; -
 // [package]
 // name = "bfbs"
-// version = "0.1.3"
+// version = "0.1.5"
 // edition = "2024"
 //
 // [dependencies]
-// csv = "1"
+// csv = "1.3"
 // rug = "1"
 // clap = { version = "4", features = ["derive"] }
 //
@@ -91,6 +91,10 @@ struct Args {
     /// Output extra information
     #[arg(short = 'v', long = "verbose")]
     verbose: bool,
+
+    /// Don't output version information
+    #[arg(short = 'q', long = "quiet")]
+    quiet: bool,
     
 }
 
@@ -288,7 +292,9 @@ fn main() {
     args.skip_lines = args.skip_lines.clamp(0, 2048);    // No user warning, but limit skipped input lines
 
     // Output version and environment information
-    println!("{}.rs version v{}", MAIN_NAME, MAIN_VERSION);
+    if ! args.quiet {
+        println!("{} version v{}", MAIN_NAME, MAIN_VERSION);
+    }
     println!(
         "Using {} bit precision for calculation and {} digit {} print out.",
         args.precision, args.digits,

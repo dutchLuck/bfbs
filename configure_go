@@ -1,0 +1,38 @@
+#! /bin/bash
+#
+# C O N F I G U R E _ C P P
+#
+# configure last edited on Sat Sep 27 23:47:03 2025 
+#
+NAME1=bfbs
+#
+OP_FILE_NAME=Makefile
+COMPILER="go"
+OPTIONS="build"
+LNK_OPTIONS=""
+TRGT=${NAME1}_go
+SRC1=${NAME1}.go
+#
+#
+echo "$TRGT: $SRC1" > $OP_FILE_NAME
+echo -e "\t$COMPILER $OPTIONS "'$^'" $LNK_OPTIONS" >> $OP_FILE_NAME
+echo -e "\tmv $NAME1 $TRGT" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "check: $TRGT" >> $OP_FILE_NAME
+echo -e "\tcd test; ./check_go" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "chk: $TRGT" >> $OP_FILE_NAME
+echo -e "\tcd test; ./chk_go" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "clean:" >> $OP_FILE_NAME
+echo -e "\trm -f $TRGT" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "debug: clean" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $OPTIONS $SRC1 $LNK_OPTIONS" >> $OP_FILE_NAME
+echo -e "\tmv $NAME1 $TRGT" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#

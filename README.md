@@ -32,6 +32,14 @@ in the
 <a href="https://www.itl.nist.gov/div898/strd/univ/homepage.html">
 Univariate Summary Statistics</a> section of the
 <a href="https://www.itl.nist.gov/div898/strd/">NIST Statistical Reference Dataset</a> website.
+## bfbs.cpp
+The C++ version of bfbs uses the 
+<a href="https://www.mpfr.org/">MPFR</a> (arbitrary-precision floating-point) library and the
+<a href="https://gmplib.org/">GMP</a> (multiple-precision arithmetic) library code to provide
+the basis of all the calculations. This program compiles on Ubuntu 22.04 LTS Linux after
+the MPFR and GMP dev libraries are installed using the apt package manager. It outputs
+minimum, median, maximum and range in addition to sum, mean, sample variance (s^2) and
+sample standard deviation (s). The results are produced without any noticable delay.
 ## bfbs.go
 The golang version of bfbs uses the
 <a href="https://pkg.go.dev/math/big">math/big</a> package and builds and runs without trouble
@@ -39,13 +47,14 @@ on Linux, MacOS and Windows. It outputs min, median, max, range, skew and kurtos
 addition to sum, mean, variance and standard deviation. N.B. that the skew and kurtosis
 are calculated as float64 values and big float values in the current (v0.0.6) version.
 The results are produced without any noticable delay.
-## bfbs.rs
-The rust version of bfbs uses the
-<a href="https://crates.io/crates/rug">rug crate</a> and builds and runs without trouble
-on MacOS. On Ubuntu Linux the m4 macro processor needed to be installed before the
-build was successful. It did not build for me on Windows and looks like it may require
-Microsoft Visual C tooling? It outputs sum, mean, variance and standard deviation. The
-results are produced without any noticable delay.
+## bfbs.java
+The java bfbs code uses the
+<a href="https://docs.oracle.com/javase/10/docs/api/index.html?java/math/BigDecimal.html">java.math.BigDecimal</a>
+package, which is part of the standard
+library. It provides decimal arbitrary-precision calculations and bfbs.java compiles ok
+and runs ok on open JDK 21. The java code outputs min, median, max and range
+in addition to sum, mean, variance and standard deviation. There is no observable
+delay before results appear.
 ## bfbs.jl
 The julia bfbs code uses the built-in
 <a href="https://docs.julialang.org/en/v1/manual/integers-and-floating-point-numbers/#Arbitrary-Precision-Arithmetic">
@@ -83,14 +92,13 @@ mean, variance and standard deviation. Even though ruby uses an interpreter ther
 only a slight delay before results appear. However, like python, this maybe due to what
 is not calculated and output by the ruby code which is median for each
 column of numbers.
-## bfbs.java
-The java bfbs code uses the
-<a href="https://docs.oracle.com/javase/10/docs/api/index.html?java/math/BigDecimal.html">java.math.BigDecimal</a>
-package, which is part of the standard
-library. It provides decimal arbitrary-precision calculations and bfbs.java compiles ok
-and runs ok on open JDK 21. The java code outputs min, median, max and range
-in addition to sum, mean, variance and standard deviation. There is no observable
-delay before results appear.
+## bfbs.rs
+The rust version of bfbs uses the
+<a href="https://crates.io/crates/rug">rug crate</a> and builds and runs without trouble
+on MacOS. On Ubuntu Linux the m4 macro processor needed to be installed before the
+build was successful. It did not build for me on Windows and looks like it may require
+Microsoft Visual C tooling? It outputs sum, mean, variance and standard deviation. The
+results are produced without any noticable delay.
 
 ## CSV data files
 The input data files (or file) are assumed by default to be in comma separated value (CSV)
@@ -235,8 +243,8 @@ optional arguments:
 
 %
 ```
-This bfbs.jl code was produced out of a combination of curiosity as to what julia would be like
-to code in and a desire to have better than double precision floating point
+This bfbs.jl code was produced out of a combination of curiosity as to what julia would
+be like to code in and a desire to have better than double precision floating point
 statistic calculations on my Apple Silicon laptop. Apple computers with Intel CPU's
 appear to have (80 bit?) long double precision floating point available,
 but at least in C language coding Apple Silicon computers have no difference in precision
@@ -281,6 +289,51 @@ The long double precision floating point value ("LDBL_MANT_DIG") has 64 mantissa
 The long double precision epsilon floating point value ("LDBL_EPSILON") is 1.0842e-19
 ```
 ## Output from languages other than julia; -
+### C++
+```
+$ ./bfbs_cpp --precision 340 --digits 80 test/data.csv 
+bfbs version 0v2
+Compiler version: 11.4.0
+MPFR version: 4.1.0
+GMP version:  6.2.1
+Using 340 bits Calculation precision and 80 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
+
+Processing file: test/data.csv
+Column: Column 1
+  Count            : 3
+  Minimum          : 1.0000000000000000000000000000000000000010000000000000000000000000000000000000000e50
+  Mean             : 2.0000000000000000000000000000000000000020000000000000000000000000000000000000000e50
+  Median           : 2.0000000000000000000000000000000000000020000000000000000000000000000000000000000e50
+  Maximum          : 3.0000000000000000000000000000000000000030000000000000000000000000000000000000000e50
+  Range            : 2.0000000000000000000000000000000000000020000000000000000000000000000000000000000e50
+  Sum              : 6.0000000000000000000000000000000000000060000000000000000000000000000000000000000e50
+  Sample Variance  : 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e100
+  Sample Std. Dev. : 1.0000000000000000000000000000000000000010000000000000000000000000000000000000000e50
+
+Column: Column 2
+  Count            : 3
+  Minimum          : 4.0000000000000000000000000000000000000040000000000000000000000000000000000000000e50
+  Mean             : 5.0000000000000000000000000000000000000050000000000000000000000000000000000000000e50
+  Median           : 5.0000000000000000000000000000000000000050000000000000000000000000000000000000000e50
+  Maximum          : 6.0000000000000000000000000000000000000060000000000000000000000000000000000000000e50
+  Range            : 2.0000000000000000000000000000000000000020000000000000000000000000000000000000000e50
+  Sum              : 1.5000000000000000000000000000000000000015000000000000000000000000000000000000000e51
+  Sample Variance  : 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e100
+  Sample Std. Dev. : 1.0000000000000000000000000000000000000010000000000000000000000000000000000000000e50
+
+Column: Column 3
+  Count            : 3
+  Minimum          : 7.0000000000000000000000000000000000000070000000000000000000000000000000000000000e50
+  Mean             : 8.0000000000000000000000000000000000000080000000000000000000000000000000000000000e50
+  Median           : 8.0000000000000000000000000000000000000080000000000000000000000000000000000000000e50
+  Maximum          : 9.0000000000000000000000000000000000000090000000000000000000000000000000000000000e50
+  Range            : 2.0000000000000000000000000000000000000020000000000000000000000000000000000000000e50
+  Sum              : 2.4000000000000000000000000000000000000024000000000000000000000000000000000000000e51
+  Sample Variance  : 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e100
+  Sample Std. Dev. : 1.0000000000000000000000000000000000000010000000000000000000000000000000000000000e50
+
+$
+```
 ### go
 ```
 % go run bfbs.go -precision 340 -output_digits 80 test/data.csv
@@ -552,4 +605,3 @@ Column: 1
   Std. Dev. : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
 %
 ```
-

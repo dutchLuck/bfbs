@@ -1,8 +1,7 @@
 //
-//
 // B F B S . G O
 //
-// bfbs.go last edited on Sat Sep 27 23:48:12 2025
+// bfbs.go last edited on Mon Sep 29 18:18:29 2025
 //
 // This script reads one or more CSV files, containing one or more columns of
 // numbers and calculates basic statistics for each column (including sum,
@@ -53,6 +52,7 @@
 // correctly with Go 1.25.0 on MacOS Sequoia. It should work on
 // any platform that supports Go and the math/big package.
 
+// v0.0.7 2025-09-29 Added --quiet option and rearranged CSV output order.
 // v0.0.6 2025-09-12 Added Big kurtosis & skewness calculation and output.
 
 package main
@@ -137,8 +137,8 @@ func main() {
 
 		// Write CSV header
 		csvWriter.Write([]string{
-			"File", "Column", "Count", "Sum", "Mean", "Variance", "StdDev",
-			"Min", "Max", "Range", "Median", "Skew", "Kurtosis",
+			"File", "Column", "Count", "Min", "Mean", "Median", "Max", "Range", "Sum", "Variance", "StdDev",
+			"Skew", "Kurtosis",
 		})
 	}
 
@@ -219,16 +219,16 @@ func main() {
 					}
 					columns[i] = &ColumnStats{
 						Header:  header,
-						Sum:     newFloatWithPrec(*precisionFlag),
+						Min:     newFloatWithPrec(*precisionFlag),
 						Mean:    newFloatWithPrec(*precisionFlag),
+						Max:     newFloatWithPrec(*precisionFlag),
+						Sum:     newFloatWithPrec(*precisionFlag),
 						Var:     newFloatWithPrec(*precisionFlag),
 						StdDev:  newFloatWithPrec(*precisionFlag),
 						VarN:    newFloatWithPrec(*precisionFlag),
 						StdDevN: newFloatWithPrec(*precisionFlag),
 						SkewBig: newFloatWithPrec(*precisionFlag),
 						KurtBig: newFloatWithPrec(*precisionFlag),
-						Min:     newFloatWithPrec(*precisionFlag),
-						Max:     newFloatWithPrec(*precisionFlag),
 					}
 				}
 
@@ -343,14 +343,14 @@ func main() {
 					filename,
 					stats.Header,
 					n.Text('g', -1),
-					stats.Sum.Text(format, *outputDigits),
-					stats.Mean.Text(format, *outputDigits),
-					stats.Var.Text(format, *outputDigits),
-					stats.StdDev.Text(format, *outputDigits),
 					stats.Min.Text(format, *outputDigits),
+					stats.Mean.Text(format, *outputDigits),
+					stats.Median.Text(format, *outputDigits),
 					stats.Max.Text(format, *outputDigits),
 					stats.Range.Text(format, *outputDigits),
-					stats.Median.Text(format, *outputDigits),
+					stats.Sum.Text(format, *outputDigits),
+					stats.Var.Text(format, *outputDigits),
+					stats.StdDev.Text(format, *outputDigits),
 					fmt.Sprintf("%.6f", stats.Skew),
 					fmt.Sprintf("%.6f", stats.Kurtosis),
 				})

@@ -3,7 +3,7 @@
 //
 // Big Float Basic Statistics
 //
-// bfbs.java last updated on Mon Sep 22 22:55:07 2025 by O.H. as 0v8
+// bfbs.java last updated on Fri Oct  3 20:54:48 2025 by O.H. as 0v9
 //
 
 //
@@ -47,6 +47,7 @@
 //
 
 //
+// 0v9 Very minor mod to testing for even number of values
 // 0v8 Rearrange order of output and make output a bit more consistant with other bfbs programs
 // 0v7 Handle file not found and check user supplied integers
 //
@@ -57,6 +58,7 @@
 // 2. --scientific to force 1.0e1 type output formatting
 // 3. Higher moments like skew and kurtosis
 // 4. Output to a file
+// 5. Naive Histogram output
 //
 
 import java.io.*;
@@ -120,7 +122,7 @@ public class bfbs {
         }
 
         // 🎉 Program info banner
-        System.out.println("bfbs 0v8");
+        System.out.println("bfbs 0v9");
         String javaVersion = System.getProperty("java.version");
         System.out.println("Running on Java version: " + javaVersion);
         System.out.println("Using java.math.BigDecimal (standard library)");
@@ -218,7 +220,7 @@ public class bfbs {
         BigDecimal mean = sum.divide(BigDecimal.valueOf(n), mc);
 
         BigDecimal median;
-        if (n % 2 == 0) {
+        if ((n & 1) == 0) {     // Determine if n is even. If it is then average middle 2 values
             median = data.get(n / 2 - 1).add(data.get(n / 2), mc).divide(BigDecimal.valueOf(2), mc);
         } else {
             median = data.get(n / 2);

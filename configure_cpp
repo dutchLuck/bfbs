@@ -2,7 +2,7 @@
 #
 # C O N F I G U R E _ C P P
 #
-# configure last edited on Sat Sep 27 22:13:13 2025 
+# configure last edited on Sat Sep 29 21:13:13 2025 
 #
 NAME1=bfbs
 #
@@ -19,11 +19,11 @@ echo -e "\t$COMPILER $OPTIONS -o "'$@ $^'" $LNK_OPTIONS" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "check: $TRGT" >> $OP_FILE_NAME
-echo -e "\tcd test; ./check_c++" >> $OP_FILE_NAME
+echo -e "\tcd test; ./check_cpp" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "chk: $TRGT" >> $OP_FILE_NAME
-echo -e "\tcd test; ./chk_c++" >> $OP_FILE_NAME
+echo -e "\tcd test; ./chk_cpp" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "clean:" >> $OP_FILE_NAME

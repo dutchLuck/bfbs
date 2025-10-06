@@ -6,7 +6,7 @@ statistics project. Each bfbs program is a command line utility that reads data
 files containing comma separated values (CSV), and outputs at least some of the
 basic statistics for each column in the file. In this project the minimum set of
 basic statistics are taken to be sum, mean, variance and standard deviation. So far
-this project has c++, golang, java, julia, perl, python, ruby and rust language examples.
+this project has c++, golang, java, julia, perl, python, ruby, rust and Rscript language examples.
 This does not exhaust the list of languages that have arbitrary-precision arithmetic
 capability by any means as there are quite a lot of languages that have
 arbitrary-precision arithmetic available. (See
@@ -76,7 +76,9 @@ in addition to sum, mean, variance and standard deviation. Even though perl uses
 interpreter there is only a minor delay before results appear on the computer
 with modest specs.
 ## bfbs.py
-The python3 bfbs code uses the
+The
+<a href="https://www.python.org">Python</a>
+(python3) bfbs code uses the
 <a href="https://docs.python.org/3/library/decimal.html">Decimal</a>
 module, which does decimal arbitrary-precision
 calculations and runs ok on Linux, MacOS and Windows. It outputs min, max, range
@@ -84,7 +86,9 @@ in addition to sum, mean, variance and standard deviation. Even though python us
 interpreter there isn't a noticable delay before results appear. However this maybe due
 to median not being calculated and output.
 ## bfbs.rb
-The ruby bfbs code uses the
+The
+<a href="https://www.ruby-lang.org/en/">Ruby</a>
+bfbs code uses the
 <a href="https://ruby-doc.org/stdlib-3.1.0/libdoc/bigdecimal/rdoc/BigDecimal.html">bigdecimal</a>
 module, which does decimal arbitrary-precision
 calculations and runs ok on Linux, MacOS and Windows. It outputs the minimal set of sum,
@@ -93,12 +97,26 @@ only a slight delay before results appear. However, like python, this maybe due 
 is not calculated and output by the ruby code which is median for each
 column of numbers.
 ## bfbs.rs
-The rust version of bfbs uses the
+The
+<a href="https://rust-lang.org">Rust</a>
+version of bfbs uses the
 <a href="https://crates.io/crates/rug">rug crate</a> and builds and runs without trouble
 on MacOS. On Ubuntu Linux the m4 macro processor needed to be installed before the
 build was successful. It did not build for me on Windows and looks like it may require
 Microsoft Visual C tooling? It outputs sum, mean, variance and standard deviation. The
 results are produced without any noticable delay.
+## bfbs.R
+The
+<a href= "https://www.r-project.org/about.html">R</a>
+(Rscript) version of bfbs uses the
+<a href="https://cran.r-project.org/web/packages/Rmpfr/vignettes/Rmpfr-pkg.pdf">
+Rmpfr package</a>
+and runs without trouble on Windows when executed by Rscript.exe version 4.5.1.
+It should run on Linux and MacOS too, as long as they have an up-to-date version of R
+installed, but it has only been tested on Windows. It outputs sum, mean, variance, standard
+deviation, skew, kurtosis and standard error. It also can output PDF graphics of
+the histogram of each column of the input data. This script only handles a single CSV file.
+The results are produced after a very noticable delay.
 
 ## CSV data files
 The input data files (or file) are assumed by default to be in comma separated value (CSV)

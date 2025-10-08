@@ -92,13 +92,9 @@ bfbs code uses the
 <a href="https://ruby-doc.org/stdlib-3.1.0/libdoc/bigdecimal/rdoc/BigDecimal.html">bigdecimal</a>
 module, which does decimal arbitrary-precision
 calculations and runs on Linux, MacOS and Windows. It outputs the minimal set of sum,
-mean, variance and standard deviation. The version 0v2 ruby code appears to wrongly
-round the output of the standard deviation of the test/data.csv to 0.1e51 even though
-it is meant to be providing calculations to 80 digits of precision. The variance number
-appears ok, so some investigation is required on what happens when the square root is taken.
-Even though ruby uses an interpreter there is only a slight delay before results appear.
-However, like python, this maybe due to what is not calculated and output by the ruby code
-which is median for each column of numbers.
+mean, variance and standard deviation. Even though ruby uses an interpreter there is
+only a slight delay before results appear. However, like python, this maybe due to what
+is not calculated and output by the ruby code which is median for each column of numbers.
 ## bfbs.rs
 The
 <a href="https://rust-lang.org">Rust</a>
@@ -421,14 +417,14 @@ Column 3:
 ```
 ### java
 ```
-> java bfbs --precision=80 .\test\data.csv
-bfbs 0v8
+>java bfbs --precision=80 test\data.csv
+bfbs 0v9
 Running on Java version: 21.0.8
 Using java.math.BigDecimal (standard library)
 Calculation precision: 80 digits
 Output rounding: full precision
 
-Processing file: .\test\data.csv
+Processing file: test\data.csv
 Column 1:
   Count            : 3
   Minimum          : 100000000000000000000000000000000000000100000000000
@@ -461,6 +457,7 @@ Column 3:
   Sum              : 2400000000000000000000000000000000000002400000000000
   Sample Variance  : 10000000000000000000000000000000000000020000000000000000000000000000000000000010000000000000000000000
   Sample Std. Dev. : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
+
 
 >
 ```
@@ -555,11 +552,11 @@ Column 3:
 ```
 ### ruby
 ```
-% ruby bfbs.rb --precision 80 test/data.csv  
-bfbs.rb version 0v2
-ruby version: 2.6.10
-csv module version: 3.0.9
-bigdecimal module version: 1.4.1
+>ruby bfbs.rb -P 80 test/data.csv
+bfbs.rb version 0v3
+ruby version: 3.2.9
+csv module version: 3.2.6
+bigdecimal module version: 3.1.3
 Using 80 digits of bigdecimal precision.
 
 Processing file: "test/data.csv"
@@ -571,7 +568,7 @@ Column: 1
   Range     : 0.2000000000000000000000000000000000000002e51
   Sum       : 0.6000000000000000000000000000000000000006e51
   Variance  : 0.1000000000000000000000000000000000000002000000000000000000000000000000000000001e101
-  Std. Dev. : 0.1e51
+  Std. Dev. : 0.1000000000000000000000000000000000000001e51
 Column: 2
   Count     : 3
   Minimum   : 0.4000000000000000000000000000000000000004e51
@@ -580,7 +577,7 @@ Column: 2
   Range     : 0.2000000000000000000000000000000000000002e51
   Sum       : 0.15000000000000000000000000000000000000015e52
   Variance  : 0.1000000000000000000000000000000000000002000000000000000000000000000000000000001e101
-  Std. Dev. : 0.1e51
+  Std. Dev. : 0.1000000000000000000000000000000000000001e51
 Column: 3
   Count     : 3
   Minimum   : 0.7000000000000000000000000000000000000007e51
@@ -589,8 +586,9 @@ Column: 3
   Range     : 0.2000000000000000000000000000000000000002e51
   Sum       : 0.24000000000000000000000000000000000000024e52
   Variance  : 0.1000000000000000000000000000000000000002000000000000000000000000000000000000001e101
-  Std. Dev. : 0.1e51
-%
+  Std. Dev. : 0.1000000000000000000000000000000000000001e51
+
+>
 ```
 ### rust
 ```

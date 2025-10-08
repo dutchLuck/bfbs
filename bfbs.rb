@@ -1,6 +1,6 @@
 #! /bin/ruby -w
 #
-# bfbs.rb last edited on Sun Sep 21 23:15:49 2025
+# bfbs.rb last edited on Wed Oct 08 19:48:49 2025
 #
 # This script reads a CSV file, calculates statistics for each column,
 # including sum, average, standard deviation, and range, and outputs the results.
@@ -16,15 +16,43 @@
 #
 
 #
+# 0v3 Substituted bsqrt in-place of 'bigdecimal/math' BigMath.sqrt
 # 0v2 Added command line options --precision and --headers, plus max, min and range output.
 #
 
 require 'optparse'
 require 'csv'
-require 'bigdecimal'  # For accurate mathematical calculations
-require 'bigdecimal/util'  # For to_d method
+require 'bigdecimal'        # For arbitrary-precision mathematical calculations
+require 'bigdecimal/util'   # For to_d method
 
-#
+# Substitute Square Root code to supercede 'bigdecimal/math' BigMath.sqrt
+# which produced 0.1e51 instead of the expected  0.1000000000000000000000000000000000000001e51
+# result on the following data; -
+# 1.000000000000000000000000000000000000001e+50, 4.000000000000000000000000000000000000004e+50, 7.000000000000000000000000000000000000007e+50
+# 2.000000000000000000000000000000000000002e+50, 5.000000000000000000000000000000000000005e+50, 8.000000000000000000000000000000000000008e+50
+# 3.000000000000000000000000000000000000003e+50, 6.000000000000000000000000000000000000006e+50, 9.000000000000000000000000000000000000009e+50
+# This code is a ChatGPT conversion of the bfbs.java square root code.
+def bsqrt(value, digits)
+  return BigDecimal("0") if value <= 0
+
+  # Set the precision (number of significant digits)
+  scale = digits + 5  # extra digits for intermediate precision
+  BigDecimal.limit(scale)
+
+  # Initial guess using Float sqrt
+  x = Math.sqrt(value.to_f).to_d
+
+  two = BigDecimal("2")
+
+  # Newton-Raphson iteration
+  scale.times do
+    x = (x + value / x).div(two, scale)
+  end
+
+  # Round the result to the desired number of digits
+  x.round(digits)
+end
+
 # Read the CSV file name from command line arguments or use a default
 options = {}
 options[:precision] = 40  # Set default precision for BigDecimal calculations
@@ -61,10 +89,11 @@ elsif options[:precision] > 1024
   options[:precision] =1024
 end
 
+BigDecimal.mode(BigDecimal::ROUND_MODE, :half_up)   # Explicitly set rounding mode
 BigDecimal.limit(options[:precision])  # Set global precision limit for BigDecimal operations
 #
 # Output version and environment information
-puts "bfbs.rb version 0v2"
+puts "bfbs.rb version 0v3"
 puts "ruby version: #{RUBY_VERSION}"
 puts "csv module version: #{CSV::VERSION}"
 puts "bigdecimal module version: #{BigDecimal::VERSION}"
@@ -104,14 +133,14 @@ filenames.each do |name|
     next
   end
   rowCount = data_no_headers.size
-  #
+
   # Convert string format Data Columns to BigDecimal format for higher precision calculations
   tmpData = Array.new 
   tmpData = data_no_headers.transpose  # Transpose columns to rows
   tmpData.each  do  |row|
     row.map!(&:to_d)  # Convert all values to bigdecimal
   end
-  #
+
   # Find minimum of each column
   minOfColumns = Array.new
   minOfColumns = tmpData.map { |col| col.min }
@@ -120,24 +149,26 @@ filenames.each do |name|
   maxOfColumns = Array.new
   maxOfColumns = tmpData.map { |col| col.max }
 
-  # Find range of each column
+  # Find range of each column without finding max and min again
   rangeOfColumns = Array.new
-  rangeOfColumns = tmpData.map { |col| col.max.sub(col.min, options[:precision]) }  # Calculate range
+  0.upto(minOfColumns.size - 1) do |i|
+    rangeOfColumns[i] = maxOfColumns[i].sub( minOfColumns[i], options[:precision])
+  end
 
   # Calculate sum of each column
   sumOfColumns = Array.new
   sumOfColumns = tmpData.map { |col| col.sum }
-  #
+
   # Calculate the average of each column
   avgOfColumns = Array.new
   avgOfColumns = sumOfColumns.map { |sum| sum.div(rowCount, options[:precision]) }  # Calculate mean
-  #
+
   # Calculate the normalized square of each column
   sqrOfColumns = Array.new
   sqrOfColumns = tmpData.map do |col|
     col.map { |value| (avgOfColumns[tmpData.index(col)] - value.to_d).power(2, options[:precision])}.sum
   end
-  #
+
   # Calculate the sample variance of each column
   varOfColumns = Array.new
   varOfColumns = sqrOfColumns.map do |var|
@@ -147,17 +178,20 @@ filenames.each do |name|
       (0.0).to_d
     end
   end
-  #
+
   # Calculate the sample standard deviation of each column
   stddevOfColumns = Array.new
   stddevOfColumns = varOfColumns.map do |var|
     if var > (0.0).to_d
-      (var.sqrt(options[:precision]))  # Calculate standard deviation
+      (bsqrt(var, options[:precision]))  # Calculate standard deviation
     else
       (0.0).to_d
     end
   end
-  #
+
+  # Ensure global precision limit was't permanently changed by bsqrt() code
+  BigDecimal.limit(options[:precision])
+
   # Output the results in column blocks
   lastColNum = sumOfColumns.size - 1
   0.upto(lastColNum) do |i|

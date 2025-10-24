@@ -81,20 +81,18 @@ The
 (python3) bfbs code uses the
 <a href="https://docs.python.org/3/library/decimal.html">Decimal</a>
 module, which does decimal arbitrary-precision
-calculations and runs ok on Linux, MacOS and Windows. It outputs min, max, range
+calculations and runs ok on Linux, MacOS and Windows. It outputs min, median, max and range
 in addition to sum, mean, variance and standard deviation. Even though python uses an
-interpreter there isn't a noticable delay before results appear. However this maybe due
-to median not being calculated and output.
+interpreter there isn't a noticable delay before results appear. 
 ## bfbs.rb
 The
 <a href="https://www.ruby-lang.org/en/">Ruby</a>
 bfbs code uses the
 <a href="https://ruby-doc.org/stdlib-3.1.0/libdoc/bigdecimal/rdoc/BigDecimal.html">bigdecimal</a>
 module, which does decimal arbitrary-precision
-calculations and runs on Linux, MacOS and Windows. It outputs the minimal set of sum,
-mean, variance and standard deviation. Even though ruby uses an interpreter there is
-only a slight delay before results appear. However, like python, this maybe due to what
-is not calculated and output by the ruby code which is median for each column of numbers.
+calculations and runs on Linux, MacOS and Windows. It outputs min, median, max and range
+in addition to sum, mean, variance and standard deviation. Even though ruby uses an
+interpreter there is only a slight delay before results appear.
 ## bfbs.rs
 The
 <a href="https://rust-lang.org">Rust</a>
@@ -118,7 +116,8 @@ version 0v1 code and the test/data.csv case, but was left for later investigatio
 This script can output PDF graphics of the histogram of each column of the input data,
 when the user provides the --histogram option in the command line. Unlike other bfbs
 programs/scripts this script only handles a single CSV file at a time. The results are
-produced after a very noticable delay.
+produced after a very noticable delay. It seems to be the slowest way to get results, but
+it does output more of them.
 
 ## CSV data files
 The input data files (or file) are assumed by default to be in comma separated value (CSV)
@@ -510,11 +509,11 @@ Column: 3
 ```
 ### python
 ```
-% python3 bfbs.py --precision 80 test/data.csv 
-bfbs.py version 0v2
-python version: 3.9.6
+> python bfbs.py --precision 80 test/data.csv
+bfbs.py version 0v3
+python version: 3.13.9
 csv module version: 1.0
-decimal module version: 3.9.6
+decimal module version: 3.13.9
 Using 80 digits of decimal precision.
 
 Processing file: "test/data.csv"
@@ -523,6 +522,7 @@ Column 1:
   Count     : 3
   Minimum   : 1.000000000000000000000000000000000000001E+50
   Mean      : 200000000000000000000000000000000000000200000000000
+  Median    : 2.000000000000000000000000000000000000002E+50
   Maximum   : 3.000000000000000000000000000000000000003E+50
   Range     : 2.000000000000000000000000000000000000002E+50
   Sum       : 600000000000000000000000000000000000000600000000000
@@ -533,6 +533,7 @@ Column 2:
   Count     : 3
   Minimum   : 4.000000000000000000000000000000000000004E+50
   Mean      : 500000000000000000000000000000000000000500000000000
+  Median    : 5.000000000000000000000000000000000000005E+50
   Maximum   : 6.000000000000000000000000000000000000006E+50
   Range     : 2.000000000000000000000000000000000000002E+50
   Sum       : 1500000000000000000000000000000000000001500000000000
@@ -543,17 +544,18 @@ Column 3:
   Count     : 3
   Minimum   : 7.000000000000000000000000000000000000007E+50
   Mean      : 800000000000000000000000000000000000000800000000000
+  Median    : 8.000000000000000000000000000000000000008E+50
   Maximum   : 9.000000000000000000000000000000000000009E+50
   Range     : 2.000000000000000000000000000000000000002E+50
   Sum       : 2400000000000000000000000000000000000002400000000000
   Variance  : 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010E+100
   Std. Dev. : 1.0000000000000000000000000000000000000010E+50
-%
+>
 ```
 ### ruby
 ```
->ruby bfbs.rb -P 80 test/data.csv
-bfbs.rb version 0v3
+> ruby bfbs.rb -P 80 test/data.csv
+bfbs.rb version 0v4
 ruby version: 3.2.9
 csv module version: 3.2.6
 bigdecimal module version: 3.1.3
@@ -564,6 +566,7 @@ Column: 1
   Count     : 3
   Minimum   : 0.1000000000000000000000000000000000000001e51
   Mean      : 0.2000000000000000000000000000000000000002e51
+  Median    : 0.2000000000000000000000000000000000000002e51
   Maximum   : 0.3000000000000000000000000000000000000003e51
   Range     : 0.2000000000000000000000000000000000000002e51
   Sum       : 0.6000000000000000000000000000000000000006e51
@@ -573,6 +576,7 @@ Column: 2
   Count     : 3
   Minimum   : 0.4000000000000000000000000000000000000004e51
   Mean      : 0.5000000000000000000000000000000000000005e51
+  Median    : 0.5000000000000000000000000000000000000005e51
   Maximum   : 0.6000000000000000000000000000000000000006e51
   Range     : 0.2000000000000000000000000000000000000002e51
   Sum       : 0.15000000000000000000000000000000000000015e52
@@ -582,12 +586,12 @@ Column: 3
   Count     : 3
   Minimum   : 0.7000000000000000000000000000000000000007e51
   Mean      : 0.8000000000000000000000000000000000000008e51
+  Median    : 0.8000000000000000000000000000000000000008e51
   Maximum   : 0.9000000000000000000000000000000000000009e51
   Range     : 0.2000000000000000000000000000000000000002e51
   Sum       : 0.24000000000000000000000000000000000000024e52
   Variance  : 0.1000000000000000000000000000000000000002000000000000000000000000000000000000001e101
   Std. Dev. : 0.1000000000000000000000000000000000000001e51
-
 >
 ```
 ### rust

@@ -1,6 +1,6 @@
 #! /bin/ruby -w
 #
-# bfbs.rb last edited on Wed Oct 08 19:48:49 2025
+# bfbs.rb last edited on Fri Oct 24 23:43:49 2025
 #
 # This script reads a CSV file, calculates statistics for each column,
 # including sum, average, standard deviation, and range, and outputs the results.
@@ -16,6 +16,7 @@
 #
 
 #
+# 0v4 Provide median
 # 0v3 Substituted bsqrt in-place of 'bigdecimal/math' BigMath.sqrt
 # 0v2 Added command line options --precision and --headers, plus max, min and range output.
 #
@@ -31,6 +32,7 @@ require 'bigdecimal/util'   # For to_d method
 # 1.000000000000000000000000000000000000001e+50, 4.000000000000000000000000000000000000004e+50, 7.000000000000000000000000000000000000007e+50
 # 2.000000000000000000000000000000000000002e+50, 5.000000000000000000000000000000000000005e+50, 8.000000000000000000000000000000000000008e+50
 # 3.000000000000000000000000000000000000003e+50, 6.000000000000000000000000000000000000006e+50, 9.000000000000000000000000000000000000009e+50
+
 # This code is a ChatGPT conversion of the bfbs.java square root code.
 def bsqrt(value, digits)
   return BigDecimal("0") if value <= 0
@@ -93,7 +95,7 @@ BigDecimal.mode(BigDecimal::ROUND_MODE, :half_up)   # Explicitly set rounding mo
 BigDecimal.limit(options[:precision])  # Set global precision limit for BigDecimal operations
 #
 # Output version and environment information
-puts "bfbs.rb version 0v3"
+puts "bfbs.rb version 0v4"
 puts "ruby version: #{RUBY_VERSION}"
 puts "csv module version: #{CSV::VERSION}"
 puts "bigdecimal module version: #{BigDecimal::VERSION}"
@@ -139,6 +141,7 @@ filenames.each do |name|
   tmpData = data_no_headers.transpose  # Transpose columns to rows
   tmpData.each  do  |row|
     row.map!(&:to_d)  # Convert all values to bigdecimal
+    row.sort!   # sort each row (in-place) needed later to find median
   end
 
   # Find minimum of each column
@@ -153,6 +156,18 @@ filenames.each do |name|
   rangeOfColumns = Array.new
   0.upto(minOfColumns.size - 1) do |i|
     rangeOfColumns[i] = maxOfColumns[i].sub( minOfColumns[i], options[:precision])
+  end
+
+  # Find median of each column
+  medianOfColumns = Array.new
+  if (rowCount & 1) == 1    # odd number of rows
+    0.upto(minOfColumns.size - 1) do |i|
+      medianOfColumns[i] = tmpData[i][rowCount / 2]
+    end
+  else  # even number of rows
+    0.upto(minOfColumns.size - 1) do |i|
+      medianOfColumns[i] = (tmpData[i][rowCount / 2] + tmpData[i][(rowCount / 2) - 1]).div(2, options[:precision]) 
+    end
   end
 
   # Calculate sum of each column
@@ -203,6 +218,7 @@ filenames.each do |name|
     print "  Count     : ", rowCount, "\n"
     print "  Minimum   : ", minOfColumns[i], "\n"
     print "  Mean      : ", avgOfColumns[i], "\n"
+    print "  Median    : ", medianOfColumns[i], "\n"
     print "  Maximum   : ", maxOfColumns[i], "\n"
     print "  Range     : ", rangeOfColumns[i], "\n"
     print "  Sum       : ", sumOfColumns[i], "\n"

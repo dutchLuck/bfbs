@@ -2,10 +2,11 @@
 #
 # B F B S . P Y
 #
-# bfbs.py last edited on Sun Sep 21 00:02:30 2025
+# bfbs.py last edited on Fri Oct 24 21:02:30 2025
 #
-# This script reads a CSV file, calculates statistics for each column,
-# including sum, average, standard deviation, and range, and outputs the results.
+# This script reads a CSV file, calculates basic statistics for each column,
+# including sum, mean (average), variance, standard deviation and range,
+# and outputs the results.
 #
 # Calculations use the  decimal  module which provides
 # arbitrary-precision decimal floating-point arithmetic
@@ -16,6 +17,7 @@
 #
 
 #
+# 0v3 Added calculation of median
 # 0v2 Cosmetic changes to output
 #
 
@@ -58,7 +60,7 @@ if args.precision is not None:  # Check the user precision input number if it is
 getcontext().prec = calc_precision
 
 # Output version and environment information
-print("bfbs.py version 0v2")
+print("bfbs.py version 0v3")
 print(f"python version: {platform.python_version()}")
 print(f"csv module version: {csv.__version__}")
 print(f"decimal module version: {platform.python_version()}")
@@ -116,11 +118,23 @@ for file_path in args.files:
         min_val = min(col)
         max_val = max(col)
         range_val = max_val - min_val
+        
+        # Sample median
+        if count < 2:
+            median = col[0]
+        else:
+            indx = int(count) >> 1  # halve count
+            col_sorted = sorted(col)
+            if (count & 1) == 1:    # is count an odd number
+                median = col_sorted[indx]
+            else:
+                median = (col_sorted[indx - 1] + col_sorted[indx] ) / safe_decimal("2")
 
         print(f"\n{headers[i]}:")
         print(f"  Count     : {count}")
         print(f"  Minimum   : {min_val}")
         print(f"  Mean      : {mean}")
+        print(f"  Median    : {median}")
         print(f"  Maximum   : {max_val}")
         print(f"  Range     : {range_val}")
         print(f"  Sum       : {total}")

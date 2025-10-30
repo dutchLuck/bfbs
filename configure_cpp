@@ -34,3 +34,7 @@ echo "debug: clean" >> $OP_FILE_NAME
 echo -e "\t$COMPILER $OPTIONS -DDEBUG -o $TRGT $SRC1 $LNK_OPTIONS" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
+echo "static: clean" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $OPTIONS -DDEBUG -o $TRGT $SRC1 -static $LNK_OPTIONS" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#

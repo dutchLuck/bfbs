@@ -36,3 +36,9 @@ echo -e "\t$COMPILER $OPTIONS $SRC1 $LNK_OPTIONS" >> $OP_FILE_NAME
 echo -e "\tmv $NAME1 $TRGT" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
+echo "release: clean" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $OPTIONS $SRC1 -ldflags \"-s -w\" $LNK_OPTIONS" >> $OP_FILE_NAME
+echo -e "\tstrip --strip-unneeded $NAME1" >> $OP_FILE_NAME
+echo -e "\tmv $NAME1 $TRGT" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#

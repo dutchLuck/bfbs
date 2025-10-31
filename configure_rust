@@ -33,6 +33,11 @@ echo "" >> $OP_FILE_NAME
 #
 echo "debug: clean" >> $OP_FILE_NAME
 echo -e "\t$COMPILER $OPTIONS $LNK_OPTIONS" >> $OP_FILE_NAME
-echo -e "\trsync -vut bin/debug/${NAME1} ./$TRGT" >> $OP_FILE_NAME
+echo -e "\trsync -vut target/debug/${NAME1} ./$TRGT" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "release: clean" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $OPTIONS --release" >> $OP_FILE_NAME
+echo -e "\trsync -vut target/release/${NAME1} ./$TRGT" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #

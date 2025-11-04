@@ -1,7 +1,7 @@
 //
 // B F B S . R S
 //
-// main.rs last edited on Sat Sep 27 23:09:26 2025
+// main.rs last edited on Tue Nov  4 21:58:27 2025
 //
 // This ChatGPT code appears to calculate test cases correctly
 // However cargo did not successfully compile the needed 
@@ -14,7 +14,7 @@
 // requires Cargo.toml as follows; -
 // [package]
 // name = "bfbs"
-// version = "0.1.5"
+// version = "0.1.6"
 // edition = "2024"
 //
 // [dependencies]
@@ -35,7 +35,13 @@
 //
 
 //
+// v0.1.6 Added median to output
 // v0.1.3 Added minimum, maximum and range to output
+//
+
+//
+// Known issues, not yet fixed; -
+// 1. Column information is not output in order
 //
 
 use clap::Parser;
@@ -178,6 +184,26 @@ impl ColumnStats {
     fn stddev(&self, precision: u32) -> Float {
         self.variance(precision).sqrt()
     }
+
+    /// Compute the median of all values
+    fn median(&self, precision: u32) -> Float {
+        if self.count == 0 {
+            return Float::with_val(precision, 0);
+        }
+
+        let mut sorted = self.values.clone();
+        sorted.sort_by(|a, b| a.partial_cmp(b).unwrap());
+
+        if self.count % 2 == 1 {
+            // Odd number of elements — middle value
+            sorted[self.count / 2].clone()
+        } else {
+            // Even number of elements — average of two middle values
+            let mid = self.count / 2;
+            let sum_of_mids = Float::with_val(precision, &sorted[mid - 1]) + &sorted[mid].clone();
+            sum_of_mids / Float::with_val(precision, 2)
+        }
+    }
 }
 
 fn format_float(value: &Float, scientific: bool, digits: usize) -> String {
@@ -317,6 +343,7 @@ fn main() {
                     println!("  Count     : {}", data.cnt());
                     println!("  Minimum   : {}", format_float(&data.minimum(args.precision), args.scientific, args.digits));
                     println!("  Mean      : {}", format_float(&data.mean(args.precision), args.scientific, args.digits));
+                    println!("  Median    : {}", format_float(&data.median(args.precision), args.scientific, args.digits));
                     println!("  Maximum   : {}", format_float(&data.maximum(args.precision), args.scientific, args.digits));
                     println!("  Range     : {}", format_float(&data.range(args.precision), args.scientific, args.digits));
                     println!("  Sum       : {}", format_float(data.sum(args.precision), args.scientific, args.digits));

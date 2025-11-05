@@ -689,17 +689,16 @@ Column: 2
 ```
 
 ### Comparison Table
-Straw poll of current performance on linux; -
+Straw poll of current Microsoft WSL linux preformance numbers (please note: the numbers are meant to be generally indicative and comparing them depends on all manner of dubious assumptions - so use with extreme care); -
 
-| bfbs | 3x3 time | 1001x1 time | 2331x4 time |
-|:-----|:--------:|:-----------:|:-----------:|
-| c++ | 4 mS | | |
-| go | 4 mS | | |
-| java | 25 mS | | |
-| julia | 10 S | | |
-| perl | 75 mS | | |
-| python | 70 mS | | |
-| Rscript | 15 S | | |
-| ruby | 100 mS | | |
-| rust | 4 mS | | |
-
+| bfbs | src lines | exe size | 3x3 time | 1001x1 time | 2113x4 time |
+|:-----|:---------:|:--------:|:--------:|:-----------:|:-----------:|
+| c++     | 188    | 2.26 Mb  | 4 mS     | 31 mS       | 17 mS.      |
+| go      | 320    | 1.80 Mb  | 6 mS     | 11 mS       | 33 mS       |
+| java    | 176    | 7081 b   | 0.14 S   | 0.15 S      | 0.27 S      |
+| julia   | 269    |          | 9 S      | 12 S        | 9.2 S       |
+| perl    | 100    |          | 88 mS    | 0.38 S      | 3 S         |
+| python  | 105    |          | 49 mS    | 49 mS       | 81 mS       |
+| Rscript | 191    |          | 0.85 S   | 10 S        | 96 S        |
+| ruby    | 143    |          | 0.11 S   | 0.11 S      | 1.3 S       |
+| rust    | 277    | 1.75 Mb  | 6 mS     | 8 mS        | 17 mS       |

@@ -39,14 +39,14 @@ The C++ version of bfbs uses the
 the basis of all the calculations. This program compiles on Ubuntu 22.04 LTS Linux after
 the MPFR and GMP dev libraries are installed using the apt package manager. It outputs
 minimum, median, maximum and range in addition to sum, mean, sample variance (s^2) and
-sample standard deviation (s). The results are produced without any noticable delay.
+sample standard deviation (s). The results are produced without any noticeable delay.
 ## bfbs.go
 The golang version of bfbs uses the
 <a href="https://pkg.go.dev/math/big">math/big</a> package and builds and runs without trouble
 on Linux, MacOS and Windows. It outputs min, median, max, range, skew and kurtosis in
 addition to sum, mean, variance and standard deviation. N.B. that the skew and kurtosis
 are calculated as float64 values and big float values in the current (v0.0.6) version.
-The results are produced without any noticable delay.
+The results are produced without any noticeable delay.
 ## bfbs.java
 The java bfbs code uses the
 <a href="https://docs.oracle.com/javase/10/docs/api/index.html?java/math/BigDecimal.html">java.math.BigDecimal</a>
@@ -60,7 +60,7 @@ The julia bfbs code uses the built-in
 <a href="https://docs.julialang.org/en/v1/manual/integers-and-floating-point-numbers/#Arbitrary-Precision-Arithmetic">
 BigFloat</a> number type and runs ok on Linux, 
 MacOS and Windows. It outputs min, median, max, range in addition to sum, mean,
-variance and standard deviation. There is a noticiable delay before results appear
+variance and standard deviation. There is a noticeable delay before results appear
 particularly on computers with modest specs. This code outputs stats for all rows
 as well as columns of numbers, unless the -R option is specified. Analyzing rows
 may be useful if the data was created by data acquisition software that sampled a
@@ -83,7 +83,7 @@ The
 module, which does decimal arbitrary-precision
 calculations and runs ok on Linux, MacOS and Windows. It outputs min, median, max and range
 in addition to sum, mean, variance and standard deviation. Even though python uses an
-interpreter there isn't a noticable delay before results appear. 
+interpreter there isn't a noticeable delay before results appear. 
 ## bfbs.rb
 The
 <a href="https://www.ruby-lang.org/en/">Ruby</a>
@@ -100,24 +100,27 @@ version of bfbs uses the
 <a href="https://crates.io/crates/rug">rug crate</a> and builds and runs without trouble
 on MacOS. On Ubuntu Linux the m4 macro processor needed to be installed before the
 build was successful. It did not build for me on Windows and looks like it may require
-modified library linking? It outputs sum, mean, variance and standard deviation. The
-results are produced without any noticable delay.
+modified library linking? It outputs minimum, maximum, sum, mean, median, variance and
+standard deviation. The results are produced without any noticeable delay. There is currently
+still an annoyance with out-of-order presentation of column statistics.
 ## bfbs.R
 The
 <a href= "https://www.r-project.org/about.html">R</a>
 (Rscript) version of bfbs uses the
 <a href="https://cran.r-project.org/web/packages/Rmpfr/vignettes/Rmpfr-pkg.pdf">
 Rmpfr package</a>
-and runs without trouble on Windows when executed by Rscript.exe version 4.5.1.
-It should run on Linux and MacOS too, as long as they have an up-to-date version of R
-installed, but it has only been tested on Windows. It outputs sum, mean, variance, standard
+and runs without trouble on Windows and Linux when executed by Rscript version 4.4 or 4.5.
+It should run on MacOS too, as long as there is an up-to-date version of R installed,
+but it has only been tested on Windows and Linux. It outputs sum, mean, variance, standard
 deviation, skew, kurtosis and standard error. The standard error appears weird for the
 version 0v1 code and the test/data.csv case, but was left for later investigation.
 This script can output PDF graphics of the histogram of each column of the input data,
 when the user provides the --histogram option in the command line. Unlike other bfbs
 programs/scripts this script only handles a single CSV file at a time. The results are
-produced after a very noticable delay. It seems to be the slowest way to get results, but
-it does output more of them.
+produced after a very noticeable delay, particularly if there a lot of rows in each column.
+It seems to be the slowest way to get results, but it does output more of them.
+Since R is generally used in an interactive fashion, not in the Rscript form used in
+this project, the speed of response is less of a negetive.
 
 ## CSV data files
 The input data files (or file) are assumed by default to be in comma separated value (CSV)
@@ -462,15 +465,15 @@ Column 3:
 ```
 ### perl
 ```
-C:\Users\owen\src\julia\bfbs>perl bfbs.pl --precision 40 .\test\data.csv
+% perl bfbs.pl --precision 40 ./test/data.csv
 bfbs.pl version 0v6 (2025-09-20)
-Perl version: v5.42.0
-Getopt::Long Version: 2.58
-Math::BigFloat Version: 2.005003
+Perl version: v5.34.1
+Getopt::Long Version: 2.52
+Math::BigFloat Version: 1.999818
 Precision: 40 digits
 Output Format: Decimal
 
-File: .\test\data.csv
+File: ./test/data.csv
 
 Column: 1
   Count     : 3
@@ -504,8 +507,7 @@ Column: 3
   Sum       : 2400000000000000000000000000000000000002400000000000.0000000000000000000000000000000000000000
   Variance  : 10000000000000000000000000000000000000020000000000000000000000000000000000000010000000000000000000000.0000000000000000000000000000000000000000 (sample)
   Std. Dev. : 100000000000000000000000000000000000000100000000000.0000000000000000000000000000000000000000 (sample)
-
->
+%
 ```
 ### python
 ```
@@ -596,26 +598,18 @@ Column: 3
 ```
 ### rust
 ```
-% cargo run -- --precision 340 --print_digits 80 test/data.csv 
+% cargo run -- --precision 340 --print_digits 80 test/data.csv
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.12s
      Running `target/debug/bfbs --precision 340 --print_digits 80 test/data.csv`
-bfbs version v0.1.5
+bfbs version v0.1.6
 Using 340 bit precision for calculation and 80 digit decimal print out.
 
 Processing file: "test/data.csv"
-Column: 2
-  Count     : 3
-  Minimum   : 400000000000000000000000000000000000000400000000000.00000000000000000000000000000
-  Mean      : 500000000000000000000000000000000000000500000000000.00000000000000000000000000000
-  Maximum   : 600000000000000000000000000000000000000600000000000.00000000000000000000000000000
-  Range     : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
-  Sum       : 1500000000000000000000000000000000000001500000000000.0000000000000000000000000000
-  Variance  : 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e100
-  Std. Dev. : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
 Column: 3
   Count     : 3
   Minimum   : 700000000000000000000000000000000000000700000000000.00000000000000000000000000000
   Mean      : 800000000000000000000000000000000000000800000000000.00000000000000000000000000000
+  Median    : 800000000000000000000000000000000000000800000000000.00000000000000000000000000000
   Maximum   : 900000000000000000000000000000000000000900000000000.00000000000000000000000000000
   Range     : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
   Sum       : 2400000000000000000000000000000000000002400000000000.0000000000000000000000000000
@@ -625,9 +619,20 @@ Column: 1
   Count     : 3
   Minimum   : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
   Mean      : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
+  Median    : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
   Maximum   : 300000000000000000000000000000000000000300000000000.00000000000000000000000000000
   Range     : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
   Sum       : 600000000000000000000000000000000000000600000000000.00000000000000000000000000000
+  Variance  : 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e100
+  Std. Dev. : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
+Column: 2
+  Count     : 3
+  Minimum   : 400000000000000000000000000000000000000400000000000.00000000000000000000000000000
+  Mean      : 500000000000000000000000000000000000000500000000000.00000000000000000000000000000
+  Median    : 500000000000000000000000000000000000000500000000000.00000000000000000000000000000
+  Maximum   : 600000000000000000000000000000000000000600000000000.00000000000000000000000000000
+  Range     : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
+  Sum       : 1500000000000000000000000000000000000001500000000000.0000000000000000000000000000
   Variance  : 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e100
   Std. Dev. : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
 %
@@ -682,3 +687,26 @@ Column: V3
 
 >
 ```
+### Comparison Table
+Straw poll of current performance on linux; -
+
+| bfbs | 3x3 speed | 1001x1 speed | 2331x4 speed |
+--------------------------------------------------
+| c++ | 4 mS | | |
+------------------
+| go | 5 mS | | |
+-----------------
+| java | 25 mS | | |
+--------------------
+| julia | 10 S | | |
+---------------------
+| perl | 100 mS | | |
+---------------------
+| python | 70 mS | | |
+----------------------
+| ruby | 150 mS | | |
+---------------------
+| rust | 4 mS | | |
+-------------------
+| Rscript | 15 S | | |
+----------------------

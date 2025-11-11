@@ -1,7 +1,7 @@
 //
 // B F B S . R S
 //
-// main.rs last edited on Tue Nov  4 21:58:27 2025
+// main.rs last edited on Tue Nov 11 11:35:12 2025
 //
 // This ChatGPT code appears to calculate test cases correctly
 // However cargo did not successfully compile the needed 
@@ -14,7 +14,7 @@
 // requires Cargo.toml as follows; -
 // [package]
 // name = "bfbs"
-// version = "0.1.6"
+// version = "0.1.7"
 // edition = "2024"
 //
 // [dependencies]
@@ -35,6 +35,7 @@
 //
 
 //
+// v0.1.7 Added elapsed execution time output
 // v0.1.6 Added median to output
 // v0.1.3 Added minimum, maximum and range to output
 //
@@ -51,10 +52,11 @@ use rug::{Float};
 use std::collections::HashMap;
 use std::fs::File;
 use std::path::PathBuf;
+use std::time::Instant;
 
 /// Default precision to use for calculations (in bits)
 const DEFAULT_PRECISION: u32 = 256;
-const DEFAULT_DIGITS: usize= 64;
+const DEFAULT_DIGITS: usize = 64;
 
 pub const MAIN_NAME: &'static str = env!("CARGO_PKG_NAME");
 pub const MAIN_VERSION: &'static str = env!("CARGO_PKG_VERSION");
@@ -313,6 +315,10 @@ fn process_file(
 }
 
 fn main() {
+    // Record the start time
+    let start = Instant::now();
+
+    // Parse command-line arguments
     let mut args = Args::parse();
     args.digits = args.digits.clamp(0, 256);    // No user warning, but limit number of digits to output
     args.skip_lines = args.skip_lines.clamp(0, 2048);    // No user warning, but limit skipped input lines
@@ -354,4 +360,9 @@ fn main() {
             Err(e) => eprintln!("Error processing {:?}: {}\n", file, e),
         }
     }
+    
+    // Calculate the elapsed time
+    let duration = start.elapsed();
+    // Print the elapsed time
+    println!("bfbs (rust executable) time taken: {:.6} [sec]", duration.as_secs_f64());
 }

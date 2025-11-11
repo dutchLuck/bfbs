@@ -1,7 +1,7 @@
 //
 // B F B S . G O
 //
-// bfbs.go last edited on Mon Sep 29 18:18:29 2025
+// bfbs.go last edited on Tue Nov 11 19:51:26 2025
 //
 // This script reads one or more CSV files, containing one or more columns of
 // numbers and calculates basic statistics for each column (including sum,
@@ -52,6 +52,7 @@
 // correctly with Go 1.25.0 on MacOS Sequoia. It should work on
 // any platform that supports Go and the math/big package.
 
+// v0.0.8 2025-11-08 Added elapsed time output.
 // v0.0.7 2025-09-29 Added --quiet option and rearranged CSV output order.
 // v0.0.6 2025-09-12 Added Big kurtosis & skewness calculation and output.
 
@@ -68,11 +69,12 @@ import (
 	"runtime"
 	"sort"
 	"strings"
+	"time" // time.Now()
 )
 
 const (
 	programName    = "bfbs"
-	programVersion = "v0.0.7"
+	programVersion = "v0.0.8"
 )
 
 type ColumnStats struct {
@@ -95,6 +97,8 @@ type ColumnStats struct {
 }
 
 func main() {
+	start_time := time.Now()
+
 	headersFlag := flag.Bool("headers", false, "Indicates that the first non-skipped row of the CSV contains headers")
 	skipLines := flag.Int("skip", 0, "Number of lines to skip at the start of each file (before headers or data)")
 	precisionFlag := flag.Int("precision", 256, "Floating-point precision (in bits) for calculations")
@@ -358,6 +362,7 @@ func main() {
 
 		}
 	}
+	println("bfbs (go executable) time taken: ", time.Since(start_time).Microseconds(), "[uS]")
 }
 
 // Helper: create *big.Float with user-specified precision

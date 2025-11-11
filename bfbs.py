@@ -170,4 +170,4 @@ for file_path in args.files:
         print(f"  Variance  : {variance}")
         print(f"  Std. Dev. : {stddev}")
 
-print("bfbs.py execution time was: %9.3f mS" % ((getClockTime() - startTime) * 1000))
+print("bfbs.py execution time was: %9.3f [mS]" % ((getClockTime() - startTime) * 1000))

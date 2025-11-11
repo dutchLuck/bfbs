@@ -16,6 +16,7 @@
 #
 
 #
+# 0v5 Provide execution time output
 # 0v4 Provide median
 # 0v3 Substituted bsqrt in-place of 'bigdecimal/math' BigMath.sqrt
 # 0v2 Added command line options --precision and --headers, plus max, min and range output.
@@ -54,6 +55,9 @@ def bsqrt(value, digits)
   # Round the result to the desired number of digits
   x.round(digits)
 end
+
+# Record start time so execution time can be output
+start_time = Time.now
 
 # Read the CSV file name from command line arguments or use a default
 options = {}
@@ -95,7 +99,7 @@ BigDecimal.mode(BigDecimal::ROUND_MODE, :half_up)   # Explicitly set rounding mo
 BigDecimal.limit(options[:precision])  # Set global precision limit for BigDecimal operations
 #
 # Output version and environment information
-puts "bfbs.rb version 0v4"
+puts "bfbs.rb version 0v5"
 puts "ruby version: #{RUBY_VERSION}"
 puts "csv module version: #{CSV::VERSION}"
 puts "bigdecimal module version: #{BigDecimal::VERSION}"
@@ -225,4 +229,6 @@ filenames.each do |name|
     print "  Variance  : ", varOfColumns[i], "\n"
     print "  Std. Dev. : ", stddevOfColumns[i], "\n"
   end
+
+  print "bfbs.rb execution time was ", Time.now - start_time, " [sec]\n"
 end

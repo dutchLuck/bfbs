@@ -3,7 +3,7 @@
 //
 // Big Float Basic Statistics
 //
-// bfbs.cpp last updated on Sat Sep 27 22:50:13 2025 by O.H. as 0v1
+// bfbs.cpp last updated on Tue Nov 11 19:51:22 2025 by O.H. as 0v3
 //
 
 //
@@ -41,6 +41,7 @@
 //
 
 //
+// 0v3 Added execution time output
 // 0v2 Added --quiet option to suppress version info and increase output digits to 64
 //
 
@@ -52,11 +53,12 @@
 #include <algorithm>
 #include <iomanip>
 #include <mpfr.h>
+#include <time.h>   // clock_gettime()
 
 using namespace std;
 
 #define PROGRAM_NAME "bfbs"
-#define PROGRAM_VERSION "0v2"
+#define PROGRAM_VERSION "0v3"
 
 // RAII Wrapper for mpfr_t
 class MpfrFloat {
@@ -256,6 +258,12 @@ void computeStats(const vector<MpfrFloat>& col, int precision, int base, int dig
 }
 
 int main(int argc, char* argv[]) {
+    int time_ok;
+    double  elapsed_wall_clock_time_in_mS;
+    struct timespec  start_time;
+    struct timespec  finish_time;
+
+    time_ok = (clock_gettime(CLOCK_MONOTONIC, &start_time) == 0);
     Options opts = parseArgs(argc, argv);
     printBanner(opts);
 
@@ -272,5 +280,10 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    if( time_ok && ( clock_gettime(CLOCK_MONOTONIC, &finish_time ) == 0 )) {
+        elapsed_wall_clock_time = (double)( finish_time.tv_sec - start_time.tv_sec ) +
+            ( double )( finish_time.tv_nsec - start_time.tv_nsec ) * (double)(1.0e-9);
+        printf( "bfbs (c++ executable) time taken: %9.3lf [sec]", elapsed_wall_clock_time );
+    }
     return 0;
 }

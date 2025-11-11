@@ -2,7 +2,7 @@
 #
 # B F B S . P L
 #
-# bfbs.pl last edited on Sat Sep 20 21:45:59 2025
+# bfbs.pl last edited on Mon Nov 10 12:44:48 2025
 #
 # This script reads one or more CSV files, containing one or more columns of
 # numbers and calculates basic statistics for each column (including sum,
@@ -40,17 +40,22 @@
 #    being used.
 
 #
+# 0v7 Add code execution elapsed calculation
 # 0v6 Cosmetic changes to output labels
 #
 
 use strict;
 use warnings;
 use Getopt::Long;
-use Math::BigFloat;
+use Math::BigFloat;     # arbitrary-precision floating point arithmetic
+use Time::HiRes qw(time);   # elapsed time measurement
+
+# === Start Timing ===
+my $start_time = time();
 
 # === Program Info ===
 my $PROGRAM_NAME    = "bfbs.pl";
-my $PROGRAM_VERSION = "0v6 (2025-09-20)";
+my $PROGRAM_VERSION = "0v7 (2025-11-10)";
 
 # === Settings ===
 my $precision       = 40;
@@ -175,4 +180,9 @@ foreach my $file (@ARGV) {
         print "  Variance  : ", ($use_scientific ? $variance->bnstr() : $variance->bstr()), " ", ($use_population ? "(population)" : "(sample)"), "\n";
         print "  Std. Dev. : ", ($use_scientific ? $stddev->bnstr() : $stddev->bstr()), " ", ($use_population ? "(population)" : "(sample)"),"\n";
     }
+
+    # === Elapsed Time Calculation ===
+    my $end_time = time();
+    my $elapsed = $end_time - $start_time;
+    printf("bfbs.pl execution elapsed time: %.6f [sec]\n", $elapsed);
 }

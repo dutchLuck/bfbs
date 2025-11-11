@@ -4,7 +4,7 @@
 #
 # Big Float Basic Statistics
 #
-# bfbs.jl last updated on Fri Sep  5 19:54:07 2025 by O.H. as 0v9
+# bfbs.jl last updated on Fri Sep  5 19:54:07 2025 by O.H. as 0v11
 #
 # Descendant of readdatafile.jl 0v1
 #
@@ -36,6 +36,7 @@
 ##
 
 #
+# 0v11 output the elapsed time for the script to run
 # 0v10 corrected --help message
 # 0v9 output Results digits and changed grouping of row/column stats
 #     output and added --scientific -e option for scientific format
@@ -238,7 +239,8 @@ function print_basic_stats_g_format(str::String, precision::Int64, cnts, mins, m
 end
 
 function main()
-	println("bfbs version 0v10 (2025-09-05)")
+	# Announce bfbs version
+	println("bfbs version 0v11 (2025-11-10)")
 
 	# Parse command line arguments
     args = parse_arguments()
@@ -377,4 +379,14 @@ function main()
     end
 end
 
+# Start the timer at the beginning of the script
+start_time = time()
+
 main()
+
+# End the timer at the end of the script
+end_time = time()
+
+# Calculate the elapsed time and print it
+elapsed_time = end_time - start_time
+@printf("bfbs.jl script execution time: %.4g  [sec]\n", elapsed_time )

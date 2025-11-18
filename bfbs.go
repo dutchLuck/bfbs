@@ -1,11 +1,21 @@
 //
 // B F B S . G O
 //
-// bfbs.go last edited on Tue Nov 11 19:51:26 2025
+// bfbs.go last edited on Mon Nov 17 10:20:33 2025
 //
 // This script reads one or more CSV files, containing one or more columns of
 // numbers and calculates basic statistics for each column (including sum,
 // average, variance and standard deviation) and outputs the results.
+//
+// The exit code for a successful execution is 0
+//  1 is the exit code if the user failed to supply file names on the command line
+//  2 is the exit code if the requested output file could not be created
+//  bit 2 (i.e. 4) is set in the exit code if any input file could not be opened
+//  bit 3 (i.e. 8) is set in the exit code if any error occurred while skipping start lines
+//  bit 4 (i.e. 16) is set in the exit code if any error occurred while reading headers
+//  bit 5 (i.e. 32) is set in the exit code if any error occurred while reading data
+//  bit 6 (i.e. 64) is set in the exit code if any invalid data value(s) were encountered
+//  bit 7 (i.e. 128) is set in the exit code if any column had no valid data
 //
 // This code is the results of the following ChatGPT prompts; -
 //  1. Please write a golang program that reads one or more
@@ -49,9 +59,10 @@
 
 // This code has been tested on Windows 10 with Go 1.25.0 and
 // appears to work correctly. It also builds and appears to work
-// correctly with Go 1.25.0 on MacOS Sequoia. It should work on
+// correctly with Go 1.25.0 on MacOS Sequoia/Tahoe. It should work on
 // any platform that supports Go and the math/big package.
 
+// v0.0.9 2025-11-15 -quiet now suppresses elapsed time output. Added some exit error codes.
 // v0.0.8 2025-11-08 Added elapsed time output.
 // v0.0.7 2025-09-29 Added --quiet option and rearranged CSV output order.
 // v0.0.6 2025-09-12 Added Big kurtosis & skewness calculation and output.
@@ -62,7 +73,6 @@ import (
 	"encoding/csv"
 	"flag"
 	"fmt"
-	"log"
 	"math"
 	"math/big"
 	"os"
@@ -74,7 +84,7 @@ import (
 
 const (
 	programName    = "bfbs"
-	programVersion = "v0.0.8"
+	programVersion = "v0.0.9"
 )
 
 type ColumnStats struct {
@@ -97,19 +107,25 @@ type ColumnStats struct {
 }
 
 func main() {
+	// capture start time for later use to calc elapsed execution time
 	start_time := time.Now()
 
+	var exitCode int = 0                 // default to success
+	defer func() { os.Exit(exitCode) }() // ensure exit code is set at end of main()
+
+	// process any command line options
 	headersFlag := flag.Bool("headers", false, "Indicates that the first non-skipped row of the CSV contains headers")
 	skipLines := flag.Int("skip", 0, "Number of lines to skip at the start of each file (before headers or data)")
 	precisionFlag := flag.Int("precision", 256, "Floating-point precision (in bits) for calculations")
 	outputDigits := flag.Int("output_digits", 64, "Number of digits to show in output")
 	outputCSV := flag.String("out", "", "Write computed statistics to a CSV file")
 	scientificFlag := flag.Bool("scientific", false, "Show numeric output in scientific notation")
-	quietFlag := flag.Bool("quiet", false, "Suppress version output")
+	quietFlag := flag.Bool("quiet", false, "Suppress version and elapsed execution time output")
 
 	flag.Parse()
 	files := flag.Args()
 
+	//
 	if !*quietFlag {
 		fmt.Printf("%s %s\n", programName, programVersion)
 		fmt.Printf("Built with Go version: %s\n", runtime.Version())
@@ -121,8 +137,10 @@ func main() {
 	// Check for input files
 	if len(files) == 0 {
 		fmt.Fprintf(os.Stderr, "\nError: No input files specified. Please provide at least one file name.\n")
-		fmt.Fprintf(os.Stderr, "Usage: %s [options] <file1.csv> [<file2.csv> ...]\n", os.Args[0])
-		log.Fatalf(" run  %s --help  to see the available options", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Usage:\n %s [options] <file1.csv> [<file2.csv> ...]\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, " run command  \"%s -help\"  to see the available options\n", os.Args[0])
+		exitCode = 1
+		return // exit with code 1 for no files specified
 	}
 
 	// Prepare CSV output if requested
@@ -132,17 +150,19 @@ func main() {
 		var err error
 		outFile, err = os.Create(*outputCSV)
 		if err != nil {
-			log.Fatalf("\nError: Failed to create output CSV file: %v", err)
+			fmt.Fprintf(os.Stderr, "\nError: Failed to create output CSV file: %v\n", err)
+			exitCode = 2
+			return // exit with code 2 for output file creation failure
 		}
 		defer outFile.Close()
 
 		csvWriter = csv.NewWriter(outFile)
-		defer csvWriter.Flush()
+		defer csvWriter.Flush() // Ensure data is written to file - this deferred Flush will run before outFile.Close()
 
 		// Write CSV header
 		csvWriter.Write([]string{
 			"File", "Column", "Count", "Min", "Mean", "Median", "Max", "Range", "Sum", "Variance", "StdDev",
-			"Skew", "Kurtosis",
+			"VarianceN", "StdDevN", "Skew", "Kurtosis",
 		})
 	}
 
@@ -153,6 +173,7 @@ func main() {
 		file, err := os.Open(filename)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "\nError: Failed to open file named \"%s\": %v\n", filename, err)
+			exitCode |= 4 // set bit 2 for input file open error
 			continue
 		} else {
 			defer file.Close()
@@ -169,7 +190,8 @@ func main() {
 		for linesRead < *skipLines {
 			_, err := reader.Read()
 			if err != nil {
-				log.Fatalf("Error skipping line %d in %s: %v", linesRead+1, filename, err)
+				fmt.Fprintf(os.Stderr, "\nError skipping line %d in %s: %v\n", linesRead+1, filename, err)
+				exitCode |= 8 // set bit 3 for line skipping in input file read error
 			}
 			linesRead++
 		}
@@ -178,7 +200,8 @@ func main() {
 			for {
 				record, err := reader.Read()
 				if err != nil {
-					log.Fatalf("Error reading header in %s: %v", filename, err)
+					fmt.Fprintf(os.Stderr, "\nError reading header in %s: %v\n", filename, err)
+					exitCode |= 16 // set bit 4 for header read error
 				}
 				linesRead++
 
@@ -195,6 +218,10 @@ func main() {
 		for {
 			record, err := reader.Read()
 			if err != nil {
+				if err.Error() != "EOF" {
+					fmt.Fprintf(os.Stderr, "\nError reading CSV data in %s: %v\n", filename, err)
+					exitCode |= 32 // set bit 5 for header read error
+				}
 				break
 			}
 			rowIndex++
@@ -213,6 +240,7 @@ func main() {
 				if err != nil {
 					fmt.Fprintf(os.Stderr, "Warning: skipping invalid value '%s' at row %d, column %d in file %s\n",
 						field, rowIndex, i+1, filename)
+					exitCode |= 64 // set bit 6 for invalid data value(s) encountered
 					continue
 				}
 
@@ -246,6 +274,7 @@ func main() {
 			stats, ok := columns[i]
 			if !ok || len(stats.Values) == 0 {
 				fmt.Printf("  %s: No valid data\n", getColumnName(headers, i))
+				exitCode |= 128 // set bit 7 for no valid data in at least one column
 				continue
 			}
 
@@ -355,14 +384,18 @@ func main() {
 					stats.Sum.Text(format, *outputDigits),
 					stats.Var.Text(format, *outputDigits),
 					stats.StdDev.Text(format, *outputDigits),
+					stats.VarN.Text(format, *outputDigits),
+					stats.StdDevN.Text(format, *outputDigits),
 					fmt.Sprintf("%.6f", stats.Skew),
 					fmt.Sprintf("%.6f", stats.Kurtosis),
 				})
 			}
-
 		}
 	}
-	println("bfbs (go executable) time taken: ", time.Since(start_time).Microseconds(), "[uS]")
+	if !*quietFlag {
+		println("bfbs (go executable) time taken: ", time.Since(start_time).Microseconds(), "[uS]")
+	}
+	return // exit with code 0 for success, or other code if errors encountered
 }
 
 // Helper: create *big.Float with user-specified precision

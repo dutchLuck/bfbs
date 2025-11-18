@@ -45,7 +45,8 @@ The golang version of bfbs uses the
 <a href="https://pkg.go.dev/math/big">math/big</a> package and builds and runs without trouble
 on Linux, MacOS and Windows. It outputs min, median, max, range, skew and kurtosis in
 addition to sum, mean, variance and standard deviation. N.B. that the skew and kurtosis
-are calculated as float64 values and big float values in the current (v0.0.6) version.
+are calculated as both float64 values and big float values in the current (v0.0.9) version, but
+the float64 values will be removed in a future version.
 The results are produced without any noticeable delay.
 ## bfbs.java
 The java bfbs code uses the
@@ -148,9 +149,9 @@ A suitable, but contrived file of test data has the following contents; -
 ```
 The results from bfbs.jl on the just shown file contents are; -
 ```
-% julia bfbs.jl -p 80 -P 340 test/data.csv
-bfbs version 0v10 (2025-09-05)
-Julia version 1.11.7
+ % julia bfbs.jl -p 80 -P 340 test/data.csv    
+bfbs version 0v11 (2025-11-10)
+Julia version 1.12.1
 BigFloat precision: 340 bits
 Results output using 80 digits in general number format
 
@@ -215,6 +216,7 @@ Column: 3
  Sum       : 2400000000000000000000000000000000000002400000000000
  Variance  : 1.000000000000000000000000000000000000002000000000000000000000000000000000000001e+100
  Std. Dev. : 100000000000000000000000000000000000000100000000000
+bfbs.jl script execution time: 2.464  [sec]
 %
 ```
 The useage information for bfbs.jl is; -
@@ -359,7 +361,7 @@ $
 ### go
 ```
 % go run bfbs.go -precision 340 -output_digits 80 test/data.csv
-bfbs v0.0.7
+bfbs v0.0.9
 Built with Go version: go1.25.0
 Using 340 bits calculation precision and 80 digits output precision
 
@@ -415,6 +417,7 @@ Column 3:
   f64 Skew   : 0.000000
   f64 Kurt   : 0.000000
 
+bfbs (go executable) time taken:  678 [uS]
 %
 ```
 ### java
@@ -466,7 +469,7 @@ Column 3:
 ### perl
 ```
 % perl bfbs.pl --precision 40 ./test/data.csv
-bfbs.pl version 0v6 (2025-09-20)
+bfbs.pl version 0v7 (2025-11-10)
 Perl version: v5.34.1
 Getopt::Long Version: 2.52
 Math::BigFloat Version: 1.999818
@@ -507,15 +510,16 @@ Column: 3
   Sum       : 2400000000000000000000000000000000000002400000000000.0000000000000000000000000000000000000000
   Variance  : 10000000000000000000000000000000000000020000000000000000000000000000000000000010000000000000000000000.0000000000000000000000000000000000000000 (sample)
   Std. Dev. : 100000000000000000000000000000000000000100000000000.0000000000000000000000000000000000000000 (sample)
-%
+bfbs.pl execution elapsed time: 0.002428 [sec]
+% 
 ```
 ### python
 ```
-> python bfbs.py --precision 80 test/data.csv
-bfbs.py version 0v3
-python version: 3.13.9
+% python3 bfbs.py --precision 80 test/data.csv
+bfbs.py version 0v4
+python version: 3.9.6
 csv module version: 1.0
-decimal module version: 3.13.9
+decimal module version: 3.9.6
 Using 80 digits of decimal precision.
 
 Processing file: "test/data.csv"
@@ -552,7 +556,8 @@ Column 3:
   Sum       : 2400000000000000000000000000000000000002400000000000
   Variance  : 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010E+100
   Std. Dev. : 1.0000000000000000000000000000000000000010E+50
->
+bfbs.py execution time was:     3.718 [mS]
+%
 ```
 ### Rscript
 ```
@@ -606,11 +611,11 @@ Column: V3
 ```
 ### ruby
 ```
-> ruby bfbs.rb -P 80 test/data.csv
-bfbs.rb version 0v4
-ruby version: 3.2.9
-csv module version: 3.2.6
-bigdecimal module version: 3.1.3
+% ruby bfbs.rb -P 80 test/data.csv
+bfbs.rb version 0v5
+ruby version: 2.6.10
+csv module version: 3.0.9
+bigdecimal module version: 1.4.1
 Using 80 digits of bigdecimal precision.
 
 Processing file: "test/data.csv"
@@ -644,27 +649,18 @@ Column: 3
   Sum       : 0.24000000000000000000000000000000000000024e52
   Variance  : 0.1000000000000000000000000000000000000002000000000000000000000000000000000000001e101
   Std. Dev. : 0.1000000000000000000000000000000000000001e51
->
+bfbs.rb execution time was 0.000622 [sec]
+%
 ```
 ### rust
 ```
-% cargo run -- --precision 340 --print_digits 80 test/data.csv
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.12s
-     Running `target/debug/bfbs --precision 340 --print_digits 80 test/data.csv`
-bfbs version v0.1.6
+% cargo run --release -- --precision 340 --print_digits 80 test/data.csv
+    Finished `release` profile [optimized] target(s) in 0.01s
+     Running `target/release/bfbs --precision 340 --print_digits 80 test/data.csv`
+bfbs version v0.1.7
 Using 340 bit precision for calculation and 80 digit decimal print out.
 
 Processing file: "test/data.csv"
-Column: 3
-  Count     : 3
-  Minimum   : 700000000000000000000000000000000000000700000000000.00000000000000000000000000000
-  Mean      : 800000000000000000000000000000000000000800000000000.00000000000000000000000000000
-  Median    : 800000000000000000000000000000000000000800000000000.00000000000000000000000000000
-  Maximum   : 900000000000000000000000000000000000000900000000000.00000000000000000000000000000
-  Range     : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
-  Sum       : 2400000000000000000000000000000000000002400000000000.0000000000000000000000000000
-  Variance  : 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e100
-  Std. Dev. : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
 Column: 1
   Count     : 3
   Minimum   : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
@@ -685,6 +681,17 @@ Column: 2
   Sum       : 1500000000000000000000000000000000000001500000000000.0000000000000000000000000000
   Variance  : 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e100
   Std. Dev. : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
+Column: 3
+  Count     : 3
+  Minimum   : 700000000000000000000000000000000000000700000000000.00000000000000000000000000000
+  Mean      : 800000000000000000000000000000000000000800000000000.00000000000000000000000000000
+  Median    : 800000000000000000000000000000000000000800000000000.00000000000000000000000000000
+  Maximum   : 900000000000000000000000000000000000000900000000000.00000000000000000000000000000
+  Range     : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
+  Sum       : 2400000000000000000000000000000000000002400000000000.0000000000000000000000000000
+  Variance  : 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e100
+  Std. Dev. : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
+bfbs (rust executable) time taken: 0.001207 [sec]
 %
 ```
 

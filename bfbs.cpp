@@ -3,7 +3,7 @@
 //
 // Big Float Basic Statistics
 //
-// bfbs.cpp last updated on Tue Nov 11 19:51:22 2025 by O.H. as 0v3
+// bfbs.cpp last updated on Fri Nov 21 21:23:43 2025 by O.H. as 0v4
 //
 
 //
@@ -13,15 +13,21 @@
 //
 // On Ubuntu make sure the library code is installed with; -
 //  sudo apt install libgmp-dev libmpfr-dev
+// On MacOS one method to provide the library code is with homebrew; -
+//  brew install gmp
+//  brew install mpfr
 //
 // Compile on Ubuntu with; -
-//  g++ -std=c++17 -o bfbs bfbs.cpp -lmpfr -lgmp
+//  g++ -Wall -pedantic -Wextra -std=c++17 -o bfbs_cpp bfbs.cpp -lmpfr -lgmp
+// Compile on MacOS (homebrew library code) with; -
+//  g++ -Wall -pedantic -Wextra -std=c++17 -I /opt/homebrew/include/ \
+//   -o bfbs_cpp bfbs.cpp -L /opt/homebrew/lib/ -lmpfr -lgmp
 //
 // Run with; -
-//  ./bfbs data1.csv data2.csv --precision 512 --digits 20 --header
+//  ./bfbs_cpp data1.csv data2.csv --precision 512 --digits 20 --header
 //
 // Usage is; -
-//  Usage: ./bfbs file1.csv [file2.csv ...] [--header] [--precision N] [--digits N]
+//  Usage: ./bfbs_cpp file1.csv [file2.csv ...] [--header] [--precision N] [--digits N]
 //
 
 //
@@ -41,6 +47,7 @@
 //
 
 //
+// 0v4 Fixed compile and output execution time to uSec resolution
 // 0v3 Added execution time output
 // 0v2 Added --quiet option to suppress version info and increase output digits to 64
 //
@@ -58,7 +65,7 @@
 using namespace std;
 
 #define PROGRAM_NAME "bfbs"
-#define PROGRAM_VERSION "0v3"
+#define PROGRAM_VERSION "0v4"
 
 // RAII Wrapper for mpfr_t
 class MpfrFloat {
@@ -143,11 +150,11 @@ void printBanner(const Options& opts) {
     cout << endl;
 }
 
-void readCSV(const string& filename, vector<vector<MpfrFloat>>& columns, vector<string>& headers, bool hasHeader, int precision) {
+int readCSV(const string& filename, vector<vector<MpfrFloat>>& columns, vector<string>& headers, bool hasHeader, int precision) {
     ifstream file(filename);
     if (!file) {
-        cerr << "Cannot open file: " << filename << endl;
-        exit(1);
+        cerr << "Error: Cannot open file: " << filename << endl;
+        return(1);  // failure due to file open error
     }
 
     string line;
@@ -188,6 +195,7 @@ void readCSV(const string& filename, vector<vector<MpfrFloat>>& columns, vector<
 
         firstLine = false;
     }
+    return(0);  // success
 }
 
 vector<MpfrFloat> sortColumn(const vector<MpfrFloat>& col) {
@@ -259,7 +267,8 @@ void computeStats(const vector<MpfrFloat>& col, int precision, int base, int dig
 
 int main(int argc, char* argv[]) {
     int time_ok;
-    double  elapsed_wall_clock_time_in_mS;
+    int result_flag = 0;
+    double  elapsed_wall_clock_time;
     struct timespec  start_time;
     struct timespec  finish_time;
 
@@ -272,7 +281,10 @@ int main(int argc, char* argv[]) {
         vector<vector<MpfrFloat>> columns;
         vector<string> headers;
 
-        readCSV(file, columns, headers, opts.hasHeader, opts.precision);
+        if ( readCSV(file, columns, headers, opts.hasHeader, opts.precision ) != 0 ) {
+            result_flag |= 1;   // remember there was a failure
+            continue;   // failure so proceed to next file if there is one
+        }
 
         for (size_t i = 0; i < columns.size(); ++i) {
             string name = (opts.hasHeader && i < headers.size()) ? headers[i] : "Column " + to_string(i + 1);
@@ -280,10 +292,10 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    if( time_ok && ( clock_gettime(CLOCK_MONOTONIC, &finish_time ) == 0 )) {
+    if( ! opts.quiet && time_ok && ( clock_gettime(CLOCK_MONOTONIC, &finish_time ) == 0 )) {
         elapsed_wall_clock_time = (double)( finish_time.tv_sec - start_time.tv_sec ) +
             ( double )( finish_time.tv_nsec - start_time.tv_nsec ) * (double)(1.0e-9);
-        printf( "bfbs (c++ executable) time taken: %9.3lf [sec]", elapsed_wall_clock_time );
+        printf( "bfbs (c++ executable) time taken: %9.6lf [sec]\n", elapsed_wall_clock_time );
     }
-    return 0;
+    return result_flag;
 }

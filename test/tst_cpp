@@ -1,0 +1,94 @@
+#! /bin/sh
+#
+# T S T _ C P P
+#
+# tst last edited on Fri Jun 21 23:26:28 2024 
+#
+# To redirect both stdout and stderr to a file, use ampersand redirect operation, for example; -
+#  ./tst &> outputFile
+#
+EXE="../bfbs_cpp --quiet"
+TEN_PLUSS=++++++++++
+#
+# Test default case: read a CSV file and output stats with default number of digits
+echo ""
+echo "${TEN_PLUSS} $EXE data.csv  +++Small valid 3 column file, with header option check${TEN_PLUSS}"
+$EXE data.csv
+echo "${TEN_PLUSS} Shell got Return code number $? for small valid file data.csv, with header option check${TEN_PLUSS}"
+#
+# Test data in 7 columns and 4 rows
+echo ""
+echo "${TEN_PLUSS} $EXE cols7rows4.csv +++Small valid 7 column file and no options check${TEN_PLUSS}"
+$EXE cols7rows4.csv
+echo "${TEN_PLUSS} Shell got Return code number $? for small valid file cols7rows4.csv, no options check${TEN_PLUSS}"
+#
+# Test data order sensitivity with the first column the reverse of the second
+echo ""
+echo "${TEN_PLUSS} $EXE -R heights.csv +++Somewhat longer file with 2 columns, 1 column the reverse of the other${TEN_PLUSS}"
+$EXE heights.csv
+echo "${TEN_PLUSS} Shell got Return code number $? for longer file with lengthier lines${TEN_PLUSS}"
+#
+# Test NIST file with known results
+echo ""
+echo "${TEN_PLUSS} $EXE NIST_StRD_PiDigits.dat +++Long file of 1 column of single digits, no options check${TEN_PLUSS}"
+$EXE NIST_StRD_PiDigits.dat
+echo "${TEN_PLUSS} Shell got Return code number $? for long file with single column (4.5348, 2.86733906028871)${TEN_PLUSS}"
+#
+echo ""
+echo "${TEN_PLUSS} $EXE NIST_StRD_Lew.dat +++Long file of 1 column of single digits, no options check${TEN_PLUSS}"
+$EXE NIST_StRD_Lew.dat
+echo "${TEN_PLUSS} Shell got Return code number $? for 200 long file with single column (-177.435, 277.332168044316)${TEN_PLUSS}"
+#
+echo ""
+echo "${TEN_PLUSS} $EXE NIST_StRD_Lottery.dat +++Long file of 1 column of single digits, no options check${TEN_PLUSS}"
+$EXE NIST_StRD_Lottery.dat
+echo "${TEN_PLUSS} Shell got Return code number $? for 218 long file with single column (518.958715596330, 291.699727470969)${TEN_PLUSS}"
+#
+echo ""
+echo "${TEN_PLUSS} $EXE NIST_StRD_Mavro.dat +++Long file of 1 column of single digits, no options check${TEN_PLUSS}"
+$EXE NIST_StRD_Mavro.dat
+echo "${TEN_PLUSS} Shell got Return code number $? for 50 long file with single column (2.001856, 0.000429123454003053)${TEN_PLUSS}"
+#
+echo ""
+echo "${TEN_PLUSS} $EXE NIST_StRD_Michelso.dat +++Long file of 1 column of single digits, no options check${TEN_PLUSS}"
+$EXE NIST_StRD_Michelso.dat
+echo "${TEN_PLUSS} Shell got Return code number $? for 100 long file with single column (299.8524, 0.0790105478190518)${TEN_PLUSS}"
+#
+echo ""
+echo "${TEN_PLUSS} $EXE NIST_StRD_NumAcc1.dat  +++NIST numerical accurracy file of 3 large close numbers${TEN_PLUSS}"
+$EXE NIST_StRD_NumAcc1.dat
+echo "${TEN_PLUSS} Shell got Return code number $? for 1st NIST numerical accuracy file ( 10000002, 1)${TEN_PLUSS}"
+#
+echo ""
+echo "${TEN_PLUSS} $EXE NIST_StRD_NumAcc2.dat  +++NIST numerical accurracy file of close numbers${TEN_PLUSS}"
+$EXE NIST_StRD_NumAcc2.dat
+echo "${TEN_PLUSS} Shell got Return code number $? for 2nd NIST numerical accuracy file ( 1.2, 0.1)${TEN_PLUSS}"
+#
+echo ""
+echo "${TEN_PLUSS} $EXE NIST_StRD_NumAcc3.dat  +++NIST numerical accurracy file of close numbers${TEN_PLUSS}"
+$EXE NIST_StRD_NumAcc3.dat
+echo "${TEN_PLUSS} Shell got Return code number $? for 3rd NIST numerical accuracy file (1000000.2, 0.1)${TEN_PLUSS}"
+#
+echo ""
+echo "${TEN_PLUSS} $EXE NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers${TEN_PLUSS}"
+$EXE NIST_StRD_NumAcc4.dat
+echo "${TEN_PLUSS} Shell got Return code number $? for 4th NIST numerical accuracy file (10000000.2, 0.1)${TEN_PLUSS}"
+#
+# Test multiple data file handling and smaller number of output digits
+echo ""
+echo "${TEN_PLUSS} $EXE --digits 10 NIST_StRD_NumAcc?.dat  +++NIST numerical accurracy files of large close numbers${TEN_PLUSS}"
+$EXE --digits 10 NIST_StRD_NumAcc?.dat
+echo "${TEN_PLUSS} Shell got Return code number $? for NIST numerical accuracy files ${TEN_PLUSS}"
+#
+# Test multiple data file handling including a missing file
+echo ""
+echo "${TEN_PLUSS} $EXE non_existent_file.csv data.csv  +++Handles non-existent file check${TEN_PLUSS}"
+$EXE non_existent_file.csv data.csv
+echo "${TEN_PLUSS} Shell got Return code number $? for Handles non-existent file options${TEN_PLUSS}"
+#
+# Test usage messages
+echo ""
+echo "${TEN_PLUSS} $EXE --help  +++Usage/help and information check${TEN_PLUSS}"
+$EXE --help
+echo "${TEN_PLUSS} Shell got Return code number $? for usage/help, options${TEN_PLUSS}"
+#

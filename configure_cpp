@@ -8,8 +8,8 @@ NAME1=bfbs
 #
 OP_FILE_NAME=Makefile
 COMPILER="g++"
-OPTIONS="-Wall -pedantic -Wextra -std=c++17"
-LNK_OPTIONS="-lmpfr -lgmp"
+OPTIONS="-Wall -pedantic -Wextra -std=c++17 -I /opt/homebrew/include/"
+LNK_OPTIONS="-L /opt/homebrew/lib/ -lmpfr -lgmp"
 TRGT=${NAME1}_cpp
 SRC1=${NAME1}.cpp
 #

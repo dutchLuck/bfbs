@@ -37,7 +37,8 @@ The C++ version of bfbs uses the
 <a href="https://www.mpfr.org/">MPFR</a> (arbitrary-precision floating-point) library and the
 <a href="https://gmplib.org/">GMP</a> (multiple-precision arithmetic) library code to provide
 the basis of all the calculations. This program compiles on Ubuntu 22.04 LTS Linux after
-the MPFR and GMP dev libraries are installed using the apt package manager. It outputs
+the MPFR and GMP dev libraries are installed using the apt package manager. It also compiles
+on MacOS after mpfr and gmp are installed with the homebrew package manager. It outputs
 minimum, median, maximum and range in addition to sum, mean, sample variance (s^2) and
 sample standard deviation (s). The results are produced without any noticeable delay.
 ## bfbs.go
@@ -315,11 +316,11 @@ The long double precision epsilon floating point value ("LDBL_EPSILON") is 1.084
 ## Output from languages other than julia; -
 ### C++
 ```
-$ ./bfbs_cpp --precision 340 --digits 80 test/data.csv 
-bfbs version 0v2
-Compiler version: 11.4.0
-MPFR version: 4.1.0
-GMP version:  6.2.1
+ % ./bfbs_cpp --precision 340 --digits 80 test/data.csv
+bfbs version 0v4
+Compiler version: Apple LLVM 17.0.0 (clang-1700.4.4.1)
+MPFR version: 4.2.2
+GMP version:  6.3.0
 Using 340 bits Calculation precision and 80 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: test/data.csv
@@ -356,7 +357,8 @@ Column: Column 3
   Sample Variance  : 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e100
   Sample Std. Dev. : 1.0000000000000000000000000000000000000010000000000000000000000000000000000000000e50
 
-$
+bfbs (c++ executable) time taken:  0.000575 [sec]
+%
 ```
 ### go
 ```

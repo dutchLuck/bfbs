@@ -2,17 +2,27 @@
 #
 # C O N F I G U R E _ C P P
 #
-# configure last edited on Sat Sep 29 21:13:13 2025 
+# configure last edited on Fri Nov 28 21:18:43 2025 
 #
 NAME1=bfbs
 #
 OP_FILE_NAME=Makefile
 COMPILER="g++"
-OPTIONS="-Wall -pedantic -Wextra -std=c++17 -I /opt/homebrew/include/"
-LNK_OPTIONS="-L /opt/homebrew/lib/ -lmpfr -lgmp"
+OPTIONS="-Wall -pedantic -Wextra -std=c++17"
+LNK_OPTIONS="-lmpfr -lgmp"
+RELEASE_LNK_OPTIONS="-static -lmpfr -lgmp"
 TRGT=${NAME1}_cpp
 SRC1=${NAME1}.cpp
 #
+# echo "OSTYPE is: $OSTYPE"
+#
+# Adjust for homebrew installed arbitrary precision math library files on MacOS
+if [[ "$OSTYPE" == "darwin25" ]]; then
+    OPTIONS="-Wall -pedantic -Wextra -std=c++17 -I /opt/homebrew/include/"
+    LNK_OPTIONS="-L /opt/homebrew/lib/ -lmpfr -lgmp"
+    # -static has problems on MacOS
+    RELEASE_LNK_OPTIONS=$LNK_OPTIONS
+fi
 #
 echo "$TRGT: $SRC1" > $OP_FILE_NAME
 echo -e "\t$COMPILER $OPTIONS -o "'$@ $^'" $LNK_OPTIONS" >> $OP_FILE_NAME
@@ -38,8 +48,9 @@ echo "static: clean" >> $OP_FILE_NAME
 echo -e "\t$COMPILER $OPTIONS -DDEBUG -o $TRGT $SRC1 -static $LNK_OPTIONS" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
+# Release target with optimization and stripped binary
 echo "release: clean" >> $OP_FILE_NAME
-echo -e "\t$COMPILER $OPTIONS -O2 -o $TRGT $SRC1 -static $LNK_OPTIONS" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $OPTIONS -O2 -o $TRGT $SRC1 $RELEASE_LNK_OPTIONS" >> $OP_FILE_NAME
 echo -e "\tstrip $TRGT" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #

@@ -18,9 +18,9 @@ but have decimal floating point packages. Compiled languages like rust and go al
 arbitrary-precision floating point capability. Even if a language does not have this
 capability it does not mean it cannot be used to do basic statistics as lower precision
 may be perfectly acceptable. If the original data being explored was acquired with a
-high level of uncertainty then statistical analysis may of great help, but this does
+high level of uncertainty then statistical analysis may be of great help, but this does
 not imply that high precision statistical calculations are required.
-(N.B. Other word choices fit "bfbs" too. For instance although extra precision provided
+(Note that other word choices fit "bfbs" too. Although extra precision provided
 by arbitrary precision (big float) floating point arithmetic may reduce worry about
 truncation, cancellation and accumulation errors effecting the results, other factors
 about the data can still make using the results output by bfbs just BS.)

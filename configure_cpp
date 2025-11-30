@@ -2,7 +2,7 @@
 #
 # C O N F I G U R E _ C P P
 #
-# configure last edited on Fri Nov 28 21:18:43 2025 
+# configure last edited on Sun Nov 30 13:36:25 2025 
 #
 NAME1=bfbs
 #
@@ -14,10 +14,11 @@ RELEASE_LNK_OPTIONS="-static -lmpfr -lgmp"
 TRGT=${NAME1}_cpp
 SRC1=${NAME1}.cpp
 #
-# echo "OSTYPE is: $OSTYPE"
+# Determine generic OS name, e.g. 'darwin'
+OS_FAMILY="${OSTYPE%[0-9][0-9]}"
 #
 # Adjust for homebrew installed arbitrary precision math library files on MacOS
-if [[ "$OSTYPE" == "darwin25" ]]; then
+if [[ "$OS_FAMILY" == "darwin" ]]; then
     OPTIONS="-Wall -pedantic -Wextra -std=c++17 -I /opt/homebrew/include/"
     LNK_OPTIONS="-L /opt/homebrew/lib/ -lmpfr -lgmp"
     # -static has problems on MacOS

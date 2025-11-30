@@ -150,9 +150,9 @@ A suitable, but contrived file of test data has the following contents; -
 ```
 The results from bfbs.jl on the just shown file contents are; -
 ```
- % julia bfbs.jl -p 80 -P 340 test/data.csv    
+% julia bfbs.jl -p 80 -P 340 test/data.csv
 bfbs version 0v11 (2025-11-10)
-Julia version 1.12.1
+Julia version 1.12.2
 BigFloat precision: 340 bits
 Results output using 80 digits in general number format
 
@@ -217,7 +217,7 @@ Column: 3
  Sum       : 2400000000000000000000000000000000000002400000000000
  Variance  : 1.000000000000000000000000000000000000002000000000000000000000000000000000000001e+100
  Std. Dev. : 100000000000000000000000000000000000000100000000000
-bfbs.jl script execution time: 2.464  [sec]
+bfbs.jl script execution time: 2.463  [sec]
 %
 ```
 The useage information for bfbs.jl is; -

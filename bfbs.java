@@ -3,7 +3,7 @@
 //
 // Big Float Basic Statistics
 //
-// bfbs.java last updated on Fri Oct  3 20:54:48 2025 by O.H. as 0v9
+// bfbs.java last updated on Sun Dec  7 22:15:48 2025 by O.H. as 0v10
 //
 
 //
@@ -47,6 +47,7 @@
 //
 
 //
+// 0v10 Added execution time output
 // 0v9 Very minor mod to testing for even number of values
 // 0v8 Rearrange order of output and make output a bit more consistant with other bfbs programs
 // 0v7 Handle file not found and check user supplied integers
@@ -69,12 +70,19 @@ import java.util.*;
 public class bfbs {
 
     public static void main(String[] args) throws IOException {
+
+        // Setup to capture the programs execution time
+        long startTime = System.currentTimeMillis();
+
         // Default precision if not provided
         int precision = 40;         // 40 is the default precision
         int roundDigits = -1;       // default to -1 (i.e full precision)
         boolean hasHeader = false;
         boolean hasHelp = false;
         List<String> fileNames = new ArrayList<>();
+
+        // 🎉 Program info banner
+        System.out.println("bfbs 0v10");
 
         // Parse arguments
         for (String arg : args) {
@@ -121,8 +129,7 @@ public class bfbs {
             return;
         }
 
-        // 🎉 Program info banner
-        System.out.println("bfbs 0v9");
+        // 🎉 Further Program info banner
         String javaVersion = System.getProperty("java.version");
         System.out.println("Running on Java version: " + javaVersion);
         System.out.println("Using java.math.BigDecimal (standard library)");
@@ -161,6 +168,11 @@ public class bfbs {
                 System.out.println();
             }
         }
+
+        long endTime = System.currentTimeMillis();
+        long durationInMillis = endTime - startTime;
+
+        System.out.println("bfbs.java execution time: " + durationInMillis + " [mS]");
     }
 
 

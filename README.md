@@ -424,8 +424,8 @@ bfbs (go executable) time taken:  678 [uS]
 ```
 ### java
 ```
->java bfbs --precision=80 test\data.csv
-bfbs 0v9
+> java bfbs --precision=80 test\data.csv
+bfbs 0v10
 Running on Java version: 21.0.8
 Using java.math.BigDecimal (standard library)
 Calculation precision: 80 digits
@@ -465,7 +465,7 @@ Column 3:
   Sample Variance  : 10000000000000000000000000000000000000020000000000000000000000000000000000000010000000000000000000000
   Sample Std. Dev. : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
 
-
+bfbs.java execution time: 62 [mS]
 >
 ```
 ### perl

@@ -420,5 +420,5 @@ Column: Column 3
 
 ++++++++++ ../bfbs_cpp --quiet --help  +++Usage/help and information check++++++++++
 Usage:
- ./bfbs file1.csv [file2.csv ...] [--help] [--quiet] [--header] [--precision N] [--digits N]
+../bfbs_cpp file1.csv [file2.csv ...] [--help] [--quiet] [--header] [--precision N] [--digits N]
 ++++++++++ Shell got Return code number 1 for usage/help, options++++++++++

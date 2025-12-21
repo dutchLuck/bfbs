@@ -3,7 +3,7 @@
 //
 // Big Float Basic Statistics
 //
-// bfbs.cpp last updated on Fri Nov 21 21:23:43 2025 by O.H. as 0v4
+// bfbs.cpp last updated on Sun Dec 21 20:46:29 2025 by O.H. as 0v5
 //
 
 //
@@ -20,8 +20,7 @@
 // Compile on Ubuntu with; -
 //  g++ -Wall -pedantic -Wextra -std=c++17 -o bfbs_cpp bfbs.cpp -lmpfr -lgmp
 // Compile on MacOS (homebrew library code) with; -
-//  g++ -Wall -pedantic -Wextra -std=c++17 -I /opt/homebrew/include/ \
-//   -o bfbs_cpp bfbs.cpp -L /opt/homebrew/lib/ -lmpfr -lgmp
+//  g++ -Wall -pedantic -Wextra -std=c++17 -I /opt/homebrew/include/ -o bfbs_cpp bfbs.cpp -L /opt/homebrew/lib/ -lmpfr -lgmp
 //
 // Run with; -
 //  ./bfbs_cpp data1.csv data2.csv --precision 512 --digits 20 --header
@@ -47,6 +46,7 @@
 //
 
 //
+// 0v5 Minor change to help output and elapsed time message
 // 0v4 Fixed compile and output execution time to uSec resolution
 // 0v3 Added execution time output
 // 0v2 Added --quiet option to suppress version info and increase output digits to 64
@@ -64,8 +64,8 @@
 
 using namespace std;
 
-#define PROGRAM_NAME "bfbs"
-#define PROGRAM_VERSION "0v4"
+#define PROGRAM_NAME __FILE__
+#define PROGRAM_VERSION "0v5"
 
 // RAII Wrapper for mpfr_t
 class MpfrFloat {
@@ -130,7 +130,8 @@ Options parseArgs(int argc, char* argv[]) {
     }
     if (opts.files.empty() || opts.help) {
         cerr << "Usage:" << endl;
-        cerr << " ./bfbs file1.csv [file2.csv ...] [--help] [--quiet] [--header] [--precision N] [--digits N]\n";
+        cerr << argv[0];    // program name
+        cerr << " file1.csv [file2.csv ...] [--help] [--quiet] [--header] [--precision N] [--digits N]\n";
         exit(1);
     }
     return opts;
@@ -295,7 +296,7 @@ int main(int argc, char* argv[]) {
     if( ! opts.quiet && time_ok && ( clock_gettime(CLOCK_MONOTONIC, &finish_time ) == 0 )) {
         elapsed_wall_clock_time = (double)( finish_time.tv_sec - start_time.tv_sec ) +
             ( double )( finish_time.tv_nsec - start_time.tv_nsec ) * (double)(1.0e-9);
-        printf( "bfbs (c++ executable) time taken: %9.6lf [sec]\n", elapsed_wall_clock_time );
+        printf( "%s (c++ executable) time taken: %9.6lf [sec]\n", argv[0], elapsed_wall_clock_time );
     }
     return result_flag;
 }

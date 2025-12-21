@@ -1,0 +1,27 @@
+#! /bin/bash
+#
+# B U I L D
+#
+# Script to check validity of all the different sources
+# by trying to compile them
+#
+function printSeparator {
+ echo ""
+ echo -e "==========\033[1;31m build \033[0m======\033[1;32m $1 \033[0m====================="
+}
+#
+printSeparator c++
+./configure_cpp
+make clean
+make
+#
+printSeparator go
+./configure_go
+make clean
+make
+#
+printSeparator rust
+./configure_rust
+make clean
+make
+#

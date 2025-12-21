@@ -28,7 +28,7 @@ echo -e "\tcd test; ./chk_rust" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "clean:" >> $OP_FILE_NAME
-echo -e "\trm -f $TRGT" >> $OP_FILE_NAME
+echo -e "\trm -f $TRGT target/debug/${NAME1} target/release/${NAME1}" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "debug: clean" >> $OP_FILE_NAME

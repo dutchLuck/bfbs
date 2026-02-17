@@ -1,0 +1,60 @@
+#! /bin/bash
+#
+# C O N F I G U R E _ F O R T R A N
+#
+# configure last edited on Fri Feb 13 09:20:09 2026 
+#
+NAME1=bfbs
+NAME2=mpfr_mod
+#
+OP_FILE_NAME=Makefile
+COMPILER="gfortran"
+OPTIONS="-Wall -pedantic -Wextra -std=f2008 -O2"
+LNK_OPTIONS="-lmpfr -lgmp"
+RELEASE_LNK_OPTIONS="-static -lmpfr -lgmp"
+TRGT=${NAME1}_fortran
+SRC1=${NAME1}.f90
+SRC2=${NAME2}.f90
+OBJ2=${NAME2}.o
+#
+# Determine generic OS name, e.g. 'darwin'
+OS_FAMILY="${OSTYPE%[0-9][0-9]}"
+#
+# Adjust for homebrew installed arbitrary precision math library files on MacOS
+if [[ "$OS_FAMILY" == "darwin" ]]; then
+    OPTIONS="-Wall -pedantic -Wextra -std=f2008 -I /opt/homebrew/include/"
+    LNK_OPTIONS="-L /opt/homebrew/lib/ -lmpfr -lgmp"
+    # -static has problems on MacOS
+    RELEASE_LNK_OPTIONS=$LNK_OPTIONS
+fi
+#
+echo "$TRGT: $SRC1 $OBJ2" > $OP_FILE_NAME
+echo -e "\t$COMPILER $OPTIONS "'$^'" $LNK_OPTIONS -o "'$@' >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "$OBJ2: $SRC2" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $OPTIONS -c $SRC2" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "check: $TRGT" >> $OP_FILE_NAME
+echo -e "\tcd test; ./check_fortran" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "chk: $TRGT" >> $OP_FILE_NAME
+echo -e "\tcd test; ./chk_fortran" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "clean:" >> $OP_FILE_NAME
+echo -e "\trm -f $TRGT $OBJ2" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "static: clean" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $OPTIONS $SRC2 $SRC1 -static $LNK_OPTIONS -o $TRGT" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+# Release target with optimization and stripped binary
+echo "release: clean" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $OPTIONS $SRC2 $SRC1 $RELEASE_LNK_OPTIONS -o $TRGT" >> $OP_FILE_NAME
+echo -e "\tstrip $TRGT" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#

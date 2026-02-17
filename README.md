@@ -41,6 +41,14 @@ the MPFR and GMP dev libraries are installed using the apt package manager. It a
 on MacOS after mpfr and gmp are installed with the homebrew package manager. It outputs
 minimum, median, maximum and range in addition to sum, mean, sample variance (s^2) and
 sample standard deviation (s). The results are produced without any noticeable delay.
+## bfbs.f90
+The Fortran version of bfbs uses the 
+<a href="https://www.mpfr.org/">MPFR</a> (arbitrary-precision floating-point) library and the
+<a href="https://gmplib.org/">GMP</a> (multiple-precision arithmetic) library code to provide
+the basis of all the calculations. This program compiles on Ubuntu 22.04 LTS Linux after
+the MPFR and GMP dev libraries and the gfortran compiler are installed using the apt package
+manager. It outputs minimum, median, maximum and range in addition to sum, mean, sample variance
+(s^2) and sample standard deviation (s). The results are produced without any noticeable delay.
 ## bfbs.go
 The golang version of bfbs uses the
 <a href="https://pkg.go.dev/math/big">math/big</a> package and builds and runs without trouble
@@ -359,6 +367,45 @@ Column: Column 3
 
 bfbs (c++ executable) time taken:  0.000575 [sec]
 %
+```
+### fortran
+```
+$ ./bfbs_fortran --prec 340 --digits 80 test/data.csv
+bfbs version 0.0.1
+Fortran compiler: GCC version 11.4.0
+Using  340 bits of calculation precision and  80 digits output precision.
+Column 1: 
+  count  : 3
+  min    : 100000000000000000000000000000000000000100000000000
+  mean   : 200000000000000000000000000000000000000200000000000
+  median : 200000000000000000000000000000000000000200000000000
+  max    : 300000000000000000000000000000000000000300000000000
+  range  : 200000000000000000000000000000000000000200000000000
+  sum    : 600000000000000000000000000000000000000600000000000
+  var    : 1.000000000000000000000000000000000000002000000000000000000000000000000000000001e+100
+  std    : 100000000000000000000000000000000000000100000000000
+Column 2: 
+  count  : 3
+  min    : 400000000000000000000000000000000000000400000000000
+  mean   : 500000000000000000000000000000000000000500000000000
+  median : 500000000000000000000000000000000000000500000000000
+  max    : 600000000000000000000000000000000000000600000000000
+  range  : 200000000000000000000000000000000000000200000000000
+  sum    : 1500000000000000000000000000000000000001500000000000
+  var    : 1.000000000000000000000000000000000000002000000000000000000000000000000000000001e+100
+  std    : 100000000000000000000000000000000000000100000000000
+Column 3: 
+  count  : 3
+  min    : 700000000000000000000000000000000000000700000000000
+  mean   : 800000000000000000000000000000000000000800000000000
+  median : 800000000000000000000000000000000000000800000000000
+  max    : 900000000000000000000000000000000000000900000000000
+  range  : 200000000000000000000000000000000000000200000000000
+  sum    : 2400000000000000000000000000000000000002400000000000
+  var    : 1.000000000000000000000000000000000000002000000000000000000000000000000000000001e+100
+  std    : 100000000000000000000000000000000000000100000000000
+bfbs (fortran executable) time taken:  0.001 [sec]
+$
 ```
 ### go
 ```

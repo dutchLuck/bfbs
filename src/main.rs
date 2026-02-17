@@ -1,7 +1,7 @@
 //
 // B F B S . R S
 //
-// main.rs last edited on Tue Nov 11 11:35:12 2025
+// main.rs last edited on Tue Feb 17 22:52:19 2026
 //
 // This ChatGPT code appears to calculate test cases correctly
 // However cargo did not successfully compile the needed 
@@ -35,6 +35,7 @@
 //
 
 //
+// v0.1.8 suppress time output with --quiet option
 // v0.1.7 Added elapsed execution time output
 // v0.1.6 Added median to output
 // v0.1.3 Added minimum, maximum and range to output
@@ -100,7 +101,7 @@ struct Args {
     #[arg(short = 'v', long = "verbose")]
     verbose: bool,
 
-    /// Don't output version information
+    /// Don't output version or timing information
     #[arg(short = 'q', long = "quiet")]
     quiet: bool,
     
@@ -361,8 +362,10 @@ fn main() {
         }
     }
     
-    // Calculate the elapsed time
-    let duration = start.elapsed();
-    // Print the elapsed time
-    println!("bfbs (rust executable) time taken: {:.6} [sec]", duration.as_secs_f64());
+    if ! args.quiet {
+        // Calculate the elapsed time
+        let duration = start.elapsed();
+        // Print the elapsed time
+        println!("bfbs (rust executable) time taken: {:.6} [sec]", duration.as_secs_f64());
+    }
 }

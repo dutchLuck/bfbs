@@ -41,6 +41,13 @@ the MPFR and GMP dev libraries are installed using the apt package manager. It a
 on MacOS after mpfr and gmp are installed with the homebrew package manager. It outputs
 minimum, median, maximum and range in addition to sum, mean, sample variance (s^2) and
 sample standard deviation (s). The results are produced without any noticeable delay.
+## bfbs.ts
+The deno (typescript) bfbs code uses the
+<a href="https://mikemcl.github.io/decimal.js/">decimal.js</a>
+package, which does decimal arbitrary-precision
+calculations. Deno interprets bfbs.ts to output min, mean, median, max, range,
+sum, variance and standard deviation. There is only a minor delay before results
+appear.
 ## bfbs.f90
 The Fortran version of bfbs uses the 
 <a href="https://www.mpfr.org/">MPFR</a> (arbitrary-precision floating-point) library and the
@@ -366,6 +373,50 @@ Column: Column 3
   Sample Std. Dev. : 1.0000000000000000000000000000000000000010000000000000000000000000000000000000000e50
 
 bfbs (c++ executable) time taken:  0.000575 [sec]
+%
+```
+### deno
+```
+% deno run --allow-read bfbs.ts --precision 80 test/data.csv
+bfbs.ts version 0.0.2
+Processing files with 80 digits of precision 
+
+Processing file: test/data.csv
+
+Column: 1
+Count:     3
+Min:       1.000000000000000000000000000000000000001e+50
+Mean:      2.000000000000000000000000000000000000002e+50
+Median:    2.000000000000000000000000000000000000002e+50
+Max:       3.000000000000000000000000000000000000003e+50
+Range:     2.000000000000000000000000000000000000002e+50
+Sum:       6.000000000000000000000000000000000000006e+50
+Variance:  1.000000000000000000000000000000000000002000000000000000000000000000000000000001e+100 (sample)
+Std Dev:   1.000000000000000000000000000000000000001e+50
+
+Column: 2
+Count:     3
+Min:       4.000000000000000000000000000000000000004e+50
+Mean:      5.000000000000000000000000000000000000005e+50
+Median:    5.000000000000000000000000000000000000005e+50
+Max:       6.000000000000000000000000000000000000006e+50
+Range:     2.000000000000000000000000000000000000002e+50
+Sum:       1.5000000000000000000000000000000000000015e+51
+Variance:  1.000000000000000000000000000000000000002000000000000000000000000000000000000001e+100 (sample)
+Std Dev:   1.000000000000000000000000000000000000001e+50
+
+Column: 3
+Count:     3
+Min:       7.000000000000000000000000000000000000007e+50
+Mean:      8.000000000000000000000000000000000000008e+50
+Median:    8.000000000000000000000000000000000000008e+50
+Max:       9.000000000000000000000000000000000000009e+50
+Range:     2.000000000000000000000000000000000000002e+50
+Sum:       2.4000000000000000000000000000000000000024e+51
+Variance:  1.000000000000000000000000000000000000002000000000000000000000000000000000000001e+100 (sample)
+Std Dev:   1.000000000000000000000000000000000000001e+50
+
+bfbs.ts processing took 5.13 [mS].
 %
 ```
 ### fortran

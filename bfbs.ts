@@ -3,7 +3,7 @@
 //
 // B F B S . T S
 //
-// bfbs.ts last edited on Wed Feb 25 20:17:58 2026
+// bfbs.ts last edited on Thu Feb 26 21:15:11 2026
 //
 
 // A Deno script to compute statistics from CSV files with arbitrary precision.
@@ -32,6 +32,10 @@
 //   --precision N    Set decimal precision (default 40)
 //   --header         First row contains column headers
 //   --population     Use population variance formula
+//   --quiet          Suppress some output information
+
+// 0.0.2 - Added quiet mode option.
+// 0.0.1 - Initial version.
 
 import Decimal from "https://esm.sh/decimal.js@10.4.3";
 
@@ -43,6 +47,8 @@ interface Options {
   precision: number;
   header: boolean;
   population: boolean;
+  quiet: boolean;
+  help: boolean;
   files: string[];
 }
 
@@ -51,6 +57,8 @@ function parseArgs(args: string[]): Options {
     precision: 40,
     header: false,
     population: false,
+    quiet: false,
+    help: false,
     files: [],
   };
 
@@ -63,17 +71,23 @@ function parseArgs(args: string[]): Options {
       options.header = true;
     } else if (arg === "--population") {
       options.population = true;
+    } else if (arg === "--quiet") {
+      options.quiet = true;
+    } else if (arg === "--help") {
+      options.help = true;
     } else {
       options.files.push(arg);
     }
   }
 
-  if (options.files.length === 0) {
+  if (options.files.length === 0 || options.help ) {
     console.error("Usage: deno run --allow-read bfbs.ts [options] <file1.csv> [file2.csv...]");
     console.error("Options:");
     console.error("  --precision N    Set decimal precision (default 50)");
+    console.error("  --help           Show this help message");
     console.error("  --header         First row contains column headers");
     console.error("  --population     Use population variance formula");
+    console.error("  --quiet          Suppress some output information");
     Deno.exit(1);
   }
 
@@ -208,8 +222,10 @@ async function processFile(filename: string) {
 // ----------------------
 
 const start = performance.now();
-console.log("bfbs.ts version 0.0.1");
-console.log(`Processing files with ${options.precision} digits of precision `);
+if (!options.quiet) {
+  console.log("bfbs.ts version 0.0.2");
+  console.log(`Processing files with ${options.precision} digits of precision `);
+}
 
 for (const file of options.files) {
   try {
@@ -227,5 +243,7 @@ for (const file of options.files) {
   }
 }
 
-const end = performance.now();
-console.log(`\nbfbs.ts processing took ${(end - start).toFixed(2)} [mS].`);
+if (!options.quiet) {
+  const end = performance.now();
+  console.log(`\nbfbs.ts processing took ${(end - start).toFixed(2)} [mS].`);
+}

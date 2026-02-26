@@ -1,0 +1,44 @@
+#! /bin/bash
+#
+# C O N F I G U R E _ D E N O
+#
+# configure last edited on Sun Aug  3 22:13:13 2025 
+#
+NAME1=bfbs
+#
+OP_FILE_NAME=Makefile
+COMPILER="deno run --allow-read"
+OPTIONS=""
+LNK_OPTIONS=""
+TRGT=$NAME1
+SRC1=$NAME1.ts
+#
+#
+echo "$TRGT: configure_deno Makefile" > $OP_FILE_NAME
+echo -e "\tdeno --version" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "check: $TRGT" >> $OP_FILE_NAME
+echo -e "\tcd test; ./check_deno" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "chk: $TRGT" >> $OP_FILE_NAME
+echo -e "\tcd test; ./chk_deno" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "clean:" >> $OP_FILE_NAME
+echo -e "\trm -f *.tmp" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "debug:" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $SRC1 --debug --verbose" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "version:" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $SRC1 --version" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "help:" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $SRC1 --help" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#

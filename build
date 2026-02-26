@@ -15,6 +15,11 @@ printSeparator c++
 make clean
 make
 #
+printSeparator fortran
+./configure_fortran
+make clean
+make
+#
 printSeparator go
 ./configure_go
 make clean

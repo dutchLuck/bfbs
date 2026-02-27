@@ -2,10 +2,11 @@
 #
 # B F B S . P Y
 #
-# bfbs.py last edited on Wed Nov  5 22:46:30 2025
+# bfbs.py last edited on Fri Feb 27 22:57:21 2026
 #
-# This script reads a CSV file, calculates basic statistics for each column,
-# including sum, mean (average), variance, standard deviation and range,
+# This script reads one or more CSV files and calculates
+# basic statistics for each column in each file, including sum,
+# mean (average), variance, standard deviation and range,
 # and outputs the results.
 #
 # Calculations use the  decimal  module which provides
@@ -17,6 +18,7 @@
 #
 
 #
+# 0v5 Added --quiet option to suppress some output including execution time
 # 0v4 Added wall clock timer and reformatted with black
 # 0v3 Added calculation of median
 # 0v2 Cosmetic changes to output
@@ -69,6 +71,12 @@ parser.add_argument(
     type=int,
     help="Set the calculation precision to PRECISION decimal digits",
 )
+parser.add_argument(
+    "-q",
+    "--quiet",
+    action="store_true",
+    help="Suppress some output including execution time",
+)
 
 args = parser.parse_args()
 
@@ -85,10 +93,12 @@ if (
 getcontext().prec = calc_precision
 
 # Output version and environment information
-print("bfbs.py version 0v4")
-print(f"python version: {platform.python_version()}")
-print(f"csv module version: {csv.__version__}")
-print(f"decimal module version: {platform.python_version()}")
+if not args.quiet:
+    print("bfbs.py version 0v5")
+    print(f"python version: {platform.python_version()}")
+    print(f"csv module version: {csv.__version__}")
+    print(f"decimal module version: {platform.python_version()}")
+
 print(f"Using {calc_precision} digits of decimal precision.")
 
 # Process all files
@@ -170,4 +180,5 @@ for file_path in args.files:
         print(f"  Variance  : {variance}")
         print(f"  Std. Dev. : {stddev}")
 
-print("bfbs.py execution time was: %9.3f [mS]" % ((getClockTime() - startTime) * 1000))
+if not args.quiet:
+    print("bfbs.py execution time was: %9.3f [mS]" % ((getClockTime() - startTime) * 1000))

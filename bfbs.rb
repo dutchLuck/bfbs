@@ -1,6 +1,6 @@
 #! /bin/ruby -w
 #
-# bfbs.rb last edited on Fri Oct 24 23:43:49 2025
+# bfbs.rb last edited on Sat Feb 28 16:13:33 2026
 #
 # This script reads a CSV file, calculates statistics for each column,
 # including sum, average, standard deviation, and range, and outputs the results.
@@ -16,6 +16,7 @@
 #
 
 #
+# 0v6 Add --quiet option to suppress version and elapsed time output
 # 0v5 Provide execution time output
 # 0v4 Provide median
 # 0v3 Substituted bsqrt in-place of 'bigdecimal/math' BigMath.sqrt
@@ -63,6 +64,7 @@ start_time = Time.now
 options = {}
 options[:precision] = 40  # Set default precision for BigDecimal calculations
 options[:header] = false  # Set default header processing
+options[:quiet] = false  # Set default quiet processing
 
 OptionParser.new do |opts|
   opts.banner = "Usage: bfbs.rb [options] file1 [file2 ...]"
@@ -75,6 +77,10 @@ OptionParser.new do |opts|
     options[:precision] = precision.to_i
   end
 
+  opts.on("-q", "--quiet", "Suppress output of timing and version information") do |quiet|
+    options[:quiet] = quiet
+  end
+
   opts.on_tail("-h", "--help", "Show this message") do
     puts opts
     exit
@@ -84,7 +90,7 @@ end.parse!(ARGV)
 # ARGV now contains only the unparsed arguments (filenames)
 filenames = ARGV
 if filenames.empty?
-  puts "Error: No filenames provided. Use -h for help."
+  puts "Error: No filenames provided. Use -h or --help for usage/help."
   exit 1
 end
 
@@ -98,11 +104,13 @@ end
 BigDecimal.mode(BigDecimal::ROUND_MODE, :half_up)   # Explicitly set rounding mode
 BigDecimal.limit(options[:precision])  # Set global precision limit for BigDecimal operations
 #
-# Output version and environment information
-puts "bfbs.rb version 0v5"
-puts "ruby version: #{RUBY_VERSION}"
-puts "csv module version: #{CSV::VERSION}"
-puts "bigdecimal module version: #{BigDecimal::VERSION}"
+# Output version and environment information unless quiet option is set
+unless options[:quiet]
+  puts "bfbs.rb version 0v6"
+  puts "ruby version: #{RUBY_VERSION}"
+  puts "csv module version: #{CSV::VERSION}"
+  puts "bigdecimal module version: #{BigDecimal::VERSION}"
+end
 puts "Using #{options[:precision]} digits of bigdecimal precision."
 # puts "Options: #{options}"
 #
@@ -230,5 +238,7 @@ filenames.each do |name|
     print "  Std. Dev. : ", stddevOfColumns[i], "\n"
   end
 
-  print "bfbs.rb execution time was ", Time.now - start_time, " [sec]\n"
+  unless options[:quiet]
+    print "bfbs.rb execution time was ", Time.now - start_time, " [sec]\n"
+  end
 end

@@ -1,0 +1,401 @@
+
+++++++++++ ruby ../bfbs.rb --quiet data.csv  +++Small valid 3 column file, with header option check++++++++++
+Using 40 digits of bigdecimal precision.
+
+Processing file: "data.csv"
+Column: 1
+  Count     : 3
+  Minimum   : 0.1000000000000000000000000000000000000001e51
+  Mean      : 0.2000000000000000000000000000000000000002e51
+  Median    : 0.2000000000000000000000000000000000000002e51
+  Maximum   : 0.3000000000000000000000000000000000000003e51
+  Range     : 0.2000000000000000000000000000000000000002e51
+  Sum       : 0.6000000000000000000000000000000000000006e51
+  Variance  : 0.1000000000000000000000000000000000000002e101
+  Std. Dev. : 0.1000000000000000000000000000000000000001e51
+Column: 2
+  Count     : 3
+  Minimum   : 0.4000000000000000000000000000000000000004e51
+  Mean      : 0.5000000000000000000000000000000000000007e51
+  Median    : 0.5000000000000000000000000000000000000005e51
+  Maximum   : 0.6000000000000000000000000000000000000006e51
+  Range     : 0.2000000000000000000000000000000000000002e51
+  Sum       : 0.1500000000000000000000000000000000000002e52
+  Variance  : 0.1000000000000000000000000000000000000002e101
+  Std. Dev. : 0.1000000000000000000000000000000000000001e51
+Column: 3
+  Count     : 3
+  Minimum   : 0.7000000000000000000000000000000000000007e51
+  Mean      : 0.800000000000000000000000000000000000001e51
+  Median    : 0.8000000000000000000000000000000000000008e51
+  Maximum   : 0.9000000000000000000000000000000000000009e51
+  Range     : 0.2000000000000000000000000000000000000002e51
+  Sum       : 0.2400000000000000000000000000000000000003e52
+  Variance  : 0.1000000000000000000000000000000000000002e101
+  Std. Dev. : 0.1000000000000000000000000000000000000001e51
+++++++++++ Shell got Return code number 0 for small valid file data.csv, with header option check++++++++++
+
+++++++++++ ruby ../bfbs.rb --quiet cols7rows4.csv +++Small valid 7 column file and no options check++++++++++
+Using 40 digits of bigdecimal precision.
+
+Processing file: "cols7rows4.csv"
+Column: 1
+  Count     : 4
+  Minimum   : -0.8e0
+  Mean      : -0.7359608525e0
+  Median    : -0.721921705e0
+  Maximum   : -0.7e0
+  Range     : 0.1e0
+  Sum       : -0.294384341e1
+  Variance  : 0.1929463550035675e-2
+  Std. Dev. : 0.43925659358007080461000372695499061e-1
+Column: 2
+  Count     : 4
+  Minimum   : -0.8e0
+  Mean      : -0.7404131975e0
+  Median    : -0.730826395e0
+  Maximum   : -0.7e0
+  Range     : 0.1e0
+  Sum       : -0.296165279e1
+  Variance  : 0.1789209042898675e-2
+  Std. Dev. : 0.42299043049443506293456091730124578e-1
+Column: 3
+  Count     : 4
+  Minimum   : -0.8e0
+  Mean      : -0.7484444525e0
+  Median    : -0.746888905e0
+  Maximum   : -0.7e0
+  Range     : 0.1e0
+  Sum       : -0.299377781e1
+  Variance  : 0.1669892970699675e-2
+  Std. Dev. : 0.40864323935428994e-1
+Column: 4
+  Count     : 4
+  Minimum   : -0.5e-1
+  Mean      : -0.4544947e-1
+  Median    : -0.4589894e-1
+  Maximum   : -0.4e-1
+  Range     : 0.1e-1
+  Sum       : -0.18179788e0
+  Variance  : 0.169360310412e-4
+  Std. Dev. : 0.4115340938634368e-2
+Column: 5
+  Count     : 4
+  Minimum   : 0.4e-1
+  Mean      : 0.4361755e-1
+  Median    : 0.422351e-1
+  Maximum   : 0.5e-1
+  Range     : 0.1e-1
+  Sum       : 0.1744702e0
+  Variance  : 0.1921489067e-4
+  Std. Dev. : 0.438347928819106e-2
+Column: 6
+  Count     : 4
+  Minimum   : 0.2e-1
+  Mean      : 0.2551974e-1
+  Median    : 0.2603948e-1
+  Maximum   : 0.3e-1
+  Range     : 0.1e-1
+  Sum       : 0.10207896e0
+  Variance  : 0.170268395568e-4
+  Std. Dev. : 0.4126359116315496e-2
+Column: 7
+  Count     : 4
+  Minimum   : 0.1e-1
+  Mean      : 0.128528175e-1
+  Median    : 0.10705635e-1
+  Maximum   : 0.2e-1
+  Range     : 0.1e-1
+  Sum       : 0.5141127e-1
+  Variance  : 0.2281385691774166666666666666666666666667e-4
+  Std. Dev. : 0.47763853401648475734832035080510659224e-2
+++++++++++ Shell got Return code number 0 for small valid file cols7rows4.csv, no options check++++++++++
+
+++++++++++ ruby ../bfbs.rb --quiet heights.csv +++Somewhat longer file with 2 columns, 1 column the reverse of the other++++++++++
+Using 40 digits of bigdecimal precision.
+
+Processing file: "heights.csv"
+Column: 1
+  Count     : 2113
+  Minimum   : 0.56e2
+  Mean      : 0.6945811642214860388073828679602460955987e2
+  Median    : 0.7e2
+  Maximum   : 0.78e2
+  Range     : 0.22e2
+  Sum       : 0.146765e6
+  Variance  : 0.7156507245909162615267679157882660012595e1
+  Std. Dev. : 0.26751649006947520533752888919508251149588e1
+Column: 2
+  Count     : 2113
+  Minimum   : 0.56e2
+  Mean      : 0.6945811642214860388073828679602460955987e2
+  Median    : 0.7e2
+  Maximum   : 0.78e2
+  Range     : 0.22e2
+  Sum       : 0.146765e6
+  Variance  : 0.7156507245909162615267679157882660012595e1
+  Std. Dev. : 0.26751649006947520533752888919508251149588e1
+Column: 3
+  Count     : 2113
+  Minimum   : 0.56e2
+  Mean      : 0.6945811642214860388073828679602460955987e2
+  Median    : 0.7e2
+  Maximum   : 0.78e2
+  Range     : 0.22e2
+  Sum       : 0.146765e6
+  Variance  : 0.7156507245909162615267679157882660012595e1
+  Std. Dev. : 0.26751649006947520533752888919508251149588e1
+Column: 4
+  Count     : 2113
+  Minimum   : 0.56e2
+  Mean      : 0.6945811642214860388073828679602460955987e2
+  Median    : 0.7e2
+  Maximum   : 0.78e2
+  Range     : 0.22e2
+  Sum       : 0.146765e6
+  Variance  : 0.7156507245909162615267679157882660012595e1
+  Std. Dev. : 0.26751649006947520533752888919508251149588e1
+++++++++++ Shell got Return code number 0 for longer file with lengthier lines++++++++++
+
+++++++++++ ruby ../bfbs.rb --quiet NIST_StRD_PiDigits.dat +++Long file of 1 column of single digits, no options check++++++++++
+Using 40 digits of bigdecimal precision.
+
+Processing file: "NIST_StRD_PiDigits.dat"
+Column: 1
+  Count     : 5000
+  Minimum   : 0.0
+  Mean      : 0.45348e1
+  Median    : 0.5e1
+  Maximum   : 0.9e1
+  Range     : 0.9e1
+  Sum       : 0.22674e5
+  Variance  : 0.8221633286657331466293258651730346069214e1
+  Std. Dev. : 0.28673390602887080724610758625500948322373e1
+++++++++++ Shell got Return code number 0 for long file with single column (4.5348, 2.86733906028871)++++++++++
+
+++++++++++ ruby ../bfbs.rb --quiet NIST_StRD_Lew.dat +++Long file of 1 column of single digits, no options check++++++++++
+Using 40 digits of bigdecimal precision.
+
+Processing file: "NIST_StRD_Lew.dat"
+Column: 1
+  Count     : 200
+  Minimum   : -0.579e3
+  Mean      : -0.177435e3
+  Median    : -0.162e3
+  Maximum   : 0.3e3
+  Range     : 0.879e3
+  Sum       : -0.35487e5
+  Variance  : 0.7691313143216080402010050251256281407035e5
+  Std. Dev. : 0.2773321680443161357649224857021053760403003e3
+++++++++++ Shell got Return code number 0 for 200 long file with single column (-177.435, 277.332168044316)++++++++++
+
+++++++++++ ruby ../bfbs.rb --quiet NIST_StRD_Lottery.dat +++Long file of 1 column of single digits, no options check++++++++++
+Using 40 digits of bigdecimal precision.
+
+Processing file: "NIST_StRD_Lottery.dat"
+Column: 1
+  Count     : 218
+  Minimum   : 0.4e1
+  Mean      : 0.5189587155963302752293577981651376146789e3
+  Median    : 0.5225e3
+  Maximum   : 0.999e3
+  Range     : 0.995e3
+  Sum       : 0.113133e6
+  Variance  : 0.8508873100663763581786665539255062782733e5
+  Std. Dev. : 0.2916997274709690842392436950813443920700349e3
+++++++++++ Shell got Return code number 0 for 218 long file with single column (518.958715596330, 291.699727470969)++++++++++
+
+++++++++++ ruby ../bfbs.rb --quiet NIST_StRD_Mavro.dat +++Long file of 1 column of single digits, no options check++++++++++
+Using 40 digits of bigdecimal precision.
+
+Processing file: "NIST_StRD_Mavro.dat"
+Column: 1
+  Count     : 50
+  Minimum   : 0.20013e1
+  Mean      : 0.2001856e1
+  Median    : 0.20018e1
+  Maximum   : 0.20027e1
+  Range     : 0.14e-2
+  Sum       : 0.1000928e3
+  Variance  : 0.1841469387755102040816326530612244897959e-6
+  Std. Dev. : 0.4291234540030528371931208090601088283e-3
+++++++++++ Shell got Return code number 0 for 50 long file with single column (2.001856, 0.000429123454003053)++++++++++
+
+++++++++++ ruby ../bfbs.rb --quiet NIST_StRD_Michelso.dat +++Long file of 1 column of single digits, no options check++++++++++
+Using 40 digits of bigdecimal precision.
+
+Processing file: "NIST_StRD_Michelso.dat"
+Column: 1
+  Count     : 100
+  Minimum   : 0.29962e3
+  Mean      : 0.2998524e3
+  Median    : 0.29985e3
+  Maximum   : 0.30007e3
+  Range     : 0.45e0
+  Sum       : 0.2998524e5
+  Variance  : 0.6242666666666666666666666666666666666667e-2
+  Std. Dev. : 0.790105478190517716313295619523241224028e-1
+++++++++++ Shell got Return code number 0 for 100 long file with single column (299.8524, 0.0790105478190518)++++++++++
+
+++++++++++ ruby ../bfbs.rb --quiet NIST_StRD_NumAcc1.dat  +++NIST numerical accurracy file of 3 large close numbers++++++++++
+Using 40 digits of bigdecimal precision.
+
+Processing file: "NIST_StRD_NumAcc1.dat"
+Column: 1
+  Count     : 3
+  Minimum   : 0.10000001e8
+  Mean      : 0.10000002e8
+  Median    : 0.10000002e8
+  Maximum   : 0.10000003e8
+  Range     : 0.2e1
+  Sum       : 0.30000006e8
+  Variance  : 0.1e1
+  Std. Dev. : 0.1e1
+++++++++++ Shell got Return code number 0 for 1st NIST numerical accuracy file ( 10000002, 1)++++++++++
+
+++++++++++ ruby ../bfbs.rb --quiet NIST_StRD_NumAcc2.dat  +++NIST numerical accurracy file of close numbers++++++++++
+Using 40 digits of bigdecimal precision.
+
+Processing file: "NIST_StRD_NumAcc2.dat"
+Column: 1
+  Count     : 1001
+  Minimum   : 0.11e1
+  Mean      : 0.12e1
+  Median    : 0.12e1
+  Maximum   : 0.13e1
+  Range     : 0.2e0
+  Sum       : 0.12012e4
+  Variance  : 0.1e-1
+  Std. Dev. : 0.1e0
+++++++++++ Shell got Return code number 0 for 2nd NIST numerical accuracy file ( 1.2, 0.1)++++++++++
+
+++++++++++ ruby ../bfbs.rb --quiet NIST_StRD_NumAcc3.dat  +++NIST numerical accurracy file of close numbers++++++++++
+Using 40 digits of bigdecimal precision.
+
+Processing file: "NIST_StRD_NumAcc3.dat"
+Column: 1
+  Count     : 1001
+  Minimum   : 0.10000001e7
+  Mean      : 0.10000002e7
+  Median    : 0.10000002e7
+  Maximum   : 0.10000003e7
+  Range     : 0.2e0
+  Sum       : 0.10010002002e10
+  Variance  : 0.1e-1
+  Std. Dev. : 0.1e0
+++++++++++ Shell got Return code number 0 for 3rd NIST numerical accuracy file (1000000.2, 0.1)++++++++++
+
+++++++++++ ruby ../bfbs.rb --quiet --precision 80 NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers++++++++++
+Using 80 digits of bigdecimal precision.
+
+Processing file: "NIST_StRD_NumAcc4.dat"
+Column: 1
+  Count     : 1001
+  Minimum   : 0.100000001e8
+  Mean      : 0.100000002e8
+  Median    : 0.100000002e8
+  Maximum   : 0.100000003e8
+  Range     : 0.2e0
+  Sum       : 0.100100002002e11
+  Variance  : 0.1e-1
+  Std. Dev. : 0.1e0
+++++++++++ Shell got Return code number 0 for 4th NIST numerical accuracy file (10000000.2, 0.1)++++++++++
+
+++++++++++ ruby ../bfbs.rb --precision 32 --quiet NIST_StRD_NumAcc?.dat  +++NIST numerical accurracy files of large close numbers++++++++++
+Using 32 digits of bigdecimal precision.
+
+Processing file: "NIST_StRD_NumAcc1.dat"
+Column: 1
+  Count     : 3
+  Minimum   : 0.10000001e8
+  Mean      : 0.10000002e8
+  Median    : 0.10000002e8
+  Maximum   : 0.10000003e8
+  Range     : 0.2e1
+  Sum       : 0.30000006e8
+  Variance  : 0.1e1
+  Std. Dev. : 0.1e1
+
+Processing file: "NIST_StRD_NumAcc2.dat"
+Column: 1
+  Count     : 1001
+  Minimum   : 0.11e1
+  Mean      : 0.12e1
+  Median    : 0.12e1
+  Maximum   : 0.13e1
+  Range     : 0.2e0
+  Sum       : 0.12012e4
+  Variance  : 0.1e-1
+  Std. Dev. : 0.1e0
+
+Processing file: "NIST_StRD_NumAcc3.dat"
+Column: 1
+  Count     : 1001
+  Minimum   : 0.10000001e7
+  Mean      : 0.10000002e7
+  Median    : 0.10000002e7
+  Maximum   : 0.10000003e7
+  Range     : 0.2e0
+  Sum       : 0.10010002002e10
+  Variance  : 0.1e-1
+  Std. Dev. : 0.1e0
+
+Processing file: "NIST_StRD_NumAcc4.dat"
+Column: 1
+  Count     : 1001
+  Minimum   : 0.100000001e8
+  Mean      : 0.100000002e8
+  Median    : 0.100000002e8
+  Maximum   : 0.100000003e8
+  Range     : 0.2e0
+  Sum       : 0.100100002002e11
+  Variance  : 0.1e-1
+  Std. Dev. : 0.1e0
+++++++++++ Shell got Return code number 0 for NIST numerical accuracy files ++++++++++
+
+++++++++++ ruby ../bfbs.rb --quiet --precision 80 non_existent_file.csv ./data.csv  +++Handles non-existent file check++++++++++
+Using 80 digits of bigdecimal precision.
+
+Processing file: "non_existent_file.csv"
+Error: File named 'non_existent_file.csv' not found.
+
+Processing file: "./data.csv"
+Column: 1
+  Count     : 3
+  Minimum   : 0.1000000000000000000000000000000000000001e51
+  Mean      : 0.2000000000000000000000000000000000000002e51
+  Median    : 0.2000000000000000000000000000000000000002e51
+  Maximum   : 0.3000000000000000000000000000000000000003e51
+  Range     : 0.2000000000000000000000000000000000000002e51
+  Sum       : 0.6000000000000000000000000000000000000006e51
+  Variance  : 0.1000000000000000000000000000000000000002000000000000000000000000000000000000001e101
+  Std. Dev. : 0.1000000000000000000000000000000000000001e51
+Column: 2
+  Count     : 3
+  Minimum   : 0.4000000000000000000000000000000000000004e51
+  Mean      : 0.5000000000000000000000000000000000000005e51
+  Median    : 0.5000000000000000000000000000000000000005e51
+  Maximum   : 0.6000000000000000000000000000000000000006e51
+  Range     : 0.2000000000000000000000000000000000000002e51
+  Sum       : 0.15000000000000000000000000000000000000015e52
+  Variance  : 0.1000000000000000000000000000000000000002000000000000000000000000000000000000001e101
+  Std. Dev. : 0.1000000000000000000000000000000000000001e51
+Column: 3
+  Count     : 3
+  Minimum   : 0.7000000000000000000000000000000000000007e51
+  Mean      : 0.8000000000000000000000000000000000000008e51
+  Median    : 0.8000000000000000000000000000000000000008e51
+  Maximum   : 0.9000000000000000000000000000000000000009e51
+  Range     : 0.2000000000000000000000000000000000000002e51
+  Sum       : 0.24000000000000000000000000000000000000024e52
+  Variance  : 0.1000000000000000000000000000000000000002000000000000000000000000000000000000001e101
+  Std. Dev. : 0.1000000000000000000000000000000000000001e51
+++++++++++ Shell got Return code number 0 for Handles non-existent file options++++++++++
+
+++++++++++ ruby ../bfbs.rb --help --quiet +++Usage/help and information check++++++++++
+Usage: bfbs.rb [options] file1 [file2 ...]
+    -H, --header                     Treat first row as a title for each column of data
+    -P, --precision PRECISION        Set calculation precision to PRECISION decimal digits
+    -q, --quiet                      Suppress output of timing and version information
+    -h, --help                       Show this message
+++++++++++ Shell got Return code number 0 for usage/help, options++++++++++

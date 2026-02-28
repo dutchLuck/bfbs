@@ -3,7 +3,7 @@
 //
 // Big Float Basic Statistics
 //
-// bfbs.cpp last updated on Sun Dec 21 20:46:29 2025 by O.H. as 0v5
+// bfbs.cpp last updated on Sat Feb 28 14:37:20 2026 by O.H. as 0v6
 //
 
 //
@@ -23,10 +23,21 @@
 //  g++ -Wall -pedantic -Wextra -std=c++17 -I /opt/homebrew/include/ -o bfbs_cpp bfbs.cpp -L /opt/homebrew/lib/ -lmpfr -lgmp
 //
 // Run with; -
-//  ./bfbs_cpp data1.csv data2.csv --precision 512 --digits 20 --header
+//  ./bfbs_cpp data.csv
 //
-// Usage is; -
-//  Usage: ./bfbs_cpp file1.csv [file2.csv ...] [--header] [--precision N] [--digits N]
+// Run with multiple files and options; -
+//  ./bfbs_cpp data1withHdr.csv data2withHdr.csv --precision 512 --digits 80 --header
+//
+// Help / Usage is; -
+// Usage:
+// ../bfbs_cpp file1.csv [file2.csv ...] [--help] [--quiet] [--header] [--precision N] [--digits N]
+//   where:
+//     file1.csv [file2.csv ...]  - one or more CSV files to process
+//     -h  or  --help             - show this help message and exit
+//     -q  or  --quiet            - suppress version info and timing info
+//     -H  or  --header           - treat first CSV row as (text) column headers
+//     --precision N              - set calculation precision to N bits (default: 256)
+//     --digits N                 - set output digits to N (default: 64)
 //
 
 //
@@ -46,6 +57,8 @@
 //
 
 //
+// 0v6 More comprehensive argument parsing and more detailed help/usage message
+// output to include all options and their descriptions
 // 0v5 Minor change to help output and elapsed time message
 // 0v4 Fixed compile and output execution time to uSec resolution
 // 0v3 Added execution time output
@@ -65,7 +78,7 @@
 using namespace std;
 
 #define PROGRAM_NAME __FILE__
-#define PROGRAM_VERSION "0v5"
+#define PROGRAM_VERSION "0v6"
 
 // RAII Wrapper for mpfr_t
 class MpfrFloat {
@@ -118,12 +131,15 @@ Options parseArgs(int argc, char* argv[]) {
             opts.precision = stoi(argv[++i]);
         } else if (arg == "--digits" && i + 1 < argc) {
             opts.digits = stoi(argv[++i]);
-        } else if (arg == "--header") {
+        } else if ((arg == "--header") || (arg == "-H")) {
             opts.hasHeader = true;
-        } else if (arg == "--quiet") {
+        } else if ((arg == "--quiet") || (arg == "-q")) {
             opts.quiet = true;
-        } else if (arg == "--help") {
+        } else if ((arg == "--help") || (arg == "-h")) {
             opts.help = true;
+        } else if (arg.rfind("-", 0) == 0) {    /* known options have already been tested */
+            cerr << "\nWarning: Skipping unknown option: \"" << arg;
+            cerr << "\"\nUse -h or --help to see usage information.\n\n";
         } else {
             opts.files.push_back(arg);
         }
@@ -132,6 +148,13 @@ Options parseArgs(int argc, char* argv[]) {
         cerr << "Usage:" << endl;
         cerr << argv[0];    // program name
         cerr << " file1.csv [file2.csv ...] [--help] [--quiet] [--header] [--precision N] [--digits N]\n";
+        cerr << "  where:\n";
+        cerr << "    file1.csv [file2.csv ...]  - one or more CSV files to process\n";
+        cerr << "    -h  or  --help             - show this help message and exit\n";
+        cerr << "    -q  or  --quiet            - suppress version info and timing info\n";
+        cerr << "    -H  or  --header           - treat first CSV row as (text) column headers\n";
+        cerr << "    --precision N              - set calculation precision to N bits (default: 256)\n";
+        cerr << "    --digits N                 - set output digits to N (default: 64)\n";
         exit(1);
     }
     return opts;
@@ -223,15 +246,15 @@ void computeStats(const vector<MpfrFloat>& col, int precision, int base, int dig
     }
 
     mpfr_set_ui(temp, n, MPFR_RNDN);
-    mpfr_div(mean, sum, temp, MPFR_RNDN);
-    mpfr_sub(range, maxVal, minVal, MPFR_RNDN);
+    mpfr_div(mean, sum, temp, MPFR_RNDN);       /* mean = sum / n */
+    mpfr_sub(range, maxVal, minVal, MPFR_RNDN); /* range = max - min */
 
     // Sample variance
     mpfr_set_zero(var, 1);
     for (const auto& val : col) {
-        mpfr_sub(diff, val.value, mean, MPFR_RNDN);
-        mpfr_mul(diff, diff, diff, MPFR_RNDN);
-        mpfr_add(var, var, diff, MPFR_RNDN);
+        mpfr_sub(diff, val.value, mean, MPFR_RNDN);     /* diff = val - mean */
+        mpfr_mul(diff, diff, diff, MPFR_RNDN);          /* diff squared */
+        mpfr_add(var, var, diff, MPFR_RNDN);            /* totalize the diff squared values */
     }
     if (n > 1) {
         mpfr_set_ui(temp, n - 1, MPFR_RNDN);

@@ -1,13 +1,13 @@
 #! /bin/sh
 #
-# T S T _ C P P
+# C H K _ C P P
 #
-# tst_cpp last edited on Sat Feb 28 11:15:51 2026 
+# chk_cpp last edited on Sat Feb 28 10:25:23 2026 
 #
 # To redirect both stdout and stderr to a file, use ampersand redirect operation, for example; -
-#  ./tst_cpp &> outputFile
+#  ./chk_cpp &> correctResults_cpp
 #
-EXE="../bfbs_cpp --quiet"
+EXE="../bfbs_cpp $1 $2 $3 $4 $5 $6 $7 $8 $9"
 TEN_PLUSS=++++++++++
 #
 # Test default case: read a CSV file and output stats with default number of digits
@@ -91,4 +91,10 @@ echo ""
 echo "${TEN_PLUSS} $EXE --help  +++Usage/help and information check${TEN_PLUSS}"
 $EXE --help
 echo "${TEN_PLUSS} Shell got Return code number $? for usage/help, options${TEN_PLUSS}"
+#
+# Test Warning messages and short form for Usage/help
+echo ""
+echo "${TEN_PLUSS} $EXE --unknown-option -Z -h +++Warning message for unknown option${TEN_PLUSS}"
+$EXE --unknown-option -Z -h
+echo "${TEN_PLUSS} Shell got Return code number $? for unknown option warning${TEN_PLUSS}"
 #

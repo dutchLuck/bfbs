@@ -2,7 +2,7 @@
 #
 # B F B S . P L
 #
-# bfbs.pl last edited on Mon Nov 10 12:44:48 2025
+# bfbs.pl last edited on Sat Feb 28 17:17:13 2026
 #
 # This script reads one or more CSV files, containing one or more columns of
 # numbers and calculates basic statistics for each column (including sum,
@@ -40,10 +40,31 @@
 #    being used.
 
 #
+# 0v8 Add --quiet option to suppress elapsed time output
 # 0v7 Add code execution elapsed calculation
 # 0v6 Cosmetic changes to output labels
-#
 
+# Deviations from other bfbs implementations; -
+# 1. This Perl version of bfbs aborts with an error if the
+# input file cannot be opened, whereas the Ruby and Python
+# versions print a warning and skip to the next file, if there
+# is a next file.
+
+# Perl Math::BigFloat's precision method sets the
+# number of significant digits, not decimal places.
+# This 0v8 version of bfbs.pl uses the "accuracy"
+# method to set the number of digits each result
+# should have, which is more intuitive for users
+# who want to specify precision in terms of digits.
+# The "precision" method in Math::BigFloat sets the
+# number of significant digits, which can lead to
+# confusion when dealing with numbers of varying
+# magnitudes. By using "accuracy", we ensure that
+# all results are consistently formatted to the
+# specified number of digits, regardless of their size.
+# (see https://perldoc.perl.org/Math::BigFloat)
+
+# === Modules ===
 use strict;
 use warnings;
 use Getopt::Long;
@@ -55,39 +76,57 @@ my $start_time = time();
 
 # === Program Info ===
 my $PROGRAM_NAME    = "bfbs.pl";
-my $PROGRAM_VERSION = "0v7 (2025-11-10)";
+my $PROGRAM_VERSION = "0v8 (2026-02-28)";
 
 # === Settings ===
 my $precision       = 40;
 my $use_population  = 0;
 my $use_header      = 0;
 my $use_scientific  = 0;
-my $helpMsg         = "[--header] [--population] [--precision=N] [--scientific] file1.csv [file2.csv ...]";
+my $quiet           = 0;
+my $help            = 0;
+my $helpMsg         = << "HELP_MSG";
+[--header] [--help] [--population] [--precision=N] [--scientific] [--quiet] file1.csv [file2.csv ...]
+ where:
+  --header       : Treat first CSV row as column headers
+  --help         : Show this help message and exit
+  --population   : Use population variance (divide by n) instead of sample variance (divide by n-1)
+  --precision=N  : Set precision to N digits (default: 40)
+  --scientific   : Output numbers in scientific notation (e.g. 1.0e1)
+  --quiet        : Suppress version and elapsed time info output
+  file1.csv ...  : One or more CSV files to process
+HELP_MSG
 
 GetOptions(
     "precision=i"   => \$precision,
     "population"    => \$use_population,
     "header"        => \$use_header,
+    "help"          => \$help,
     "scientific"    => \$use_scientific,
+    "quiet"         => \$quiet,
 ) or die "Usage: $0 $helpMsg\n";
 
+# Show help and exit if requested
+if ($help) { die "Usage: $0 $helpMsg\n" };
+
 # Set global Math::BigFloat precision
-Math::BigFloat->precision(-$precision);  # Negative => significant digits
+Math::BigFloat->accuracy($precision);  # "accuracy()" sets the number of digits each result should have
 
 # Require at least one file
-@ARGV or die "Usage: $0 $helpMsg\n";
+@ARGV or die "Error: No input files specified.\nUsage: $0 $helpMsg\n";
 
 # === Announce Info ===
-print "$PROGRAM_NAME version $PROGRAM_VERSION\n";
-print "Perl version: $^V\n";
-print "Getopt::Long Version: ", ($Getopt::Long::VERSION // 'unknown'), "\n";
-print "Math::BigFloat Version: ", ($Math::BigFloat::VERSION // 'unknown'), "\n";
-print "Precision: $precision digits\n";
-print "Output Format: ", ($use_scientific ? "Scientific" : "Decimal"), "\n";
+unless ($quiet) {
+    print "$PROGRAM_NAME version $PROGRAM_VERSION\n";
+    print "Perl version: $^V\n";
+    print "Getopt::Long Version: ", ($Getopt::Long::VERSION // 'unknown'), "\n";
+    print "Math::BigFloat Version: ", ($Math::BigFloat::VERSION // 'unknown'), "\n";
+}
+print "Precision: $precision digits, Output Format: ", ($use_scientific ? "Scientific" : "Decimal"), "\n";
 
 # === File Processing ===
 foreach my $file (@ARGV) {
-    open my $fh, '<', $file or die "Cannot open $file: $!";
+    open my $fh, '<', $file or die "Error: Cannot open \"$file\": $!";
 
     print "\nFile: $file\n";
 
@@ -182,7 +221,9 @@ foreach my $file (@ARGV) {
     }
 
     # === Elapsed Time Calculation ===
-    my $end_time = time();
-    my $elapsed = $end_time - $start_time;
-    printf("bfbs.pl execution elapsed time: %.6f [sec]\n", $elapsed);
+    unless ($quiet) {
+        my $end_time = time();
+        my $elapsed = $end_time - $start_time;
+        printf("bfbs.pl execution elapsed time: %.6f [sec]\n", $elapsed);
+    }
 }

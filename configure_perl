@@ -1,0 +1,44 @@
+#! /bin/bash
+#
+# C O N F I G U R E _ P E R L
+#
+# configure_perl last edited on Sat Feb 28 17:01:17 2026 
+#
+NAME1=bfbs
+#
+OP_FILE_NAME=Makefile
+COMPILER="perl"
+OPTIONS=""
+LNK_OPTIONS=""
+TRGT=$NAME1
+SRC1=$NAME1.pl
+#
+#
+echo "$TRGT: configure_perl Makefile" > $OP_FILE_NAME
+echo -e "\t$COMPILER --version" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "check: $TRGT" >> $OP_FILE_NAME
+echo -e "\tcd test; ./check_perl" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "chk: $TRGT" >> $OP_FILE_NAME
+echo -e "\tcd test; ./chk_perl" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "clean:" >> $OP_FILE_NAME
+echo -e "\trm -f *.tmp" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "debug:" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $SRC1 --debug --verbose" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "version:" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $SRC1 --version" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "help:" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $SRC1 --help" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#

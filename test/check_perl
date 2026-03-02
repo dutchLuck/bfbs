@@ -10,6 +10,6 @@ rm -f tstResults_perl
 #
 # redirect both stdout and stderr output to tstResults file
 #
-./tst_perl > tstResults_perl 2>&1
+./chk_perl --quiet > tstResults_perl 2>&1
 diff -s tstResults_perl correctResults_perl
 #

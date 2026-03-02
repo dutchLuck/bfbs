@@ -1,6 +1,6 @@
 #! /bin/sh
 #
-# check last edited on Mon Jun 10 23:16:31 2024 
+# check last edited on Mon Mar  2 19:41:08 2026 
 #
 # Test known data
 #
@@ -9,6 +9,6 @@ echo 1. Test predefined test against known correct results
 rm -f tstResults_rust
 #
 # redirect both stdout and stderr output to tstResults file
-./tst_rust > tstResults_rust 2>&1
+./chk_rust --quiet > tstResults_rust 2>&1
 diff -s tstResults_rust correctResults_rust
 #

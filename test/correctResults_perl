@@ -1,44 +1,44 @@
 
-++++++++++ perl ../bfbs.pl --quiet data.csv  +++Small valid 3 column file, with header option check++++++++++
-Precision: 40 digits, Output Format: Decimal
+++++++++++ perl ../bfbs.pl --quiet         --precision 80 data.csv  +++Small valid 3 column file, with header option check++++++++++
+Precision: 80 digits, Output Format: Decimal
 
 File: data.csv
 
 Column: 1
   Count     : 3
-  Minimum   : 100000000000000000000000000000000000000100000000000
-  Mean      : 200000000000000000000000000000000000000200000000000
-  Median    : 200000000000000000000000000000000000000200000000000
-  Maximum   : 300000000000000000000000000000000000000300000000000
-  Range     : 200000000000000000000000000000000000000200000000000
-  Sum       : 600000000000000000000000000000000000000600000000000
-  Variance  : 10000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000 (sample)
-  Std. Dev. : 100000000000000000000000000000000000000100000000000 (sample)
+  Minimum   : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
+  Mean      : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
+  Median    : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
+  Maximum   : 300000000000000000000000000000000000000300000000000.00000000000000000000000000000
+  Range     : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
+  Sum       : 600000000000000000000000000000000000000600000000000.00000000000000000000000000000
+  Variance  : 10000000000000000000000000000000000000020000000000000000000000000000000000000010000000000000000000000 (sample)
+  Std. Dev. : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000 (sample)
 
 Column: 2
   Count     : 3
-  Minimum   : 400000000000000000000000000000000000000400000000000
-  Mean      : 500000000000000000000000000000000000000700000000000
-  Median    : 500000000000000000000000000000000000000500000000000
-  Maximum   : 600000000000000000000000000000000000000600000000000
-  Range     : 200000000000000000000000000000000000000200000000000
-  Sum       : 1500000000000000000000000000000000000002000000000000
-  Variance  : 10000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000 (sample)
-  Std. Dev. : 100000000000000000000000000000000000000100000000000 (sample)
+  Minimum   : 400000000000000000000000000000000000000400000000000.00000000000000000000000000000
+  Mean      : 500000000000000000000000000000000000000500000000000.00000000000000000000000000000
+  Median    : 500000000000000000000000000000000000000500000000000.00000000000000000000000000000
+  Maximum   : 600000000000000000000000000000000000000600000000000.00000000000000000000000000000
+  Range     : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
+  Sum       : 1500000000000000000000000000000000000001500000000000.0000000000000000000000000000
+  Variance  : 10000000000000000000000000000000000000020000000000000000000000000000000000000010000000000000000000000 (sample)
+  Std. Dev. : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000 (sample)
 
 Column: 3
   Count     : 3
-  Minimum   : 700000000000000000000000000000000000000700000000000
-  Mean      : 800000000000000000000000000000000000001000000000000
-  Median    : 800000000000000000000000000000000000000800000000000
-  Maximum   : 900000000000000000000000000000000000000900000000000
-  Range     : 200000000000000000000000000000000000000200000000000
-  Sum       : 2400000000000000000000000000000000000003000000000000
-  Variance  : 10000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000 (sample)
-  Std. Dev. : 100000000000000000000000000000000000000100000000000 (sample)
+  Minimum   : 700000000000000000000000000000000000000700000000000.00000000000000000000000000000
+  Mean      : 800000000000000000000000000000000000000800000000000.00000000000000000000000000000
+  Median    : 800000000000000000000000000000000000000800000000000.00000000000000000000000000000
+  Maximum   : 900000000000000000000000000000000000000900000000000.00000000000000000000000000000
+  Range     : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
+  Sum       : 2400000000000000000000000000000000000002400000000000.0000000000000000000000000000
+  Variance  : 10000000000000000000000000000000000000020000000000000000000000000000000000000010000000000000000000000 (sample)
+  Std. Dev. : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000 (sample)
 ++++++++++ Shell got Return code number 0 for small valid file data.csv, with header option check++++++++++
 
-++++++++++ perl ../bfbs.pl --quiet cols7rows4.csv +++Small valid 7 column file and no options check++++++++++
+++++++++++ perl ../bfbs.pl --quiet         cols7rows4.csv +++Small valid 7 column file and no options check++++++++++
 Precision: 40 digits, Output Format: Decimal
 
 File: cols7rows4.csv
@@ -121,7 +121,7 @@ Column: 7
   Std. Dev. : 0.004776385340164847573483203508051065922405 (sample)
 ++++++++++ Shell got Return code number 0 for small valid file cols7rows4.csv, no options check++++++++++
 
-++++++++++ perl ../bfbs.pl --quiet heights.csv +++Somewhat longer file with 2 columns, 1 column the reverse of the other++++++++++
+++++++++++ perl ../bfbs.pl --quiet         heights.csv +++Somewhat longer file with 2 columns, 1 column the reverse of the other++++++++++
 Precision: 40 digits, Output Format: Decimal
 
 File: heights.csv
@@ -171,7 +171,7 @@ Column: 4
   Std. Dev. : 2.675164900694752053375288891950825115414 (sample)
 ++++++++++ Shell got Return code number 0 for longer file with lengthier lines++++++++++
 
-++++++++++ perl ../bfbs.pl --quiet NIST_StRD_PiDigits.dat +++Long file of 1 column of single digits, no options check++++++++++
+++++++++++ perl ../bfbs.pl --quiet         NIST_StRD_PiDigits.dat +++Long file of 1 column of single digits, no options check++++++++++
 Precision: 40 digits, Output Format: Decimal
 
 File: NIST_StRD_PiDigits.dat
@@ -188,7 +188,7 @@ Column: 1
   Std. Dev. : 2.867339060288708072461075862550094832237 (sample)
 ++++++++++ Shell got Return code number 0 for long file with single column (4.5348, 2.86733906028871)++++++++++
 
-++++++++++ perl ../bfbs.pl --quiet NIST_StRD_Lew.dat +++Long file of 1 column of single digits, no options check++++++++++
+++++++++++ perl ../bfbs.pl --quiet         NIST_StRD_Lew.dat +++Long file of 1 column of single digits, no options check++++++++++
 Precision: 40 digits, Output Format: Decimal
 
 File: NIST_StRD_Lew.dat
@@ -205,7 +205,7 @@ Column: 1
   Std. Dev. : 277.3321680443161357649224857021053760403 (sample)
 ++++++++++ Shell got Return code number 0 for 200 long file with single column (-177.435, 277.332168044316)++++++++++
 
-++++++++++ perl ../bfbs.pl --quiet NIST_StRD_Lottery.dat +++Long file of 1 column of single digits, no options check++++++++++
+++++++++++ perl ../bfbs.pl --quiet         NIST_StRD_Lottery.dat +++Long file of 1 column of single digits, no options check++++++++++
 Precision: 40 digits, Output Format: Decimal
 
 File: NIST_StRD_Lottery.dat
@@ -222,7 +222,7 @@ Column: 1
   Std. Dev. : 291.6997274709690842392436950813443920703 (sample)
 ++++++++++ Shell got Return code number 0 for 218 long file with single column (518.958715596330, 291.699727470969)++++++++++
 
-++++++++++ perl ../bfbs.pl --quiet NIST_StRD_Mavro.dat +++Long file of 1 column of single digits, no options check++++++++++
+++++++++++ perl ../bfbs.pl --quiet         NIST_StRD_Mavro.dat +++Long file of 1 column of single digits, no options check++++++++++
 Precision: 40 digits, Output Format: Decimal
 
 File: NIST_StRD_Mavro.dat
@@ -239,7 +239,7 @@ Column: 1
   Std. Dev. : 0.0004291234540030528371931208090601088283278 (sample)
 ++++++++++ Shell got Return code number 0 for 50 long file with single column (2.001856, 0.000429123454003053)++++++++++
 
-++++++++++ perl ../bfbs.pl --quiet NIST_StRD_Michelso.dat +++Long file of 1 column of single digits, no options check++++++++++
+++++++++++ perl ../bfbs.pl --quiet         NIST_StRD_Michelso.dat +++Long file of 1 column of single digits, no options check++++++++++
 Precision: 40 digits, Output Format: Decimal
 
 File: NIST_StRD_Michelso.dat
@@ -256,7 +256,7 @@ Column: 1
   Std. Dev. : 0.07901054781905177163132956195232412240279 (sample)
 ++++++++++ Shell got Return code number 0 for 100 long file with single column (299.8524, 0.0790105478190518)++++++++++
 
-++++++++++ perl ../bfbs.pl --quiet NIST_StRD_NumAcc1.dat  +++NIST numerical accurracy file of 3 large close numbers++++++++++
+++++++++++ perl ../bfbs.pl --quiet         NIST_StRD_NumAcc1.dat  +++NIST numerical accurracy file of 3 large close numbers++++++++++
 Precision: 40 digits, Output Format: Decimal
 
 File: NIST_StRD_NumAcc1.dat
@@ -273,7 +273,7 @@ Column: 1
   Std. Dev. : 1.000000000000000000000000000000000000000 (sample)
 ++++++++++ Shell got Return code number 0 for 1st NIST numerical accuracy file ( 10000002, 1)++++++++++
 
-++++++++++ perl ../bfbs.pl --quiet NIST_StRD_NumAcc2.dat  +++NIST numerical accurracy file of close numbers++++++++++
+++++++++++ perl ../bfbs.pl --quiet         NIST_StRD_NumAcc2.dat  +++NIST numerical accurracy file of close numbers++++++++++
 Precision: 40 digits, Output Format: Decimal
 
 File: NIST_StRD_NumAcc2.dat
@@ -290,7 +290,7 @@ Column: 1
   Std. Dev. : 0.1000000000000000000000000000000000000000 (sample)
 ++++++++++ Shell got Return code number 0 for 2nd NIST numerical accuracy file ( 1.2, 0.1)++++++++++
 
-++++++++++ perl ../bfbs.pl --quiet NIST_StRD_NumAcc3.dat  +++NIST numerical accurracy file of close numbers++++++++++
+++++++++++ perl ../bfbs.pl --quiet         NIST_StRD_NumAcc3.dat  +++NIST numerical accurracy file of close numbers++++++++++
 Precision: 40 digits, Output Format: Decimal
 
 File: NIST_StRD_NumAcc3.dat
@@ -307,7 +307,7 @@ Column: 1
   Std. Dev. : 0.1000000000000000000000000000000000000000 (sample)
 ++++++++++ Shell got Return code number 0 for 3rd NIST numerical accuracy file (1000000.2, 0.1)++++++++++
 
-++++++++++ perl ../bfbs.pl --quiet --precision 80 NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers++++++++++
+++++++++++ perl ../bfbs.pl --quiet         --precision 80 NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers++++++++++
 Precision: 80 digits, Output Format: Decimal
 
 File: NIST_StRD_NumAcc4.dat
@@ -324,7 +324,7 @@ Column: 1
   Std. Dev. : 0.10000000000000000000000000000000000000000000000000000000000000000000000000000000 (sample)
 ++++++++++ Shell got Return code number 0 for 4th NIST numerical accuracy file (10000000.2, 0.1)++++++++++
 
-++++++++++ perl ../bfbs.pl --precision 32 --quiet NIST_StRD_NumAcc?.dat  +++NIST numerical accurracy files of large close numbers++++++++++
+++++++++++ perl ../bfbs.pl --quiet         --precision 32 NIST_StRD_NumAcc?.dat  +++NIST numerical accurracy files of large close numbers++++++++++
 Precision: 32 digits, Output Format: Decimal
 
 File: NIST_StRD_NumAcc1.dat
@@ -380,12 +380,12 @@ Column: 1
   Std. Dev. : 0.10000000000000000000000000000000 (sample)
 ++++++++++ Shell got Return code number 0 for NIST numerical accuracy files ++++++++++
 
-++++++++++ perl ../bfbs.pl --quiet --precision 80 non_existent_file.csv ./data.csv  +++Handles non-existent file check++++++++++
+++++++++++ perl ../bfbs.pl --quiet         --precision 80 non_existent_file.csv ./data.csv  +++Handles non-existent file check++++++++++
 Error: Cannot open "non_existent_file.csv": No such file or directory at ../bfbs.pl line 129.
 Precision: 80 digits, Output Format: Decimal
 ++++++++++ Shell got Return code number 2 for Handles non-existent file options++++++++++
 
-++++++++++ perl ../bfbs.pl --help --quiet +++Usage/help and information check++++++++++
+++++++++++ perl ../bfbs.pl --quiet         --help +++Usage/help and information check++++++++++
 Usage: ../bfbs.pl [--header] [--help] [--population] [--precision=N] [--scientific] [--quiet] file1.csv [file2.csv ...]
  where:
   --header       : Treat first CSV row as column headers

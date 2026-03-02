@@ -1,7 +1,7 @@
 //
 // B F B S . R S
 //
-// main.rs last edited on Tue Feb 17 22:52:19 2026
+// main.rs last edited on Mon Mar  2 13:41:56 2026
 //
 // This ChatGPT code appears to calculate test cases correctly
 // However cargo did not successfully compile the needed 
@@ -14,7 +14,7 @@
 // requires Cargo.toml as follows; -
 // [package]
 // name = "bfbs"
-// version = "0.1.7"
+// version = "0.1.9"
 // edition = "2024"
 //
 // [dependencies]
@@ -35,6 +35,7 @@
 //
 
 //
+// v0.1.9 AI fix for output column order, and added some comments to code
 // v0.1.8 suppress time output with --quiet option
 // v0.1.7 Added elapsed execution time output
 // v0.1.6 Added median to output
@@ -43,7 +44,6 @@
 
 //
 // Known issues, not yet fixed; -
-// 1. Column information is not output in order
 //
 
 use clap::Parser;
@@ -223,7 +223,7 @@ fn process_file(
     has_header: bool,
     skip_lines: usize,
     comment_char: char,
-) -> csv::Result<HashMap<String, ColumnStats>> {
+) -> csv::Result<(Vec<String>, HashMap<String, ColumnStats>)> {
     let file = File::open(path)?;
     let reader = BufReader::new(file);
 
@@ -259,7 +259,7 @@ fn process_file(
         let first_record = match records.next() {
             Some(Ok(rec)) => rec,
             Some(Err(e)) => return Err(e),
-            None => return Ok(HashMap::new()), // empty file
+            None => return Ok((Vec::new(), HashMap::new())), // empty file
         };
 
         let col_count = first_record.len();
@@ -292,7 +292,7 @@ fn process_file(
             }
         }
 
-        return Ok(stats);
+        return Ok((headers, stats));
     }
 
     // Case: has_header = true
@@ -312,7 +312,7 @@ fn process_file(
         }
     }
 
-    Ok(stats)
+    Ok((headers, stats))
 }
 
 fn main() {
@@ -344,18 +344,21 @@ fn main() {
             args.skip_lines,
             args.comment_char,
         ) {
-            Ok(stats) => {
-                for (col, data) in stats {
-                    println!("Column: {}", col);
-                    println!("  Count     : {}", data.cnt());
-                    println!("  Minimum   : {}", format_float(&data.minimum(args.precision), args.scientific, args.digits));
-                    println!("  Mean      : {}", format_float(&data.mean(args.precision), args.scientific, args.digits));
-                    println!("  Median    : {}", format_float(&data.median(args.precision), args.scientific, args.digits));
-                    println!("  Maximum   : {}", format_float(&data.maximum(args.precision), args.scientific, args.digits));
-                    println!("  Range     : {}", format_float(&data.range(args.precision), args.scientific, args.digits));
-                    println!("  Sum       : {}", format_float(data.sum(args.precision), args.scientific, args.digits));
-                    println!("  Variance  : {}", format_float(&data.variance(args.precision), args.scientific, args.digits));
-                    println!("  Std. Dev. : {}", format_float(&data.stddev(args.precision), args.scientific, args.digits));
+            Ok((headers, stats)) => {
+                // iterate in the original column order stored in headers
+                for col in headers {
+                    if let Some(data) = stats.get(&col) {
+                        println!("Column: {}", col);
+                        println!("  Count     : {}", data.cnt());
+                        println!("  Minimum   : {}", format_float(&data.minimum(args.precision), args.scientific, args.digits));
+                        println!("  Mean      : {}", format_float(&data.mean(args.precision), args.scientific, args.digits));
+                        println!("  Median    : {}", format_float(&data.median(args.precision), args.scientific, args.digits));
+                        println!("  Maximum   : {}", format_float(&data.maximum(args.precision), args.scientific, args.digits));
+                        println!("  Range     : {}", format_float(&data.range(args.precision), args.scientific, args.digits));
+                        println!("  Sum       : {}", format_float(data.sum(args.precision), args.scientific, args.digits));
+                        println!("  Variance  : {}", format_float(&data.variance(args.precision), args.scientific, args.digits));
+                        println!("  Std. Dev. : {}", format_float(&data.stddev(args.precision), args.scientific, args.digits));
+                    }
                 }
             }
             Err(e) => eprintln!("Error processing {:?}: {}\n", file, e),

@@ -1,0 +1,479 @@
+
+++++++++++ tclsh ../bfbs.tcl --quiet         data.csv  +++Small valid 3 column file, with header option check++++++++++
+Info: precision: 40, print digits: 10
+Warning: math::bigfloat::precision command not available.
+Processing: data.csv  (precision = 40 bits)
+Column 1:
+    count      = 3
+    minimum    = 100000000000000000000000000000000000000100000000000.0000000000
+    mean       = 2.0000000000000000000000000000000000000020e+50
+    median     = 200000000000000000000000000000000000000200000000000.0000000000
+    maximum    = 300000000000000000000000000000000000000300000000000.0000000000
+    range      = 200000000000000000000000000000000000000200000000000.0000000000
+    sum        = 600000000000000000000000000000000000000600000000000.0000000000
+    variance   = 1.0000000000000000000000000000000000000020e+100
+    stddev     = 1.0000000000000000000000000000000000000010e+50
+    variance n = 6.666666666666666666666666666666666666680e+99
+    stddev n   = 8.164965809277260327324280249019637973228e+49
+Column 2:
+    count      = 3
+    minimum    = 400000000000000000000000000000000000000400000000000.0000000000
+    mean       = 5.0000000000000000000000000000000000000050e+50
+    median     = 500000000000000000000000000000000000000500000000000.0000000000
+    maximum    = 600000000000000000000000000000000000000600000000000.0000000000
+    range      = 200000000000000000000000000000000000000200000000000.0000000000
+    sum        = 1500000000000000000000000000000000000001500000000000.0000000000
+    variance   = 1.000000000000000000000000000000000000002e+100
+    stddev     = 1.0000000000000000000000000000000000000010e+50
+    variance n = 6.66666666666666666666666666666666666668e+99
+    stddev n   = 8.16496580927726032732428024901963797323e+49
+Column 3:
+    count      = 3
+    minimum    = 700000000000000000000000000000000000000700000000000.0000000000
+    mean       = 8.0000000000000000000000000000000000000080e+50
+    median     = 800000000000000000000000000000000000000800000000000.0000000000
+    maximum    = 900000000000000000000000000000000000000900000000000.0000000000
+    range      = 200000000000000000000000000000000000000200000000000.0000000000
+    sum        = 2400000000000000000000000000000000000002400000000000.0000000000
+    variance   = 1.000000000000000000000000000000000000002e+100
+    stddev     = 1.000000000000000000000000000000000000001e+50
+    variance n = 6.6666666666666666666666666666666666667e+99
+    stddev n   = 8.1649658092772603273242802490196379732e+49
+
+++++++++++ Shell got Return code number 0 for small valid file data.csv, with header option check++++++++++
+
+++++++++++ tclsh ../bfbs.tcl --quiet         cols7rows4.csv +++Small valid 7 column file and no options check++++++++++
+Info: precision: 40, print digits: 10
+Warning: math::bigfloat::precision command not available.
+Processing: cols7rows4.csv  (precision = 40 bits)
+Column 1:
+    count      = 4
+    minimum    = -0.8000000000
+    mean       = -0.7359608525
+    median     = -1.0000000000
+    maximum    = -0.7000000000
+    range      = 0.1000000000
+    sum        = -2.9438434100
+    variance   = 1.929463550035675000000000000000000000e-3
+    stddev     = 4.3925659358007080461000372695499060950e-2
+    variance n = 1.4470976625267562500000000000000000000e-3
+    stddev n   = 3.804073688201578791809062084432050939e-2
+Column 2:
+    count      = 4
+    minimum    = -0.8000000000
+    mean       = -0.7404131975
+    median     = -1.0000000000
+    maximum    = -0.7000000000
+    range      = 0.1000000000
+    sum        = -2.9616527900
+    variance   = 1.789209042898675000000000000000000000e-3
+    stddev     = 4.2299043049443506293456091730124578108e-2
+    variance n = 1.3419067821740062500000000000000000000e-3
+    stddev n   = 3.6632045836589665552629282511253221654e-2
+Column 3:
+    count      = 4
+    minimum    = -0.8000000000
+    mean       = -0.7484444525
+    median     = -1.0000000000
+    maximum    = -0.7000000000
+    range      = 0.1000000000
+    sum        = -2.9937778100
+    variance   = 1.669892970699675000000000000000000000e-3
+    stddev     = 4.086432393542899419834505533191548056e-2
+    variance n = 1.2524197280247562500000000000000000000e-3
+    stddev n   = 3.538954263655799564732878116161198832e-2
+Column 4:
+    count      = 4
+    minimum    = -5.000000000000000000000000000000000000000e-2
+    mean       = -4.54494700000000000000000000000000000000e-2
+    median     = -0.0000000000
+    maximum    = -4.000000000000000000000000000000000000000e-2
+    range      = 1.000000000000000000000000000000000000000e-2
+    sum        = -0.1817978800
+    variance   = 1.69360310412000000000000000000000000e-5
+    stddev     = 4.11534093863436787307044466817588373e-3
+    variance n = 1.27020232809000000000000000000000000e-5
+    stddev n   = 3.5639897980914591837997785449467045e-3
+Column 5:
+    count      = 4
+    minimum    = 4.000000000000000000000000000000000000000e-2
+    mean       = 4.36175500000000000000000000000000000000e-2
+    median     = 4.e-2
+    maximum    = 5.000000000000000000000000000000000000000e-2
+    range      = 1.000000000000000000000000000000000000000e-2
+    sum        = 0.1744702000
+    variance   = 1.92148906700000000000000000000000000e-5
+    stddev     = 4.38347928819105976621686459828131359e-3
+    variance n = 1.44111680025000000000000000000000000e-5
+    stddev n   = 3.7962044205363862359804493623463414e-3
+Column 6:
+    count      = 4
+    minimum    = 2.000000000000000000000000000000000000000e-2
+    mean       = 2.55197400000000000000000000000000000000e-2
+    median     = 0.0000000000
+    maximum    = 3.000000000000000000000000000000000000000e-2
+    range      = 1.000000000000000000000000000000000000000e-2
+    sum        = 0.1020789600
+    variance   = 1.70268395568000000000000000000000000e-5
+    stddev     = 4.12635911631549587308150112473978638e-3
+    variance n = 1.27701296676000000000000000000000000e-5
+    stddev n   = 3.5735318198667267498939240228741217e-3
+Column 7:
+    count      = 4
+    minimum    = 1.000000000000000000000000000000000000000e-2
+    mean       = 1.28528175000000000000000000000000000000e-2
+    median     = 1.e-2
+    maximum    = 2.000000000000000000000000000000000000000e-2
+    range      = 1.000000000000000000000000000000000000000e-2
+    sum        = 5.14112700000000000000000000000000000000e-2
+    variance   = 2.2813856917741666666666666666666667e-5
+    stddev     = 4.77638534016484757348320350805106592e-3
+    variance n = 1.71103926883062500000000000000000000e-5
+    stddev n   = 4.13647104284633545892036203585902683e-3
+
+++++++++++ Shell got Return code number 0 for small valid file cols7rows4.csv, no options check++++++++++
+
+++++++++++ tclsh ../bfbs.tcl --quiet         heights.csv +++Somewhat longer file with 2 columns, 1 column the reverse of the other++++++++++
+Info: precision: 40, print digits: 10
+Warning: math::bigfloat::precision command not available.
+Processing: heights.csv  (precision = 40 bits)
+Column 1:
+    count      = 2113
+    minimum    = 56.0000000000
+    mean       = 69.4581164221
+    median     = 70.0000000000
+    maximum    = 78.0000000000
+    range      = 22.0000000000
+    sum        = 146765.0000000000
+    variance   = 7.1565072459
+    stddev     = 2.6751649006
+    variance n = 7.1531203518
+    stddev n   = 2.6745318004
+Column 2:
+    count      = 2113
+    minimum    = 56.0000000000
+    mean       = 69.4581164221
+    median     = 70.0000000000
+    maximum    = 78.0000000000
+    range      = 22.0000000000
+    sum        = 146765.0000000000
+    variance   = 7.1565072459
+    stddev     = 2.6751649006
+    variance n = 7.1531203518
+    stddev n   = 2.6745318004
+Column 3:
+    count      = 2113
+    minimum    = 56.0000000000
+    mean       = 69.4581164221
+    median     = 70.0000000000
+    maximum    = 78.0000000000
+    range      = 22.0000000000
+    sum        = 146765.0000000000
+    variance   = 7.1565072459
+    stddev     = 2.6751649006
+    variance n = 7.1531203518
+    stddev n   = 2.6745318004
+Column 4:
+    count      = 2113
+    minimum    = 56.0000000000
+    mean       = 69.4581164221
+    median     = 70.0000000000
+    maximum    = 78.0000000000
+    range      = 22.0000000000
+    sum        = 146765.0000000000
+    variance   = 7.1565072459
+    stddev     = 2.6751649006
+    variance n = 7.1531203518
+    stddev n   = 2.6745318004
+
+++++++++++ Shell got Return code number 0 for longer file with lengthier lines++++++++++
+
+++++++++++ tclsh ../bfbs.tcl --quiet         NIST_StRD_PiDigits.dat +++Long file of 1 column of single digits, no options check++++++++++
+Info: precision: 40, print digits: 10
+Warning: math::bigfloat::precision command not available.
+Processing: NIST_StRD_PiDigits.dat  (precision = 40 bits)
+Column 1:
+    count      = 5000
+    minimum    = 0.e-40
+    mean       = 4.5348000000
+    median     = 5.0000000000
+    maximum    = 9.0000000000
+    range      = 9.0000000000
+    sum        = 22674.0000000000
+    variance   = 8.2216332866
+    stddev     = 2.8673390602
+    variance n = 8.2199889600
+    stddev n   = 2.8670523120
+
+++++++++++ Shell got Return code number 0 for long file with single column (4.5348, 2.86733906028871)++++++++++
+
+++++++++++ tclsh ../bfbs.tcl --quiet         NIST_StRD_Lew.dat +++Long file of 1 column of single digits, no options check++++++++++
+Info: precision: 40, print digits: 10
+Warning: math::bigfloat::precision command not available.
+Processing: NIST_StRD_Lew.dat  (precision = 40 bits)
+Column 1:
+    count      = 200
+    minimum    = -579.0000000000
+    mean       = -177.4350000000
+    median     = -2.e+2
+    maximum    = 300.0000000000
+    range      = 879.0000000000
+    sum        = -35487.0000000000
+    variance   = 76913.1314321608
+    stddev     = 277.3321680443
+    variance n = 76528.5657750000
+    stddev n   = 276.6379687877
+
+++++++++++ Shell got Return code number 0 for 200 long file with single column (-177.435, 277.332168044316)++++++++++
+
+++++++++++ tclsh ../bfbs.tcl --quiet         NIST_StRD_Lottery.dat +++Long file of 1 column of single digits, no options check++++++++++
+Info: precision: 40, print digits: 10
+Warning: math::bigfloat::precision command not available.
+Processing: NIST_StRD_Lottery.dat  (precision = 40 bits)
+Column 1:
+    count      = 218
+    minimum    = 4.0000000000
+    mean       = 518.9587155963
+    median     = 5.e+2
+    maximum    = 999.0000000000
+    range      = 995.0000000000
+    sum        = 113133.0000000000
+    variance   = 85088.7310066376
+    stddev     = 291.6997274709
+    variance n = 84698.4157267906
+    stddev n   = 291.0299223907
+
+++++++++++ Shell got Return code number 0 for 218 long file with single column (518.958715596330, 291.699727470969)++++++++++
+
+++++++++++ tclsh ../bfbs.tcl --quiet         NIST_StRD_Mavro.dat +++Long file of 1 column of single digits, no options check++++++++++
+Info: precision: 40, print digits: 10
+Warning: math::bigfloat::precision command not available.
+Processing: NIST_StRD_Mavro.dat  (precision = 40 bits)
+Column 1:
+    count      = 50
+    minimum    = 2.0013000000
+    mean       = 2.0018560000
+    median     = 2.0000000000
+    maximum    = 2.0027000000
+    range      = 1.40000000000000000000000000000000000000000e-3
+    sum        = 100.0928000000
+    variance   = 1.841469387755102040816326530612245e-7
+    stddev     = 4.291234540030528371931208090601088e-4
+    variance n = 1.804640000000000000000000000000000e-7
+    stddev n   = 4.248105460084530434420153802591419e-4
+
+++++++++++ Shell got Return code number 0 for 50 long file with single column (2.001856, 0.000429123454003053)++++++++++
+
+++++++++++ tclsh ../bfbs.tcl --quiet         NIST_StRD_Michelso.dat +++Long file of 1 column of single digits, no options check++++++++++
+Info: precision: 40, print digits: 10
+Warning: math::bigfloat::precision command not available.
+Processing: NIST_StRD_Michelso.dat  (precision = 40 bits)
+Column 1:
+    count      = 100
+    minimum    = 299.6200000000
+    mean       = 299.8524000000
+    median     = 3.e+2
+    maximum    = 300.0700000000
+    range      = 0.4500000000
+    sum        = 29985.2400000000
+    variance   = 6.2426666666666666666666666666666667e-3
+    stddev     = 7.90105478190517716313295619523241224e-2
+    variance n = 6.1802400000000000000000000000000000e-3
+    stddev n   = 7.8614502478868363057779662983570930e-2
+
+++++++++++ Shell got Return code number 0 for 100 long file with single column (299.8524, 0.0790105478190518)++++++++++
+
+++++++++++ tclsh ../bfbs.tcl --quiet         NIST_StRD_NumAcc1.dat  +++NIST numerical accurracy file of 3 large close numbers++++++++++
+Info: precision: 40, print digits: 10
+Warning: math::bigfloat::precision command not available.
+Processing: NIST_StRD_NumAcc1.dat  (precision = 40 bits)
+Column 1:
+    count      = 3
+    minimum    = 10000001.0000000000
+    mean       = 10000002.0000000000
+    median     = 10000002.0000000000
+    maximum    = 10000003.0000000000
+    range      = 2.0000000000
+    sum        = 30000006.0000000000
+    variance   = 1.0000000000
+    stddev     = 1.0000000000
+    variance n = 0.6666666666
+    stddev n   = 0.8164965809
+
+++++++++++ Shell got Return code number 0 for 1st NIST numerical accuracy file ( 10000002, 1)++++++++++
+
+++++++++++ tclsh ../bfbs.tcl --quiet         NIST_StRD_NumAcc2.dat  +++NIST numerical accurracy file of close numbers++++++++++
+Info: precision: 40, print digits: 10
+Warning: math::bigfloat::precision command not available.
+Processing: NIST_StRD_NumAcc2.dat  (precision = 40 bits)
+Column 1:
+    count      = 1001
+    minimum    = 1.1000000000
+    mean       = 1.2000000000
+    median     = 1.2000000000
+    maximum    = 1.3000000000
+    range      = 0.2000000000
+    sum        = 1201.2000000000
+    variance   = 1.0000000000000000000000000000000000000e-2
+    stddev     = 0.1000000000
+    variance n = 9.990009990009990009990009990009990010e-3
+    stddev n   = 9.995003746877731916316266610390706823e-2
+
+++++++++++ Shell got Return code number 0 for 2nd NIST numerical accuracy file ( 1.2, 0.1)++++++++++
+
+++++++++++ tclsh ../bfbs.tcl --quiet         NIST_StRD_NumAcc3.dat  +++NIST numerical accurracy file of close numbers++++++++++
+Info: precision: 40, print digits: 10
+Warning: math::bigfloat::precision command not available.
+Processing: NIST_StRD_NumAcc3.dat  (precision = 40 bits)
+Column 1:
+    count      = 1001
+    minimum    = 1000000.1000000000
+    mean       = 1000000.2000000000
+    median     = 1000000.2000000000
+    maximum    = 1000000.3000000000
+    range      = 0.2000000000
+    sum        = 1001000200.2000000000
+    variance   = 1.00000000000000000000000000000e-2
+    stddev     = 0.1000000000
+    variance n = 9.9900099900099900099900099900e-3
+    stddev n   = 9.9950037468777319163162666104e-2
+
+++++++++++ Shell got Return code number 0 for 3rd NIST numerical accuracy file (1000000.2, 0.1)++++++++++
+
+++++++++++ tclsh ../bfbs.tcl --quiet         --precision 80 NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers++++++++++
+Info: precision: 80, print digits: 10
+Warning: math::bigfloat::precision command not available.
+Processing: NIST_StRD_NumAcc4.dat  (precision = 80 bits)
+Column 1:
+    count      = 1001
+    minimum    = 10000000.1000000000
+    mean       = 10000000.2000000000
+    median     = 10000000.2000000000
+    maximum    = 10000000.3000000000
+    range      = 0.2000000000
+    sum        = 10010000200.2000000000
+    variance   = 1.0000000000000000000000000000000000000000000000000000000000000000000e-2
+    stddev     = 0.1000000000
+    variance n = 9.990009990009990009990009990009990009990009990009990009990009990010e-3
+    stddev n   = 9.99500374687773191631626661039070682345244786433347132419023947893e-2
+
+++++++++++ Shell got Return code number 0 for 4th NIST numerical accuracy file (10000000.2, 0.1)++++++++++
+
+++++++++++ tclsh ../bfbs.tcl --precision 32 --quiet         NIST_StRD_NumAcc?.dat  +++NIST numerical accurracy files of large close numbers++++++++++
+Info: precision: 32, print digits: 10
+Warning: math::bigfloat::precision command not available.
+Processing: NIST_StRD_NumAcc1.dat  (precision = 32 bits)
+Column 1:
+    count      = 3
+    minimum    = 10000001.0000000000
+    mean       = 10000002.0000000000
+    median     = 10000002.0000000000
+    maximum    = 10000003.0000000000
+    range      = 2.0000000000
+    sum        = 30000006.0000000000
+    variance   = 1.0000000000
+    stddev     = 1.0000000000
+    variance n = 0.6666666666
+    stddev n   = 0.8164965809
+
+Processing: NIST_StRD_NumAcc2.dat  (precision = 32 bits)
+Column 1:
+    count      = 1001
+    minimum    = 1.1000000000
+    mean       = 1.2000000000
+    median     = 1.2000000000
+    maximum    = 1.3000000000
+    range      = 0.2000000000
+    sum        = 1201.2000000000
+    variance   = 1.00000000000000000000000000000e-2
+    stddev     = 0.1000000000
+    variance n = 9.9900099900099900099900099900e-3
+    stddev n   = 9.99500374687773191631626661039e-2
+
+Processing: NIST_StRD_NumAcc3.dat  (precision = 32 bits)
+Column 1:
+    count      = 1001
+    minimum    = 1000000.1000000000
+    mean       = 1000000.2000000000
+    median     = 1000000.2000000000
+    maximum    = 1000000.3000000000
+    range      = 0.2000000000
+    sum        = 1001000200.2000000000
+    variance   = 1.000000000000000000000e-2
+    stddev     = 0.1000000000
+    variance n = 9.99000999000999000999e-3
+    stddev n   = 9.9950037468777319163e-2
+
+Processing: NIST_StRD_NumAcc4.dat  (precision = 32 bits)
+Column 1:
+    count      = 1001
+    minimum    = 10000000.1000000000
+    mean       = 10000000.2000000000
+    median     = 10000000.2000000000
+    maximum    = 10000000.3000000000
+    range      = 0.2000000000
+    sum        = 10010000200.2000000000
+    variance   = 1.0000000000000000000e-2
+    stddev     = 0.1000000000
+    variance n = 9.990009990009990010e-3
+    stddev n   = 9.99500374687773192e-2
+
+++++++++++ Shell got Return code number 0 for NIST numerical accuracy files ++++++++++
+
+++++++++++ tclsh ../bfbs.tcl --quiet         --precision 80 non_existent_file.csv ./data.csv  +++Handles non-existent file check++++++++++
+Info: precision: 80, print digits: 10
+Warning: math::bigfloat::precision command not available.
+Processing: non_existent_file.csv  (precision = 80 bits)
+Cannot open file non_existent_file.csv: couldn't open "non_existent_file.csv": no such file or directory
+Processing: ./data.csv  (precision = 80 bits)
+Column 1:
+    count      = 3
+    minimum    = 100000000000000000000000000000000000000100000000000.0000000000
+    mean       = 200000000000000000000000000000000000000200000000000.0000000000
+    median     = 200000000000000000000000000000000000000200000000000.0000000000
+    maximum    = 300000000000000000000000000000000000000300000000000.0000000000
+    range      = 200000000000000000000000000000000000000200000000000.0000000000
+    sum        = 600000000000000000000000000000000000000600000000000.0000000000
+    variance   = 1.00000000000000000000000000000000000000200000000000000000000000000000000000000100e+100
+    stddev     = 100000000000000000000000000000000000000100000000000.0000000000
+    variance n = 6.666666666666666666666666666666666666680000000000000000000000000000000000000007e+99
+    stddev n   = 81649658092772603273242802490196379732279899013315.1102176963
+Column 2:
+    count      = 3
+    minimum    = 400000000000000000000000000000000000000400000000000.0000000000
+    mean       = 500000000000000000000000000000000000000500000000000.0000000000
+    median     = 500000000000000000000000000000000000000500000000000.0000000000
+    maximum    = 600000000000000000000000000000000000000600000000000.0000000000
+    range      = 200000000000000000000000000000000000000200000000000.0000000000
+    sum        = 1500000000000000000000000000000000000001500000000000.0000000000
+    variance   = 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e+100
+    stddev     = 100000000000000000000000000000000000000100000000000.0000000000
+    variance n = 6.66666666666666666666666666666666666668000000000000000000000000000000000000001e+99
+    stddev n   = 81649658092772603273242802490196379732279899013315.1102176963
+Column 3:
+    count      = 3
+    minimum    = 700000000000000000000000000000000000000700000000000.0000000000
+    mean       = 800000000000000000000000000000000000000800000000000.0000000000
+    median     = 800000000000000000000000000000000000000800000000000.0000000000
+    maximum    = 900000000000000000000000000000000000000900000000000.0000000000
+    range      = 200000000000000000000000000000000000000200000000000.0000000000
+    sum        = 2400000000000000000000000000000000000002400000000000.0000000000
+    variance   = 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e+100
+    stddev     = 100000000000000000000000000000000000000100000000000.0000000000
+    variance n = 6.66666666666666666666666666666666666668000000000000000000000000000000000000001e+99
+    stddev n   = 81649658092772603273242802490196379732279899013315.1102176963
+
+++++++++++ Shell got Return code number 0 for Handles non-existent file options++++++++++
+
+++++++++++ tclsh ../bfbs.tcl --help --quiet         +++Usage/help and information check++++++++++
+
+Usage: ../bfbs.tcl ?-h? ?--quiet? ?-p N? ?-P N? file1.csv file2.csv ...
+  Where; -
+   -h / --help      print this usage / help message and exit
+   -p N / --print-digits N   number of fractional digits to print (default 10)
+   -P N / --precision N      sets math::bigfloat precision (default 40 digits)
+              N.B. if the installed tcllib is too old precision may be ignored
+   -q / --quiet     suppress timing and header output
+   -v / --version   print version message and exit
+
+++++++++++ Shell got Return code number 1 for usage/help, options++++++++++

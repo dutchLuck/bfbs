@@ -42,7 +42,7 @@ on MacOS after mpfr and gmp are installed with the homebrew package manager. It 
 minimum, median, maximum and range in addition to sum, mean, sample variance (s^2) and
 sample standard deviation (s). The results are produced without any noticeable delay.
 ## bfbs.ts
-The deno (typescript) bfbs code uses the
+The <a href="https://deno.com">deno</a> (typescript) bfbs code uses the
 <a href="https://mikemcl.github.io/decimal.js/">decimal.js</a>
 package, which does decimal arbitrary-precision
 calculations. Deno interprets bfbs.ts to output min, mean, median, max, range,
@@ -138,6 +138,16 @@ produced after a very noticeable delay, particularly if there a lot of rows in e
 It seems to be the slowest way to get results, but it does output more of them.
 Since R is generally used in an interactive fashion, not in the Rscript form used in
 this project, the speed of response is less of a negetive.
+## bfbs.tcl
+The 
+<a href="https://wiki.tcl-lang.org/page/What+is+Tcl">tcl</a>
+bfbs script uses the tcl version 8.5.9
+<a href="https://core.tcl-lang.org/tcllib/doc/trunk/embedded/md/tcllib/files/modules/math/bigfloat.md">math::bigfloat</a>
+package from
+<a href="https://wiki.tcl-lang.org/page/Tcllib">tcllib</a>, which does decimal arbitrary-precision
+calculations. tclsh interprets bfbs.tcl to output min, mean, median, max, range,
+sum, variance and standard deviation. There is only a minor delay before results
+appear. Currently this script is only known to work with tcl version 8.5.9 on MacOS. 
 
 ## CSV data files
 The input data files (or file) are assumed by default to be in comma separated value (CSV)
@@ -793,7 +803,55 @@ Column: 3
 bfbs (rust executable) time taken: 0.001087 [sec]
 %
 ```
+### tcl
+```
+% tclsh bfbs.tcl -P 80 test/data.csv 
+Info: bfbs.tcl version 0.1.0
+Info: tclsh version 8.5.9
+Info: math::bigfloat version info is 1.2.2 2.0.1
+Info: precision: 80, print digits: 10
+Warning: math::bigfloat::precision command not available.
+Processing: test/data.csv  (precision = 80 bits)
+Column 1:
+    count      = 3
+    minimum    = 100000000000000000000000000000000000000100000000000.0000000000
+    mean       = 200000000000000000000000000000000000000200000000000.0000000000
+    median     = 200000000000000000000000000000000000000200000000000.0000000000
+    maximum    = 300000000000000000000000000000000000000300000000000.0000000000
+    range      = 200000000000000000000000000000000000000200000000000.0000000000
+    sum        = 600000000000000000000000000000000000000600000000000.0000000000
+    variance   = 1.00000000000000000000000000000000000000200000000000000000000000000000000000000100e+100
+    stddev     = 100000000000000000000000000000000000000100000000000.0000000000
+    variance n = 6.666666666666666666666666666666666666680000000000000000000000000000000000000007e+99
+    stddev n   = 81649658092772603273242802490196379732279899013315.1102176963
+Column 2:
+    count      = 3
+    minimum    = 400000000000000000000000000000000000000400000000000.0000000000
+    mean       = 500000000000000000000000000000000000000500000000000.0000000000
+    median     = 500000000000000000000000000000000000000500000000000.0000000000
+    maximum    = 600000000000000000000000000000000000000600000000000.0000000000
+    range      = 200000000000000000000000000000000000000200000000000.0000000000
+    sum        = 1500000000000000000000000000000000000001500000000000.0000000000
+    variance   = 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e+100
+    stddev     = 100000000000000000000000000000000000000100000000000.0000000000
+    variance n = 6.66666666666666666666666666666666666668000000000000000000000000000000000000001e+99
+    stddev n   = 81649658092772603273242802490196379732279899013315.1102176963
+Column 3:
+    count      = 3
+    minimum    = 700000000000000000000000000000000000000700000000000.0000000000
+    mean       = 800000000000000000000000000000000000000800000000000.0000000000
+    median     = 800000000000000000000000000000000000000800000000000.0000000000
+    maximum    = 900000000000000000000000000000000000000900000000000.0000000000
+    range      = 200000000000000000000000000000000000000200000000000.0000000000
+    sum        = 2400000000000000000000000000000000000002400000000000.0000000000
+    variance   = 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e+100
+    stddev     = 100000000000000000000000000000000000000100000000000.0000000000
+    variance n = 6.66666666666666666666666666666666666668000000000000000000000000000000000000001e+99
+    stddev n   = 81649658092772603273242802490196379732279899013315.1102176963
 
+Info: bfbs (tcl) time taken: 0.009000 [sec]
+%
+```
 ### Comparison Table
 Straw poll of current Microsoft WSL linux preformance numbers (please note: the numbers are meant to be generally indicative and comparing them depends on all manner of dubious assumptions - so use with extreme care); -
 

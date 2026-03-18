@@ -1,0 +1,53 @@
+#! /bin/bash
+#
+# C O N F I G U R E _ S W I F T
+#
+# configure last edited on Fri Feb 13 09:20:09 2026 
+#
+NAME1=bfbs
+NAME2=MPFRFloat
+NAME3=CMPFR/mpfr_wrapper
+#
+OP_FILE_NAME=Makefile
+COMPILER="swiftc"
+OPTIONS="-I CMPFR"
+LNK_OPTIONS="-lmpfr -lgmp"
+RELEASE_LNK_OPTIONS="-static -lmpfr -lgmp"
+TRGT=${NAME1}_swift
+SRC1=${NAME1}.swift
+SRC2=${NAME2}.swift
+SRC3=${NAME3}.c
+#
+# Determine generic OS name, e.g. 'darwin'
+OS_FAMILY="${OSTYPE%[0-9][0-9]}"
+#
+# Adjust for homebrew installed arbitrary precision math library files on MacOS
+if [[ "$OS_FAMILY" == "darwin" ]]; then
+    OPTIONS="-I CMPFR"
+    LNK_OPTIONS="-L /opt/homebrew/lib/ -lmpfr -lgmp"
+    # -static has problems on MacOS
+    RELEASE_LNK_OPTIONS=$LNK_OPTIONS
+fi
+#
+echo "$TRGT: $SRC1 $SRC2 $SRC3" > $OP_FILE_NAME
+echo -e "\t$COMPILER $OPTIONS "'$^'" $LNK_OPTIONS -o "'$@' >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "check: $TRGT" >> $OP_FILE_NAME
+echo -e "\tcd test; ./check_swift" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "chk: $TRGT" >> $OP_FILE_NAME
+echo -e "\tcd test; ./chk_swift" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "clean:" >> $OP_FILE_NAME
+echo -e "\trm -f $TRGT" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+# Release target with optimization and stripped binary
+echo "release: clean" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $OPTIONS $SRC1 $SRC2 $SRC3 $RELEASE_LNK_OPTIONS -o $TRGT" >> $OP_FILE_NAME
+echo -e "\tstrip $TRGT" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#

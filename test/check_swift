@@ -1,0 +1,14 @@
+#! /bin/sh
+#
+# check last edited on Sat Mar  7 09:25:18 2026 
+#
+# Test known data
+#
+echo 1. Test predefined test against known correct results
+#
+rm -f tstResults_swift
+#
+# redirect both stdout and stderr output to tstResults file
+./chk_swift --quiet > tstResults_swift 2>&1
+diff -s tstResults_swift correctResults_swift
+#

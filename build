@@ -30,3 +30,8 @@ printSeparator rust
 make clean
 make
 #
+printSeparator swift
+./configure_swift
+make clean
+make
+#

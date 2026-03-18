@@ -1,0 +1,522 @@
+
+++++++++++ ../bfbs_swift --quiet         data.csv  +++Small valid 3 column file, with header option check++++++++++
+Using 256 bit precision and 64 output digits
+
+Processing file: data.csv
+Column: Column 1
+  Count         : 3
+  Minimum       : 100000000000000000000000000000000000000100000000000
+  Mean          : 200000000000000000000000000000000000000200000000000
+  Median        : 200000000000000000000000000000000000000200000000000
+  Maximum       : 300000000000000000000000000000000000000300000000000
+  Range         : 200000000000000000000000000000000000000200000000000
+  Sum           : 600000000000000000000000000000000000000600000000000
+  Variance (s²) : 1.000000000000000000000000000000000000002e+100
+  Std.Dev. (s)  : 100000000000000000000000000000000000000100000000000
+  Autocorr r(1) : 0
+  Variance (σ²) : 6.66666666666666666666666666666666666668e+99
+  Std.Dev. (σ)  : 81649658092772603273242802490196379732279899013315.11021769632838
+
+Column: Column 2
+  Count         : 3
+  Minimum       : 400000000000000000000000000000000000000400000000000
+  Mean          : 500000000000000000000000000000000000000500000000000
+  Median        : 500000000000000000000000000000000000000500000000000
+  Maximum       : 600000000000000000000000000000000000000600000000000
+  Range         : 200000000000000000000000000000000000000200000000000
+  Sum           : 1500000000000000000000000000000000000001500000000000
+  Variance (s²) : 1.000000000000000000000000000000000000002e+100
+  Std.Dev. (s)  : 100000000000000000000000000000000000000100000000000
+  Autocorr r(1) : 0
+  Variance (σ²) : 6.66666666666666666666666666666666666668e+99
+  Std.Dev. (σ)  : 81649658092772603273242802490196379732279899013315.11021769632838
+
+Column: Column 3
+  Count         : 3
+  Minimum       : 700000000000000000000000000000000000000700000000000
+  Mean          : 800000000000000000000000000000000000000800000000000
+  Median        : 800000000000000000000000000000000000000800000000000
+  Maximum       : 900000000000000000000000000000000000000900000000000
+  Range         : 200000000000000000000000000000000000000200000000000
+  Sum           : 2400000000000000000000000000000000000002400000000000
+  Variance (s²) : 1.000000000000000000000000000000000000002e+100
+  Std.Dev. (s)  : 100000000000000000000000000000000000000100000000000
+  Autocorr r(1) : 0
+  Variance (σ²) : 6.66666666666666666666666666666666666668e+99
+  Std.Dev. (σ)  : 81649658092772603273242802490196379732279899013315.11021769632838
+
+++++++++++ Shell got Return code number 0 for small valid file data.csv, with header option check++++++++++
+
+++++++++++ ../bfbs_swift --quiet         cols7rows4.csv +++Small valid 7 column file and no options check++++++++++
+Using 256 bit precision and 64 output digits
+
+Processing file: cols7rows4.csv
+Column: Column 1
+  Count         : 4
+  Minimum       : -0.8
+  Mean          : -0.7359608525
+  Median        : -0.721921705
+  Maximum       : -0.7
+  Range         : 0.1
+  Sum           : -2.94384341
+  Variance (s²) : 0.001929463550035675
+  Std.Dev. (s)  : 0.04392565935800708046100037269549906095004699266633955855415968661
+  Autocorr r(1) : -0.03405051152225048839858988119247634365613786265793962009959262376
+  Variance (σ²) : 0.00144709766252675625
+  Std.Dev. (σ)  : 0.03804073688201578791809062084432050939374168222410567907904917117
+
+Column: Column 2
+  Count         : 4
+  Minimum       : -0.8
+  Mean          : -0.7404131975
+  Median        : -0.730826395
+  Maximum       : -0.7
+  Range         : 0.1
+  Sum           : -2.96165279
+  Variance (s²) : 0.001789209042898675
+  Std.Dev. (s)  : 0.04229904304944350629345609173012457810799161945130537148496054328
+  Autocorr r(1) : -0.01712242299444772750527940927850864292690601026539864454702225144
+  Variance (σ²) : 0.00134190678217400625
+  Std.Dev. (σ)  : 0.03663204583658966555262928251125322165390293176204979659737104353
+
+Column: Column 3
+  Count         : 4
+  Minimum       : -0.8
+  Mean          : -0.7484444525
+  Median        : -0.746888905
+  Maximum       : -0.7
+  Range         : 0.1
+  Sum           : -2.99377781
+  Variance (s²) : 0.001669892970699675
+  Std.Dev. (s)  : 0.04086432393542899419834505533191548056042884740856174854128729588
+  Autocorr r(1) : -0.0004830106015202476663607093617337666920427002714301845470493950043
+  Variance (σ²) : 0.00125241972802475625
+  Std.Dev. (σ)  : 0.03538954263655799564732878116161198832279960800810015655287368346
+
+Column: Column 4
+  Count         : 4
+  Minimum       : -0.05
+  Mean          : -0.04544947
+  Median        : -0.04589894
+  Maximum       : -0.04
+  Range         : 0.01
+  Sum           : -0.18179788
+  Variance (s²) : 1.69360310412e-05
+  Std.Dev. (s)  : 0.00411534093863436787307044466817588373067684644460872099135820225
+  Autocorr r(1) : -0.00397620277558028672594101417413345248122391197246321526382709529
+  Variance (σ²) : 1.27020232809e-05
+  Std.Dev. (σ)  : 0.003563989798091459183799778544946704463848867271846044627117097456
+
+Column: Column 5
+  Count         : 4
+  Minimum       : 0.04
+  Mean          : 0.04361755
+  Median        : 0.0422351
+  Maximum       : 0.05
+  Range         : 0.01
+  Sum           : 0.1744702
+  Variance (s²) : 1.921489067e-05
+  Std.Dev. (s)  : 0.004383479288191059766216864598281313590770449443077400576707564183
+  Autocorr r(1) : -0.03315428704613770947536353238763097960074593197429487811565744045
+  Variance (σ²) : 1.44111680025e-05
+  Std.Dev. (σ)  : 0.003796204420536386235980449362346341413548603024675739957669794181
+
+Column: Column 6
+  Count         : 4
+  Minimum       : 0.02
+  Mean          : 0.02551974
+  Median        : 0.02603948
+  Maximum       : 0.03
+  Range         : 0.01
+  Sum           : 0.10207896
+  Variance (s²) : 1.70268395568e-05
+  Std.Dev. (s)  : 0.004126359116315495873081501124739786382421209017421251441405650488
+  Autocorr r(1) : -0.005288310977087513500950224290265999961192124676903229849863204376
+  Variance (σ²) : 1.27701296676e-05
+  Std.Dev. (σ)  : 0.00357353181986672674989392402287412167489133550797558219284622429
+
+Column: Column 7
+  Count         : 4
+  Minimum       : 0.01
+  Mean          : 0.0128528175
+  Median        : 0.010705635
+  Maximum       : 0.02
+  Range         : 0.01
+  Sum           : 0.05141127
+  Variance (s²) : 2.281385691774166666666666666666666666666666666666666666666666667e-05
+  Std.Dev. (s)  : 0.004776385340164847573483203508051065922405097730424199481526419915
+  Autocorr r(1) : -0.06736246169640994192157809202973195429188939892073790092669111148
+  Variance (σ²) : 1.711039268830625e-05
+  Std.Dev. (σ)  : 0.004136471042846335458920362035859026833828347386417484661207118623
+
+++++++++++ Shell got Return code number 0 for small valid file cols7rows4.csv, no options check++++++++++
+
+++++++++++ ../bfbs_swift --quiet         heights.csv +++Somewhat longer file with 2 columns, 1 column the reverse of the other++++++++++
+Using 256 bit precision and 64 output digits
+
+Processing file: heights.csv
+Column: Column 1
+  Count         : 2113
+  Minimum       : 56
+  Mean          : 69.45811642214860388073828679602460955986748698532891623284429721
+  Median        : 70
+  Maximum       : 78
+  Range         : 22
+  Sum           : 146765
+  Variance (s²) : 7.156507245909162615267679157882660012333462404451519453885757719
+  Std.Dev. (s)  : 2.67516490069475205337528889195082511490988065909033128581844327
+  Autocorr r(1) : 0.99066843545888143485613550597477123508184850853689906697919646
+  Variance (σ²) : 7.153120351803195193301153990273628938025685091434741640608954237
+  Std.Dev. (σ)  : 2.674531800484562418189672161152057756785590662655662952824838576
+
+Column: Column 2
+  Count         : 2113
+  Minimum       : 56
+  Mean          : 69.45811642214860388073828679602460955986748698532891623284429721
+  Median        : 70
+  Maximum       : 78
+  Range         : 22
+  Sum           : 146765
+  Variance (s²) : 7.156507245909162615267679157882660012333462404451519453885757719
+  Std.Dev. (s)  : 2.67516490069475205337528889195082511490988065909033128581844327
+  Autocorr r(1) : 0.99066843545888143485613550597477123508184850853689906697919646
+  Variance (σ²) : 7.153120351803195193301153990273628938025685091434741640608954237
+  Std.Dev. (σ)  : 2.674531800484562418189672161152057756785590662655662952824838576
+
+Column: Column 3
+  Count         : 2113
+  Minimum       : 56
+  Mean          : 69.45811642214860388073828679602460955986748698532891623284429721
+  Median        : 70
+  Maximum       : 78
+  Range         : 22
+  Sum           : 146765
+  Variance (s²) : 7.156507245909162615267679157882660012333462404451519453885757719
+  Std.Dev. (s)  : 2.67516490069475205337528889195082511490988065909033128581844327
+  Autocorr r(1) : -0.9807219223796527056071448929853073946467142288247153348609245531
+  Variance (σ²) : 7.153120351803195193301153990273628938025685091434741640608954237
+  Std.Dev. (σ)  : 2.674531800484562418189672161152057756785590662655662952824838576
+
+Column: Column 4
+  Count         : 2113
+  Minimum       : 56
+  Mean          : 69.45811642214860388073828679602460955986748698532891623284429721
+  Median        : 70
+  Maximum       : 78
+  Range         : 22
+  Sum           : 146765
+  Variance (s²) : 7.156507245909162615267679157882660012333462404451519453885757719
+  Std.Dev. (s)  : 2.67516490069475205337528889195082511490988065909033128581844327
+  Autocorr r(1) : -0.9823045992910624390732812243849397336588265010053157225613462892
+  Variance (σ²) : 7.153120351803195193301153990273628938025685091434741640608954237
+  Std.Dev. (σ)  : 2.674531800484562418189672161152057756785590662655662952824838576
+
+++++++++++ Shell got Return code number 0 for longer file with lengthier lines++++++++++
+
+++++++++++ ../bfbs_swift --quiet         NIST_StRD_PiDigits.dat +++Long file of 1 column of single digits, no options check++++++++++
+Using 256 bit precision and 64 output digits
+
+Processing file: NIST_StRD_PiDigits.dat
+Column: Column 1
+  Count         : 5000
+  Minimum       : 0
+  Mean          : 4.5348
+  Median        : 5
+  Maximum       : 9
+  Range         : 9
+  Sum           : 22674
+  Variance (s²) : 8.221633286657331466293258651730346069213842768553710742148429686
+  Std.Dev. (s)  : 2.867339060288708072461075862550094832237262874077861858804787822
+  Autocorr r(1) : -0.003550992872379721541621145924264112393649735510107059803155745358
+  Variance (σ²) : 8.21998896
+  Std.Dev. (σ)  : 2.867052312044550051446360789826447820826930377643585956058893742
+
+++++++++++ Shell got Return code number 0 for long file with single column (4.5348, 2.86733906028871)++++++++++
+
+++++++++++ ../bfbs_swift --quiet         NIST_StRD_Lew.dat +++Long file of 1 column of single digits, no options check++++++++++
+Using 256 bit precision and 64 output digits
+
+Processing file: NIST_StRD_Lew.dat
+Column: Column 1
+  Count         : 200
+  Minimum       : -579
+  Mean          : -177.435
+  Median        : -162
+  Maximum       : 300
+  Range         : 879
+  Sum           : -35487
+  Variance (s²) : 76913.13143216080402010050251256281407035175879396984924623115578
+  Std.Dev. (s)  : 277.3321680443161357649224857021053760403034212814911216702377333
+  Autocorr r(1) : -0.307304800605679454862356591707601487452545950969770411851155589
+  Variance (σ²) : 76528.565775
+  Std.Dev. (σ)  : 276.6379687877280521730200747782021068167495692305642457834251926
+
+++++++++++ Shell got Return code number 0 for 200 long file with single column (-177.435, 277.332168044316)++++++++++
+
+++++++++++ ../bfbs_swift --quiet         NIST_StRD_Lottery.dat +++Long file of 1 column of single digits, no options check++++++++++
+Using 256 bit precision and 64 output digits
+
+Processing file: NIST_StRD_Lottery.dat
+Column: Column 1
+  Count         : 218
+  Minimum       : 4
+  Mean          : 518.9587155963302752293577981651376146788990825688073394495412844
+  Median        : 522.5
+  Maximum       : 999
+  Range         : 995
+  Sum           : 113133
+  Variance (s²) : 85088.73100663763581786665539255062782733691286517566482053016531
+  Std.Dev. (s)  : 291.6997274709690842392436950813443920700467772214726566248753999
+  Autocorr r(1) : -0.1209486229673928676524097520210147540399681515918231585346933114
+  Variance (σ²) : 84698.41572679067418567460651460314788317481693460146452318828381
+  Std.Dev. (σ)  : 291.029922390792445790085925989434688959471655212562864136553469
+
+++++++++++ Shell got Return code number 0 for 218 long file with single column (518.958715596330, 291.699727470969)++++++++++
+
+++++++++++ ../bfbs_swift --quiet         NIST_StRD_Mavro.dat +++Long file of 1 column of single digits, no options check++++++++++
+Using 256 bit precision and 64 output digits
+
+Processing file: NIST_StRD_Mavro.dat
+Column: Column 1
+  Count         : 50
+  Minimum       : 2.0013
+  Mean          : 2.001856
+  Median        : 2.0018
+  Maximum       : 2.0027
+  Range         : 0.0014
+  Sum           : 100.0928
+  Variance (s²) : 1.841469387755102040816326530612244897959183673469387755102040816e-07
+  Std.Dev. (s)  : 0.0004291234540030528371931208090601088283278562648135003918072334821
+  Autocorr r(1) : 0.9379891834382480716375565209681709371398173596950084227325117475
+  Variance (σ²) : 1.80464e-07
+  Std.Dev. (σ)  : 0.0004248105460084530434420153802591419196695727135199549446466336427
+
+++++++++++ Shell got Return code number 0 for 50 long file with single column (2.001856, 0.000429123454003053)++++++++++
+
+++++++++++ ../bfbs_swift --quiet         NIST_StRD_Michelso.dat +++Long file of 1 column of single digits, no options check++++++++++
+Using 256 bit precision and 64 output digits
+
+Processing file: NIST_StRD_Michelso.dat
+Column: Column 1
+  Count         : 100
+  Minimum       : 299.62
+  Mean          : 299.8524
+  Median        : 299.85
+  Maximum       : 300.07
+  Range         : 0.45
+  Sum           : 29985.24
+  Variance (s²) : 0.006242666666666666666666666666666666666666666666666666666666666667
+  Std.Dev. (s)  : 0.07901054781905177163132956195232412240279181228613938157327118648
+  Autocorr r(1) : 0.5351996686212833158582838206930475191901932611031286810868186349
+  Variance (σ²) : 0.00618024
+  Std.Dev. (σ)  : 0.07861450247886836305777966298357093034433326263867429703672195046
+
+++++++++++ Shell got Return code number 0 for 100 long file with single column (299.8524, 0.0790105478190518)++++++++++
+
+++++++++++ ../bfbs_swift --quiet         NIST_StRD_NumAcc1.dat  +++NIST numerical accurracy file of 3 large close numbers++++++++++
+Using 256 bit precision and 64 output digits
+
+Processing file: NIST_StRD_NumAcc1.dat
+Column: Column 1
+  Count         : 3
+  Minimum       : 10000001
+  Mean          : 10000002
+  Median        : 10000002
+  Maximum       : 10000003
+  Range         : 2
+  Sum           : 30000006
+  Variance (s²) : 1
+  Std.Dev. (s)  : 1
+  Autocorr r(1) : -0.5
+  Variance (σ²) : 0.6666666666666666666666666666666666666666666666666666666666666667
+  Std.Dev. (σ)  : 0.8164965809277260327324280249019637973219824935522233761442308558
+
+++++++++++ Shell got Return code number 0 for 1st NIST numerical accuracy file ( 10000002, 1)++++++++++
+
+++++++++++ ../bfbs_swift --quiet         NIST_StRD_NumAcc2.dat  +++NIST numerical accurracy file of close numbers++++++++++
+Using 256 bit precision and 64 output digits
+
+Processing file: NIST_StRD_NumAcc2.dat
+Column: Column 1
+  Count         : 1001
+  Minimum       : 1.1
+  Mean          : 1.2
+  Median        : 1.2
+  Maximum       : 1.3
+  Range         : 0.2
+  Sum           : 1201.2
+  Variance (s²) : 0.01
+  Std.Dev. (s)  : 0.1
+  Autocorr r(1) : -0.999
+  Variance (σ²) : 0.00999000999000999000999000999000999000999000999000999000999000999
+  Std.Dev. (σ)  : 0.09995003746877731916316266610390706823452447864333471324190239479
+
+++++++++++ Shell got Return code number 0 for 2nd NIST numerical accuracy file ( 1.2, 0.1)++++++++++
+
+++++++++++ ../bfbs_swift --quiet         NIST_StRD_NumAcc3.dat  +++NIST numerical accurracy file of close numbers++++++++++
+Using 256 bit precision and 64 output digits
+
+Processing file: NIST_StRD_NumAcc3.dat
+Column: Column 1
+  Count         : 1001
+  Minimum       : 1000000.1
+  Mean          : 1000000.2
+  Median        : 1000000.2
+  Maximum       : 1000000.3
+  Range         : 0.2
+  Sum           : 1001000200.2
+  Variance (s²) : 0.01
+  Std.Dev. (s)  : 0.1
+  Autocorr r(1) : -0.999
+  Variance (σ²) : 0.00999000999000999000999000999000999000999000999000999000999000999
+  Std.Dev. (σ)  : 0.09995003746877731916316266610390706823452447864333471324190239479
+
+++++++++++ Shell got Return code number 0 for 3rd NIST numerical accuracy file (1000000.2, 0.1)++++++++++
+
+++++++++++ ../bfbs_swift --quiet         --precision 320 NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers++++++++++
+Using 320 bit precision and 64 output digits
+
+Processing file: NIST_StRD_NumAcc4.dat
+Column: Column 1
+  Count         : 1001
+  Minimum       : 10000000.1
+  Mean          : 10000000.2
+  Median        : 10000000.2
+  Maximum       : 10000000.3
+  Range         : 0.2
+  Sum           : 10010000200.2
+  Variance (s²) : 0.01
+  Std.Dev. (s)  : 0.1
+  Autocorr r(1) : -0.999
+  Variance (σ²) : 0.00999000999000999000999000999000999000999000999000999000999000999
+  Std.Dev. (σ)  : 0.09995003746877731916316266610390706823452447864333471324190239479
+
+++++++++++ Shell got Return code number 0 for 4th NIST numerical accuracy file (10000000.2, 0.1)++++++++++
+
+++++++++++ ../bfbs_swift --precision 320 --digits 80 --quiet         NIST_StRD_NumAcc?.dat  +++NIST numerical accurracy files of large close numbers++++++++++
+Using 320 bit precision and 80 output digits
+
+Processing file: NIST_StRD_NumAcc1.dat
+Column: Column 1
+  Count         : 3
+  Minimum       : 10000001
+  Mean          : 10000002
+  Median        : 10000002
+  Maximum       : 10000003
+  Range         : 2
+  Sum           : 30000006
+  Variance (s²) : 1
+  Std.Dev. (s)  : 1
+  Autocorr r(1) : -0.5
+  Variance (σ²) : 0.66666666666666666666666666666666666666666666666666666666666666666666666666666667
+  Std.Dev. (σ)  : 0.81649658092772603273242802490196379732198249355222337614423085575032012581910501
+
+Processing file: NIST_StRD_NumAcc2.dat
+Column: Column 1
+  Count         : 1001
+  Minimum       : 1.1
+  Mean          : 1.2
+  Median        : 1.2
+  Maximum       : 1.3
+  Range         : 0.2
+  Sum           : 1201.2
+  Variance (s²) : 0.01
+  Std.Dev. (s)  : 0.1
+  Autocorr r(1) : -0.999
+  Variance (σ²) : 0.00999000999000999000999000999000999000999000999000999000999000999000999000999001
+  Std.Dev. (σ)  : 0.099950037468777319163162666103907068234524478643334713241902394789294315074013981
+
+Processing file: NIST_StRD_NumAcc3.dat
+Column: Column 1
+  Count         : 1001
+  Minimum       : 1000000.1
+  Mean          : 1000000.2
+  Median        : 1000000.2
+  Maximum       : 1000000.3
+  Range         : 0.2
+  Sum           : 1001000200.2
+  Variance (s²) : 0.01
+  Std.Dev. (s)  : 0.1
+  Autocorr r(1) : -0.999
+  Variance (σ²) : 0.00999000999000999000999000999000999000999000999000999000999000999000999000999001
+  Std.Dev. (σ)  : 0.099950037468777319163162666103907068234524478643334713241902394789294315074013981
+
+Processing file: NIST_StRD_NumAcc4.dat
+Column: Column 1
+  Count         : 1001
+  Minimum       : 10000000.1
+  Mean          : 10000000.2
+  Median        : 10000000.2
+  Maximum       : 10000000.3
+  Range         : 0.2
+  Sum           : 10010000200.2
+  Variance (s²) : 0.01
+  Std.Dev. (s)  : 0.1
+  Autocorr r(1) : -0.999
+  Variance (σ²) : 0.00999000999000999000999000999000999000999000999000999000999000999000999000999001
+  Std.Dev. (σ)  : 0.099950037468777319163162666103907068234524478643334713241902394789294315074013981
+
+++++++++++ Shell got Return code number 0 for NIST numerical accuracy files ++++++++++
+
+++++++++++ ../bfbs_swift --quiet         --precision 320 --digits 80 non_existent_file.csv ./data.csv  +++Handles non-existent file check++++++++++
+Using 320 bit precision and 80 output digits
+
+
+Error: File named "non_existent_file.csv" not found.
+
+Processing file: ./data.csv
+Column: Column 1
+  Count         : 3
+  Minimum       : 100000000000000000000000000000000000000100000000000
+  Mean          : 200000000000000000000000000000000000000200000000000
+  Median        : 200000000000000000000000000000000000000200000000000
+  Maximum       : 300000000000000000000000000000000000000300000000000
+  Range         : 200000000000000000000000000000000000000200000000000
+  Sum           : 600000000000000000000000000000000000000600000000000
+  Variance (s²) : 1.000000000000000000000000000000000000002000000000000000000000000000000000000001e+100
+  Std.Dev. (s)  : 100000000000000000000000000000000000000100000000000
+  Autocorr r(1) : 0
+  Variance (σ²) : 6.6666666666666666666666666666666666666800000000000000000000000000000000000000067e+99
+  Std.Dev. (σ)  : 81649658092772603273242802490196379732279899013315.110217696328377522208961642699
+
+Column: Column 2
+  Count         : 3
+  Minimum       : 400000000000000000000000000000000000000400000000000
+  Mean          : 500000000000000000000000000000000000000500000000000
+  Median        : 500000000000000000000000000000000000000500000000000
+  Maximum       : 600000000000000000000000000000000000000600000000000
+  Range         : 200000000000000000000000000000000000000200000000000
+  Sum           : 1500000000000000000000000000000000000001500000000000
+  Variance (s²) : 1.000000000000000000000000000000000000002000000000000000000000000000000000000001e+100
+  Std.Dev. (s)  : 100000000000000000000000000000000000000100000000000
+  Autocorr r(1) : 0
+  Variance (σ²) : 6.6666666666666666666666666666666666666800000000000000000000000000000000000000067e+99
+  Std.Dev. (σ)  : 81649658092772603273242802490196379732279899013315.110217696328377522208961642699
+
+Column: Column 3
+  Count         : 3
+  Minimum       : 700000000000000000000000000000000000000700000000000
+  Mean          : 800000000000000000000000000000000000000800000000000
+  Median        : 800000000000000000000000000000000000000800000000000
+  Maximum       : 900000000000000000000000000000000000000900000000000
+  Range         : 200000000000000000000000000000000000000200000000000
+  Sum           : 2400000000000000000000000000000000000002400000000000
+  Variance (s²) : 1.000000000000000000000000000000000000002000000000000000000000000000000000000001e+100
+  Std.Dev. (s)  : 100000000000000000000000000000000000000100000000000
+  Autocorr r(1) : 0
+  Variance (σ²) : 6.6666666666666666666666666666666666666800000000000000000000000000000000000000067e+99
+  Std.Dev. (σ)  : 81649658092772603273242802490196379732279899013315.110217696328377522208961642699
+
+++++++++++ Shell got Return code number 0 for Handles non-existent file options++++++++++
+
+++++++++++ ../bfbs_swift --help --quiet         +++Usage/help and information check++++++++++
+Usage:
+bfbs_swift file1.csv [file2.csv ...] [--help] [--quiet] [--header] [--precision N] [--digits N]
+
+Options:
+  -h --help        Show help / usage information and exit
+  -q --quiet       Suppress banner and timing information
+  -H --header      First row is column names
+  --precision N    MPFR precision bits (default 256)
+  --digits N       Output digits (default 64)
+++++++++++ Shell got Return code number 1 for usage/help, options++++++++++

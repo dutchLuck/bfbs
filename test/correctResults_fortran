@@ -1,5 +1,5 @@
 
-++++++++++ ../bfbs_fortran --quiet data.csv  +++Small valid 3 column file, with header option check++++++++++
+++++++++++ ../bfbs_fortran -q data.csv  +++Small valid 3 column file, with header option check++++++++++
 Using  256 bits of calculation precision and  64 digits output precision.
 Column 1: 
   count  : 3
@@ -33,7 +33,7 @@ Column 3:
   std    : 100000000000000000000000000000000000000100000000000
 ++++++++++ Shell got Return code number 0 for small valid file data.csv, with header option check++++++++++
 
-++++++++++ ../bfbs_fortran --quiet cols7rows4.csv +++Small valid 7 column file and no options check++++++++++
+++++++++++ ../bfbs_fortran -q cols7rows4.csv +++Small valid 7 column file and no options check++++++++++
 Using  256 bits of calculation precision and  64 digits output precision.
 Column 1: 
   count  : 4
@@ -107,7 +107,7 @@ Column 7:
   std    : 0.004776385340164847573483203508051065922405097730424199481526419915
 ++++++++++ Shell got Return code number 0 for small valid file cols7rows4.csv, no options check++++++++++
 
-++++++++++ ../bfbs_fortran --quiet -R heights.csv +++Somewhat longer file with 2 columns, 1 column the reverse of the other++++++++++
+++++++++++ ../bfbs_fortran -q -R heights.csv +++Somewhat longer file with 2 columns, 1 column the reverse of the other++++++++++
 Using  256 bits of calculation precision and  64 digits output precision.
 Column 1: 
   count  : 2113
@@ -151,7 +151,7 @@ Column 4:
   std    : 2.67516490069475205337528889195082511490988065909033128581844327
 ++++++++++ Shell got Return code number 0 for longer file with lengthier lines++++++++++
 
-++++++++++ ../bfbs_fortran --quiet NIST_StRD_PiDigits.dat +++Long file of 1 column of single digits, no options check++++++++++
+++++++++++ ../bfbs_fortran -q NIST_StRD_PiDigits.dat +++Long file of 1 column of single digits, no options check++++++++++
 Using  256 bits of calculation precision and  64 digits output precision.
 Column 1: 
   count  : 5000
@@ -165,7 +165,7 @@ Column 1:
   std    : 2.867339060288708072461075862550094832237262874077861858804787822
 ++++++++++ Shell got Return code number 0 for long file with single column (4.5348, 2.86733906028871)++++++++++
 
-++++++++++ ../bfbs_fortran --quiet NIST_StRD_Lew.dat +++Long file of 1 column of single digits, no options check++++++++++
+++++++++++ ../bfbs_fortran -q NIST_StRD_Lew.dat +++Long file of 1 column of single digits, no options check++++++++++
 Using  256 bits of calculation precision and  64 digits output precision.
 Column 1: 
   count  : 200
@@ -179,7 +179,7 @@ Column 1:
   std    : 277.3321680443161357649224857021053760403034212814911216702377333
 ++++++++++ Shell got Return code number 0 for 200 long file with single column (-177.435, 277.332168044316)++++++++++
 
-++++++++++ ../bfbs_fortran --quiet NIST_StRD_Lottery.dat +++Long file of 1 column of single digits, no options check++++++++++
+++++++++++ ../bfbs_fortran -q NIST_StRD_Lottery.dat +++Long file of 1 column of single digits, no options check++++++++++
 Using  256 bits of calculation precision and  64 digits output precision.
 Column 1: 
   count  : 218
@@ -193,7 +193,7 @@ Column 1:
   std    : 291.6997274709690842392436950813443920700467772214726566248753999
 ++++++++++ Shell got Return code number 0 for 218 long file with single column (518.958715596330, 291.699727470969)++++++++++
 
-++++++++++ ../bfbs_fortran --quiet NIST_StRD_Mavro.dat +++Long file of 1 column of single digits, no options check++++++++++
+++++++++++ ../bfbs_fortran -q NIST_StRD_Mavro.dat +++Long file of 1 column of single digits, no options check++++++++++
 Using  256 bits of calculation precision and  64 digits output precision.
 Column 1: 
   count  : 50
@@ -207,7 +207,7 @@ Column 1:
   std    : 0.0004291234540030528371931208090601088283278562648135003918072334821
 ++++++++++ Shell got Return code number 0 for 50 long file with single column (2.001856, 0.000429123454003053)++++++++++
 
-++++++++++ ../bfbs_fortran --quiet NIST_StRD_Michelso.dat +++Long file of 1 column of single digits, no options check++++++++++
+++++++++++ ../bfbs_fortran -q NIST_StRD_Michelso.dat +++Long file of 1 column of single digits, no options check++++++++++
 Using  256 bits of calculation precision and  64 digits output precision.
 Column 1: 
   count  : 100
@@ -221,7 +221,7 @@ Column 1:
   std    : 0.07901054781905177163132956195232412240279181228613938157327118648
 ++++++++++ Shell got Return code number 0 for 100 long file with single column (299.8524, 0.0790105478190518)++++++++++
 
-++++++++++ ../bfbs_fortran --quiet NIST_StRD_NumAcc1.dat  +++NIST numerical accurracy file of 3 large close numbers++++++++++
+++++++++++ ../bfbs_fortran -q NIST_StRD_NumAcc1.dat  +++NIST numerical accurracy file of 3 large close numbers++++++++++
 Using  256 bits of calculation precision and  64 digits output precision.
 Column 1: 
   count  : 3
@@ -235,7 +235,7 @@ Column 1:
   std    : 1
 ++++++++++ Shell got Return code number 0 for 1st NIST numerical accuracy file ( 10000002, 1)++++++++++
 
-++++++++++ ../bfbs_fortran --quiet NIST_StRD_NumAcc2.dat  +++NIST numerical accurracy file of close numbers++++++++++
+++++++++++ ../bfbs_fortran -q NIST_StRD_NumAcc2.dat  +++NIST numerical accurracy file of close numbers++++++++++
 Using  256 bits of calculation precision and  64 digits output precision.
 Column 1: 
   count  : 1001
@@ -249,7 +249,7 @@ Column 1:
   std    : 0.1
 ++++++++++ Shell got Return code number 0 for 2nd NIST numerical accuracy file ( 1.2, 0.1)++++++++++
 
-++++++++++ ../bfbs_fortran --quiet NIST_StRD_NumAcc3.dat  +++NIST numerical accurracy file of close numbers++++++++++
+++++++++++ ../bfbs_fortran -q NIST_StRD_NumAcc3.dat  +++NIST numerical accurracy file of close numbers++++++++++
 Using  256 bits of calculation precision and  64 digits output precision.
 Column 1: 
   count  : 1001
@@ -263,7 +263,7 @@ Column 1:
   std    : 0.1
 ++++++++++ Shell got Return code number 0 for 3rd NIST numerical accuracy file (1000000.2, 0.1)++++++++++
 
-++++++++++ ../bfbs_fortran --quiet --prec 340 --digits 80 NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers++++++++++
+++++++++++ ../bfbs_fortran -q --precision 340 --print_digits 80 NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers++++++++++
 Using  340 bits of calculation precision and  80 digits output precision.
 Column 1: 
   count  : 1001
@@ -277,7 +277,7 @@ Column 1:
   std    : 0.1
 ++++++++++ Shell got Return code number 0 for 4th NIST numerical accuracy file (10000000.2, 0.1)++++++++++
 
-++++++++++ ../bfbs_fortran --quiet --digits 10 NIST_StRD_NumAcc*.dat  +++NIST numerical accurracy files of large close numbers++++++++++
+++++++++++ ../bfbs_fortran -q --print_digits 10 NIST_StRD_NumAcc*.dat  +++NIST numerical accurracy files of large close numbers++++++++++
 Using  256 bits of calculation precision and  10 digits output precision.
 Column 1: 
   count  : 1001
@@ -291,7 +291,7 @@ Column 1:
   std    : 0.1
 ++++++++++ Shell got Return code number 0 for NIST numerical accuracy files ++++++++++
 
-++++++++++ ../bfbs_fortran --quiet non_existent_file.csv data.csv  +++Handles non-existent file check++++++++++
+++++++++++ ../bfbs_fortran -q non_existent_file.csv data.csv  +++Handles non-existent file check++++++++++
 Using  256 bits of calculation precision and  64 digits output precision.
 Column 1: 
   count  : 3
@@ -325,17 +325,18 @@ Column 3:
   std    : 100000000000000000000000000000000000000100000000000
 ++++++++++ Shell got Return code number 0 for Handles non-existent file options++++++++++
 
-++++++++++ ../bfbs_fortran --quiet --help +++Usage/help and information check++++++++++
+++++++++++ ../bfbs_fortran -q --help +++Usage/help and information check++++++++++
 Using  256 bits of calculation precision and  64 digits output precision.
 
 Usage:
- bfbs [-h][--help][--debug][--digits INT][--header][--prec INT][--quiet] data_file_name.csv
+ bfbs [--debug][--help][--header][--print_digits INT][--precision INT][--quiet] data_file_name.csv
   where; -
-  --help or -h .. outputs this help info
-  --debug      .. outputs extra information
-  --digits INT .. uses up to INT digits to represent the stats numbers
-  --header     .. CSV file has a first line with column labels
-  --prec INT   .. uses INT bits of precision in the calculations
-  --quiet      .. Suppress output of version and timing information
+  -D or --debug  .. outputs extra information
+  -h or --help   .. outputs this help info and stops
+  -H or --header .. CSV file has a first line with column labels
+  -p or --print_digits INT .. uses up to INT digits to print out the stats numbers
+  -P or --precision INT    .. uses INT bits of precision in the calculations
+  -q or --quiet  .. Suppress output of version and timing information
+  data_file_name.csv  ..  non-optional name of the CSV data file
 
 ++++++++++ Shell got Return code number 0 for usage/help, options++++++++++

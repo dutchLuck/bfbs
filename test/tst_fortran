@@ -2,12 +2,12 @@
 #
 # T S T _ F O R T R A N
 #
-# tst_fortran last edited on Tue Feb 17 23:31:18 2026 
+# tst_fortran last edited on Sun Mar 22 21:34:36 2026 
 #
 # To redirect both stdout and stderr to a file, use ampersand redirect operation, for example; -
 #  ./tst_fortran &> correctResults_fortran
 #
-EXE="../bfbs_fortran --quiet"
+EXE="../bfbs_fortran -q"
 TEN_PLUSS=++++++++++
 #
 # Test default case: read a CSV file and output stats with default number of digits
@@ -70,14 +70,14 @@ $EXE NIST_StRD_NumAcc3.dat
 echo "${TEN_PLUSS} Shell got Return code number $? for 3rd NIST numerical accuracy file (1000000.2, 0.1)${TEN_PLUSS}"
 #
 echo ""
-echo "${TEN_PLUSS} $EXE --prec 340 --digits 80 NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers${TEN_PLUSS}"
-$EXE --prec 340 --digits 80 NIST_StRD_NumAcc4.dat
+echo "${TEN_PLUSS} $EXE --precision 340 --print_digits 80 NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers${TEN_PLUSS}"
+$EXE --precision 340 --print_digits 80 NIST_StRD_NumAcc4.dat
 echo "${TEN_PLUSS} Shell got Return code number $? for 4th NIST numerical accuracy file (10000000.2, 0.1)${TEN_PLUSS}"
 #
 # Test multiple data file handling and smaller number of output digits
 echo ""
-echo "${TEN_PLUSS} $EXE --digits 10 NIST_StRD_NumAcc*.dat  +++NIST numerical accurracy files of large close numbers${TEN_PLUSS}"
-$EXE --digits 10 NIST_StRD_NumAcc*.dat
+echo "${TEN_PLUSS} $EXE --print_digits 10 NIST_StRD_NumAcc*.dat  +++NIST numerical accurracy files of large close numbers${TEN_PLUSS}"
+$EXE --print_digits 10 NIST_StRD_NumAcc*.dat
 echo "${TEN_PLUSS} Shell got Return code number $? for NIST numerical accuracy files ${TEN_PLUSS}"
 #
 # Test multiple data file handling including a missing file

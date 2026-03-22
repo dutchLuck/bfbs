@@ -1,7 +1,7 @@
 !
 ! B F B S . F 9 0
 !
-! bfbs.f90 last edited on Tue Feb 17 23:37:30 2026 
+! bfbs.f90 last edited on Sun Mar 22 21:34:17 2026 as 0.0.2
 !
 ! This code reads a CSV file containing rows of comma separated
 ! data and provides summary stats for each column of numbers.
@@ -62,18 +62,26 @@
 ! bfbs (fortran executable) time taken:  0.001 [sec]
 !
 
+!
+! 0.0.2 Added short form command line options and changed long form
+!       --prec to --precision and --digits to --print_digits to have
+!       uniformity across compiled versions of bfbs. Now checks for
+!       an input file name and that the named file exists.
+! 0.0.1 Original version
+!
+
 program bfbs
   use iso_c_binding
   use iso_fortran_env   !compiler_version(), compiler_options()
   use mpfr_mod
   implicit none
 
-  character(len=*), parameter :: version = "0.0.1"
+  character(len=*), parameter :: version = "0.0.2"
 
   integer :: i,j,ncols,nrows,prec_bits,digits,argc,arg_idx,ios,k_row_no
   real :: start_time, finish_time
   character(len=512) :: line, fname
-  logical :: has_header, debug_output, help_output, quiet_output
+  logical :: has_header, debug_output, help_output, quiet_output, file_exists
   character(len=512), allocatable :: colnames(:)
   character(len=128), allocatable :: fields(:)     ! N.B. can't handle CSV file numbers of more than 128 digits
 
@@ -97,6 +105,8 @@ program bfbs
   debug_output = .false.
   help_output = .false.
   quiet_output = .false.
+  file_exists = .false.
+  fname = ''
 
   !----------------------------
   ! Command-line parsing
@@ -105,19 +115,33 @@ program bfbs
   arg_idx = 1
   do while(arg_idx <= argc)
      call get_command_argument(arg_idx,line)
-     if (line(1:min(6,len(line))) == "--prec") then
+     if (line(1:min(11,len(line))) == "--precision") then
         arg_idx = arg_idx+1
         call get_command_argument(arg_idx,line)
         read(line,*) prec_bits
-     else if (line(1:min(8,len(line))) == "--digits") then
+     else if (line(1:min(2,len(line))) == "-P") then
+        arg_idx = arg_idx+1
+        call get_command_argument(arg_idx,line)
+        read(line,*) prec_bits
+     else if (line(1:min(14,len(line))) == "--print_digits") then
+        arg_idx = arg_idx+1
+        call get_command_argument(arg_idx,line)
+        read(line,*) digits
+     else if (line(1:min(2,len(line))) == "-p") then
         arg_idx = arg_idx+1
         call get_command_argument(arg_idx,line)
         read(line,*) digits
      else if (line(1:min(8,len(line))) == "--header") then
         has_header = .true.
+     else if (line(1:min(2,len(line))) == "-H") then
+        has_header = .true.
      else if (line(1:min(7,len(line))) == "--debug") then
         debug_output = .true.
+     else if (line(1:min(2,len(line))) == "-D") then
+        debug_output = .true.
      else if (line(1:min(7,len(line))) == "--quiet") then
+        quiet_output = .true.
+     else if (line(1:min(2,len(line))) == "-q") then
         quiet_output = .true.
      else if (line(1:min(6,len(line))) == "--help") then
         help_output = .true.
@@ -159,16 +183,31 @@ program bfbs
   if (help_output) then
     print '("")'
     print '("Usage:")'
-    print '(" bfbs [-h][--help][--debug][--digits INT][--header][--prec INT][--quiet] data_file_name.csv")'
+    print '(" bfbs [--debug][--help][--header][--print_digits INT][--precision INT][--quiet] data_file_name.csv")'
     print '("  where; -")'
-    print '("  --help or -h .. outputs this help info")'
-    print '("  --debug      .. outputs extra information")'
-    print '("  --digits INT .. uses up to INT digits to represent the stats numbers")'
-    print '("  --header     .. CSV file has a first line with column labels")'
-    print '("  --prec INT   .. uses INT bits of precision in the calculations")'
-    print '("  --quiet      .. Suppress output of version and timing information")'
+    print '("  -D or --debug  .. outputs extra information")'
+    print '("  -h or --help   .. outputs this help info and stops")'
+    print '("  -H or --header .. CSV file has a first line with column labels")'
+    print '("  -p or --print_digits INT .. uses up to INT digits to print out the stats numbers")'
+    print '("  -P or --precision INT    .. uses INT bits of precision in the calculations")'
+    print '("  -q or --quiet  .. Suppress output of version and timing information")'
+    print '("  data_file_name.csv  ..  non-optional name of the CSV data file")'
     print '("")'
     stop 
+  endif
+
+  !----------------------------
+  ! Validate filename is provided and file exists
+  !----------------------------
+  if (len_trim(fname) == 0) then
+     write(*,*) "Error: No input file specified. Use --help for usage information."
+     stop
+  endif
+
+  inquire(file=fname, exist=file_exists)
+  if (.not. file_exists) then
+     write(*,*) "Error: Input file '", trim(fname), "' does not exist."
+     stop
   endif
 
   !----------------------------

@@ -1,5 +1,5 @@
 
-++++++++++ ../bfbs_cpp --quiet data.csv  +++Small valid 3 column file, with header option check++++++++++
+++++++++++ ../bfbs_cpp -q data.csv  +++Small valid 3 column file, with header option check++++++++++
 Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: data.csv
@@ -38,7 +38,7 @@ Column: Column 3
 
 ++++++++++ Shell got Return code number 0 for small valid file data.csv, with header option check++++++++++
 
-++++++++++ ../bfbs_cpp --quiet cols7rows4.csv +++Small valid 7 column file and no options check++++++++++
+++++++++++ ../bfbs_cpp -q cols7rows4.csv +++Small valid 7 column file and no options check++++++++++
 Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: cols7rows4.csv
@@ -121,7 +121,7 @@ Column: Column 7
 
 ++++++++++ Shell got Return code number 0 for small valid file cols7rows4.csv, no options check++++++++++
 
-++++++++++ ../bfbs_cpp --quiet heights.csv +++Somewhat longer file with 2 columns, 1 column the reverse of the other++++++++++
+++++++++++ ../bfbs_cpp -q heights.csv +++Somewhat longer file with 2 columns, 1 column the reverse of the other++++++++++
 Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: heights.csv
@@ -171,7 +171,7 @@ Column: Column 4
 
 ++++++++++ Shell got Return code number 0 for longer file with lengthier lines++++++++++
 
-++++++++++ ../bfbs_cpp --quiet NIST_StRD_PiDigits.dat +++Long file of 1 column of single digits, no options check++++++++++
+++++++++++ ../bfbs_cpp -q NIST_StRD_PiDigits.dat +++Long file of 1 column of single digits, no options check++++++++++
 Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_PiDigits.dat
@@ -188,7 +188,7 @@ Column: Column 1
 
 ++++++++++ Shell got Return code number 0 for long file with single column (4.5348, 2.86733906028871)++++++++++
 
-++++++++++ ../bfbs_cpp --quiet NIST_StRD_Lew.dat +++Long file of 1 column of single digits, no options check++++++++++
+++++++++++ ../bfbs_cpp -q NIST_StRD_Lew.dat +++Long file of 1 column of single digits, no options check++++++++++
 Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_Lew.dat
@@ -205,7 +205,7 @@ Column: Column 1
 
 ++++++++++ Shell got Return code number 0 for 200 long file with single column (-177.435, 277.332168044316)++++++++++
 
-++++++++++ ../bfbs_cpp --quiet NIST_StRD_Lottery.dat +++Long file of 1 column of single digits, no options check++++++++++
+++++++++++ ../bfbs_cpp -q NIST_StRD_Lottery.dat +++Long file of 1 column of single digits, no options check++++++++++
 Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_Lottery.dat
@@ -222,7 +222,7 @@ Column: Column 1
 
 ++++++++++ Shell got Return code number 0 for 218 long file with single column (518.958715596330, 291.699727470969)++++++++++
 
-++++++++++ ../bfbs_cpp --quiet NIST_StRD_Mavro.dat +++Long file of 1 column of single digits, no options check++++++++++
+++++++++++ ../bfbs_cpp -q NIST_StRD_Mavro.dat +++Long file of 1 column of single digits, no options check++++++++++
 Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_Mavro.dat
@@ -239,7 +239,7 @@ Column: Column 1
 
 ++++++++++ Shell got Return code number 0 for 50 long file with single column (2.001856, 0.000429123454003053)++++++++++
 
-++++++++++ ../bfbs_cpp --quiet NIST_StRD_Michelso.dat +++Long file of 1 column of single digits, no options check++++++++++
+++++++++++ ../bfbs_cpp -q NIST_StRD_Michelso.dat +++Long file of 1 column of single digits, no options check++++++++++
 Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_Michelso.dat
@@ -256,7 +256,7 @@ Column: Column 1
 
 ++++++++++ Shell got Return code number 0 for 100 long file with single column (299.8524, 0.0790105478190518)++++++++++
 
-++++++++++ ../bfbs_cpp --quiet NIST_StRD_NumAcc1.dat  +++NIST numerical accurracy file of 3 large close numbers++++++++++
+++++++++++ ../bfbs_cpp -q NIST_StRD_NumAcc1.dat  +++NIST numerical accurracy file of 3 large close numbers++++++++++
 Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_NumAcc1.dat
@@ -273,7 +273,7 @@ Column: Column 1
 
 ++++++++++ Shell got Return code number 0 for 1st NIST numerical accuracy file ( 10000002, 1)++++++++++
 
-++++++++++ ../bfbs_cpp --quiet NIST_StRD_NumAcc2.dat  +++NIST numerical accurracy file of close numbers++++++++++
+++++++++++ ../bfbs_cpp -q NIST_StRD_NumAcc2.dat  +++NIST numerical accurracy file of close numbers++++++++++
 Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_NumAcc2.dat
@@ -290,7 +290,7 @@ Column: Column 1
 
 ++++++++++ Shell got Return code number 0 for 2nd NIST numerical accuracy file ( 1.2, 0.1)++++++++++
 
-++++++++++ ../bfbs_cpp --quiet NIST_StRD_NumAcc3.dat  +++NIST numerical accurracy file of close numbers++++++++++
+++++++++++ ../bfbs_cpp -q NIST_StRD_NumAcc3.dat  +++NIST numerical accurracy file of close numbers++++++++++
 Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_NumAcc3.dat
@@ -307,7 +307,7 @@ Column: Column 1
 
 ++++++++++ Shell got Return code number 0 for 3rd NIST numerical accuracy file (1000000.2, 0.1)++++++++++
 
-++++++++++ ../bfbs_cpp --quiet NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers++++++++++
+++++++++++ ../bfbs_cpp -q NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers++++++++++
 Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_NumAcc4.dat
@@ -324,7 +324,7 @@ Column: Column 1
 
 ++++++++++ Shell got Return code number 0 for 4th NIST numerical accuracy file (10000000.2, 0.1)++++++++++
 
-++++++++++ ../bfbs_cpp --quiet --digits 10 NIST_StRD_NumAcc?.dat  +++NIST numerical accurracy files of large close numbers++++++++++
+++++++++++ ../bfbs_cpp -q --print_digits 10 NIST_StRD_NumAcc?.dat  +++NIST numerical accurracy files of large close numbers++++++++++
 Using 256 bits Calculation precision and 10 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_NumAcc1.dat
@@ -377,7 +377,7 @@ Column: Column 1
 
 ++++++++++ Shell got Return code number 0 for NIST numerical accuracy files ++++++++++
 
-++++++++++ ../bfbs_cpp --quiet --digits 80 --precision 320 non_existent_file.csv data.csv  +++Handles non-existent file check++++++++++
+++++++++++ ../bfbs_cpp -q --print_digits 80 --precision 320 non_existent_file.csv data.csv  +++Handles non-existent file check++++++++++
 Using 320 bits Calculation precision and 80 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: non_existent_file.csv
@@ -418,14 +418,14 @@ Column: Column 3
 
 ++++++++++ Shell got Return code number 1 for Handles non-existent file options++++++++++
 
-++++++++++ ../bfbs_cpp --quiet --help  +++Usage/help and information check++++++++++
+++++++++++ ../bfbs_cpp -q --help  +++Usage/help and information check++++++++++
 Usage:
-../bfbs_cpp file1.csv [file2.csv ...] [--help] [--quiet] [--header] [--precision N] [--digits N]
+../bfbs_cpp file1.csv [file2.csv ...] [--help] [--header] [--print_digits N] [--precision N] [--quiet]
   where:
     file1.csv [file2.csv ...]  - one or more CSV files to process
     -h  or  --help             - show this help message and exit
-    -q  or  --quiet            - suppress version info and timing info
     -H  or  --header           - treat first CSV row as (text) column headers
-    --precision N              - set calculation precision to N bits (default: 256)
-    --digits N                 - set output digits to N (default: 64)
+    -p  or --print_digits N    - set output digits to N (default: 64)
+    -P  or --precision N       - set calculation precision to N bits (default: 256)
+    -q  or  --quiet            - suppress version info and timing info
 ++++++++++ Shell got Return code number 1 for usage/help, options++++++++++

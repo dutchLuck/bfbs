@@ -2,12 +2,12 @@
 #
 # T S T _ C P P
 #
-# tst_cpp last edited on Sat Feb 28 11:15:51 2026 
+# tst_cpp last edited on Sun Mar 22 22:53:47 2026 
 #
 # To redirect both stdout and stderr to a file, use ampersand redirect operation, for example; -
 #  ./tst_cpp &> outputFile
 #
-EXE="../bfbs_cpp --quiet"
+EXE="../bfbs_cpp -q"
 TEN_PLUSS=++++++++++
 #
 # Test default case: read a CSV file and output stats with default number of digits
@@ -76,14 +76,14 @@ echo "${TEN_PLUSS} Shell got Return code number $? for 4th NIST numerical accura
 #
 # Test multiple data file handling and smaller number of output digits
 echo ""
-echo "${TEN_PLUSS} $EXE --digits 10 NIST_StRD_NumAcc?.dat  +++NIST numerical accurracy files of large close numbers${TEN_PLUSS}"
-$EXE --digits 10 NIST_StRD_NumAcc?.dat
+echo "${TEN_PLUSS} $EXE --print_digits 10 NIST_StRD_NumAcc?.dat  +++NIST numerical accurracy files of large close numbers${TEN_PLUSS}"
+$EXE --print_digits 10 NIST_StRD_NumAcc?.dat
 echo "${TEN_PLUSS} Shell got Return code number $? for NIST numerical accuracy files ${TEN_PLUSS}"
 #
 # Test multiple data file handling including a missing file
 echo ""
-echo "${TEN_PLUSS} $EXE --digits 80 --precision 320 non_existent_file.csv data.csv  +++Handles non-existent file check${TEN_PLUSS}"
-$EXE --digits 80 --precision 320 non_existent_file.csv data.csv
+echo "${TEN_PLUSS} $EXE --print_digits 80 --precision 320 non_existent_file.csv data.csv  +++Handles non-existent file check${TEN_PLUSS}"
+$EXE --print_digits 80 --precision 320 non_existent_file.csv data.csv
 echo "${TEN_PLUSS} Shell got Return code number $? for Handles non-existent file options${TEN_PLUSS}"
 #
 # Test usage messages

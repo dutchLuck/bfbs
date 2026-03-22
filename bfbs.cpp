@@ -3,7 +3,7 @@
 //
 // Big Float Basic Statistics
 //
-// bfbs.cpp last updated on Sat Feb 28 14:37:20 2026 by O.H. as 0v6
+// bfbs.cpp last updated on Sun Mar 22 22:53:18 2026 by O.H. as 0v7
 //
 
 //
@@ -34,10 +34,10 @@
 //   where:
 //     file1.csv [file2.csv ...]  - one or more CSV files to process
 //     -h  or  --help             - show this help message and exit
-//     -q  or  --quiet            - suppress version info and timing info
 //     -H  or  --header           - treat first CSV row as (text) column headers
-//     --precision N              - set calculation precision to N bits (default: 256)
-//     --digits N                 - set output digits to N (default: 64)
+//     -P  or  --precision N       - set calculation precision to N bits (default: 256)
+//     -p  or  --print_digits N    - set output digits to N (default: 64)
+//     -q  or  --quiet            - suppress version info and timing info
 //
 
 //
@@ -57,6 +57,7 @@
 //
 
 //
+// 0v7 Short form option parsing and help/usage message
 // 0v6 More comprehensive argument parsing and more detailed help/usage message
 // output to include all options and their descriptions
 // 0v5 Minor change to help output and elapsed time message
@@ -78,7 +79,7 @@
 using namespace std;
 
 #define PROGRAM_NAME __FILE__
-#define PROGRAM_VERSION "0v6"
+#define PROGRAM_VERSION "0v7"
 
 // RAII Wrapper for mpfr_t
 class MpfrFloat {
@@ -127,9 +128,9 @@ Options parseArgs(int argc, char* argv[]) {
     Options opts;
     for (int i = 1; i < argc; ++i) {
         string arg = argv[i];
-        if (arg == "--precision" && i + 1 < argc) {
+        if (((arg == "--precision") || (arg == "-P")) && i + 1 < argc) {
             opts.precision = stoi(argv[++i]);
-        } else if (arg == "--digits" && i + 1 < argc) {
+        } else if (((arg == "--print_digits") || (arg == "-p")) && i + 1 < argc) {
             opts.digits = stoi(argv[++i]);
         } else if ((arg == "--header") || (arg == "-H")) {
             opts.hasHeader = true;
@@ -147,14 +148,14 @@ Options parseArgs(int argc, char* argv[]) {
     if (opts.files.empty() || opts.help) {
         cerr << "Usage:" << endl;
         cerr << argv[0];    // program name
-        cerr << " file1.csv [file2.csv ...] [--help] [--quiet] [--header] [--precision N] [--digits N]\n";
+        cerr << " file1.csv [file2.csv ...] [--help] [--header] [--print_digits N] [--precision N] [--quiet]\n";
         cerr << "  where:\n";
         cerr << "    file1.csv [file2.csv ...]  - one or more CSV files to process\n";
         cerr << "    -h  or  --help             - show this help message and exit\n";
-        cerr << "    -q  or  --quiet            - suppress version info and timing info\n";
         cerr << "    -H  or  --header           - treat first CSV row as (text) column headers\n";
-        cerr << "    --precision N              - set calculation precision to N bits (default: 256)\n";
-        cerr << "    --digits N                 - set output digits to N (default: 64)\n";
+        cerr << "    -p  or --print_digits N    - set output digits to N (default: 64)\n";
+        cerr << "    -P  or --precision N       - set calculation precision to N bits (default: 256)\n";
+        cerr << "    -q  or  --quiet            - suppress version info and timing info\n";
         exit(1);
     }
     return opts;

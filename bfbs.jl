@@ -4,7 +4,7 @@
 #
 # Big Float Basic Statistics
 #
-# bfbs.jl last updated on Fri Sep  5 19:54:07 2025 by O.H. as 0v11
+# bfbs.jl last updated on Fri Mar 27 22:46:14 2026 by O.H. as 0v12
 #
 # Descendant of readdatafile.jl 0v1
 #
@@ -36,6 +36,8 @@
 ##
 
 #
+# 0v12 added --quiet option to suppress output of time and version information
+#      and added population variance & standard deviation calculations to output
 # 0v11 output the elapsed time for the script to run
 # 0v10 corrected --help message
 # 0v9 output Results digits and changed grouping of row/column stats
@@ -54,6 +56,8 @@ using Statistics
 using Printf
 using ArgParse
 using InteractiveUtils	# for versioninfo()
+
+# MARK: Parse Arguments
 
 function parse_arguments()
     s = ArgParseSettings()
@@ -83,10 +87,6 @@ function parse_arguments()
         action = :store_true
         help = "The first row is treated as a header."
 
-        "--n_divisor", "-n"
-        action = :store_true
-        help = "Use the actual number of samples n as the Standard Deviation divisor, rather than n-1."
-
         "--print_digits", "-p"
         arg_type = String
         help = "Write output with \"PRINT-DIGITS\" digits. If not provided, 64 output digits are used."
@@ -111,6 +111,10 @@ function parse_arguments()
         action = :store_true
         help = "Provide version information."
 
+        "--quiet", "-q"
+        action = :store_true
+        help = "Suppress output of time and version information and over-ride --verbose."
+
         "files"
         nargs = '*'
         help = "Input files containing 1 or more columns of numbers. Default file format has comma separated columns."
@@ -118,6 +122,8 @@ function parse_arguments()
 
     return parse_args(s)
 end
+
+# MARK: Read CSV into BigFloat
 
 # Function to read a file and convert to BigFloat matrix
 function read_bignum_matrix(filepath::String, delimiter::Char, header::Bool, verbose::Bool, linestoskip::Integer, comment_start::Char)
@@ -139,8 +145,10 @@ function read_bignum_matrix(filepath::String, delimiter::Char, header::Bool, ver
     return mat
 end
 
+# MARK: Calculate row stats
+
 # Function to compute average and stddev for each row
-function row_stats(mat::Matrix{BigFloat}, use_n::Bool )
+function row_stats(mat::Matrix{BigFloat})
     row_cnts = [length(row) for row in eachrow(mat)]
     row_mins = [minimum(row) for row in eachrow(mat)]
     row_medians = [median(row) for row in eachrow(mat)]
@@ -148,14 +156,18 @@ function row_stats(mat::Matrix{BigFloat}, use_n::Bool )
 	row_ranges = row_maxs - row_mins
     row_means = [mean(row) for row in eachrow(mat)]
     row_sums = [sum(row) for row in eachrow(mat)]
-    row_vars  = [var(row) for row in eachrow(mat)]
-    row_stds  = [std(row; corrected = !use_n) for row in eachrow(mat)]
+    row_vars  = [var(row; corrected = true) for row in eachrow(mat)]	# n-1 divisor for sample variance
+    row_stds  = [std(row; corrected = true) for row in eachrow(mat)]	# n-1 divisor for sample standard deviation
+    row_varn  = [var(row; corrected = false) for row in eachrow(mat)]	# n divisor for population variance
+    row_stdn  = [std(row; corrected = false) for row in eachrow(mat)]	# n divisor for population standard deviation
     row_medians  = [median(row) for row in eachrow(mat)]
-    return row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds
+    return row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds, row_varn, row_stdn, row_medians
 end
 
+# MARK: Calculate column stats
+
 # Function to compute average and stddev for each column
-function col_stats(mat::Matrix{BigFloat}, use_n::Bool)
+function col_stats(mat::Matrix{BigFloat})
     col_cnts = [length(col) for col in eachcol(mat)]
     col_mins = [minimum(col) for col in eachcol(mat)]
     col_medians = [median(col) for col in eachcol(mat)]
@@ -163,9 +175,11 @@ function col_stats(mat::Matrix{BigFloat}, use_n::Bool)
 	col_ranges = col_maxs - col_mins
     col_means = [mean(col) for col in eachcol(mat)]
     col_sums = [sum(col) for col in eachcol(mat)]
-    col_vars  = [var(col) for col in eachcol(mat)]
-    col_stds  = [std(col; corrected = !use_n) for col in eachcol(mat)]
-    return col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds 
+    col_vars  = [var(col; corrected = true) for col in eachcol(mat)]	# n-1 divisor for sample variance
+    col_stds  = [std(col; corrected = true) for col in eachcol(mat)]	# n-1 divisor for sample standard deviation
+    col_varn  = [var(col; corrected = false) for col in eachcol(mat)]	# n divisor for population variance
+    col_stdn  = [std(col; corrected = false) for col in eachcol(mat)]	# n divisor for population standard deviation
+    return col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds, col_varn, col_stdn, col_medians
 end
 
 # Print a matrix of BigFloats with high precision
@@ -179,79 +193,99 @@ function print_bigfloat_matrix(mat::Matrix{BigFloat}, digits::Int64)
     end
 end
 
-function print_basic_statistics(str::String, precision::Int64, cnts, mins, medians, maxs, ranges, means, sums, vars, stds)
-	# Display rows results
+function print_basic_statistics(str::String, format_digits::Int64, cnts, mins, medians, maxs, ranges, means, sums, vars, stds, varn, stdn)
+	# Display row or column results
 	println("$str Counts:")
 	foreach(x -> @printf("%d\n", x), cnts)
-	# Display row results with precision
+	# Display results in scientific format with specified number of digits
 	println("$str Minimums:")
-	foreach(x -> @printf("%.*e\n", precision, x), mins)
-	println("$str Medians:")
-	foreach(x -> @printf("%.*e\n", precision, x), medians)
-	println("$str Maximums:")
-	foreach(x -> @printf("%.*e\n", precision, x), maxs)
-	println("$str Ranges:")
-	foreach(x -> @printf("%.*e\n", precision, x), ranges)
+	foreach(x -> @printf("%.*e\n", format_digits, x), mins)
 	println("$str Means:")
-	foreach(x -> @printf("%.*e\n", precision, x), means)
+	foreach(x -> @printf("%.*e\n", format_digits, x), means)
+	println("$str Medians:")
+	foreach(x -> @printf("%.*e\n", format_digits, x), medians)
+	println("$str Maximums:")
+	foreach(x -> @printf("%.*e\n", format_digits, x), maxs)
+	println("$str Ranges:")
+	foreach(x -> @printf("%.*e\n", format_digits, x), ranges)
 	println("$str Sums:")
-	foreach(x -> @printf("%.*e\n", precision, x), sums)
-	println("$str Variances:")
-	foreach(x -> @printf("%.*e\n", precision, x), vars)
-	println("$str Standard Deviations:")
-	foreach(x -> @printf("%.*e\n", precision, x), stds)
+	foreach(x -> @printf("%.*e\n", format_digits, x), sums)
+	println("$str Sample Variances s²:")
+	foreach(x -> @printf("%.*e\n", format_digits, x), vars)
+	println("$str Sample Standard Deviations s:")
+	foreach(x -> @printf("%.*e\n", format_digits, x), stds)
+	println("$str Population Variances σ²:")
+	foreach(x -> @printf("%.*e\n", format_digits, x), varn)
+	println("$str Population Standard Deviations σ:")
+	foreach(x -> @printf("%.*e\n", format_digits, x), stdn)
 end
 
-function print_basic_stats_e_format(str::String, precision::Int64, cnts, mins, medians, maxs, ranges, means, sums, vars, stds)
-	# Display rows or column results
+# MARK: Exponent Format Output
+
+function print_basic_stats_e_format(str::String, format_digits::Int64, cnts, mins, medians, maxs, ranges, means, sums, vars, stds, varn, stdn)
+	# Display row or column results
 	i = 1
 	for x in cnts
 		@printf("%s: %d\n", str, i)
-		@printf(" Count     : %d\n", x)
-		@printf(" Minimum   : %.*e\n", precision, mins[i])
-		@printf(" Median    : %.*e\n", precision, medians[i])
-		@printf(" Maximum   : %.*e\n", precision, maxs[i])
-		@printf(" Range     : %.*e\n", precision, ranges[i])
-		@printf(" Mean      : %.*e\n", precision, means[i])
-		@printf(" Sum       : %.*e\n", precision, sums[i])
-		@printf(" Variance  : %.*e\n", precision, vars[i])
-		@printf(" Std. Dev. : %.*e\n", precision, stds[i])
+		@printf(" Count       : %d\n", x)
+		@printf(" Minimum     : %.*e\n", format_digits, mins[i])
+		@printf(" Mean        : %.*e\n", format_digits, means[i])
+		@printf(" Median      : %.*e\n", format_digits, medians[i])
+		@printf(" Maximum     : %.*e\n", format_digits, maxs[i])
+		@printf(" Range       : %.*e\n", format_digits, ranges[i])
+		@printf(" Sum         : %.*e\n", format_digits, sums[i])
+		@printf(" Variance s\u00B2 : %.*e\n", format_digits, vars[i])
+		@printf(" Std. Dev. s : %.*e\n", format_digits, stds[i])
+		@printf(" Variance \u03C3\u00B2 : %.*e\n", format_digits, varn[i])
+		@printf(" Std. Dev. \u03C3 : %.*e\n", format_digits, stdn[i])
 		i += 1
 	end
 end
 
-function print_basic_stats_g_format(str::String, precision::Int64, cnts, mins, medians, maxs, ranges, means, sums, vars, stds)
-	# Display rows or column results
+# MARK: General Format Output
+
+function print_basic_stats_g_format(str::String, format_digits::Int64, cnts, mins, medians, maxs, ranges, means, sums, vars, stds, varn, stdn)
+	# Display row or column results
 	i = 1
 	for x in cnts
 		@printf("%s: %d\n", str, i)
-		@printf(" Count     : %d\n", x)
-		@printf(" Minimum   : %.*g\n", precision, mins[i])
-		@printf(" Median    : %.*g\n", precision, medians[i])
-		@printf(" Maximum   : %.*g\n", precision, maxs[i])
-		@printf(" Range     : %.*g\n", precision, ranges[i])
-		@printf(" Mean      : %.*g\n", precision, means[i])
-		@printf(" Sum       : %.*g\n", precision, sums[i])
-		@printf(" Variance  : %.*g\n", precision, vars[i])
-		@printf(" Std. Dev. : %.*g\n", precision, stds[i])
+		@printf(" Count       : %d\n", x)
+		@printf(" Minimum     : %.*g\n", format_digits, mins[i])
+		@printf(" Mean        : %.*g\n", format_digits, means[i])
+		@printf(" Median      : %.*g\n", format_digits, medians[i])
+		@printf(" Maximum     : %.*g\n", format_digits, maxs[i])
+		@printf(" Range       : %.*g\n", format_digits, ranges[i])
+		@printf(" Sum         : %.*g\n", format_digits, sums[i])
+		@printf(" Variance s\u00B2 : %.*g\n", format_digits, vars[i])
+		@printf(" Std. Dev. s : %.*g\n", format_digits, stds[i])
+		@printf(" Variance \u03C3\u00B2 : %.*g\n", format_digits, varn[i])
+		@printf(" Std. Dev. \u03C3 : %.*g\n", format_digits, stdn[i])
 		i += 1
 	end
 end
+
+# MARK: Main()
 
 function main()
-	# Announce bfbs version
-	println("bfbs version 0v11 (2025-11-10)")
+	# Start the timer at the beginning of the script
+	start_time = time()
 
 	# Parse command line arguments
     args = parse_arguments()
+
+	if args["quiet"]
+		verbose = false		# --quiet command line argument overrides --verbose
+	else
+		# Announce bfbs version if --quiet is not active
+		println("bfbs version 0v12 (2026-03-27)")
+		verbose = args["verbose"]	# --verbose command line argument
+	end
 	comment_delimiter_string = get(args, "comment_char", nothing)	# --comment_char command line argument
 	delimiter_string = get(args, "delimiter_char", nothing)			# --delimiter_char command line argument
 	has_header = args["header"]		# --header command line argument
-	n_divisor = args["n_divisor"]	# --n_divisor command line argument
 	print_digits_string = get(args, "print_digits", nothing)	# --print_digits command line argument
 	precision_bits_string = get(args, "precision", nothing)		# --precision command line argument
 	skip_lines_string = get(args, "skip", nothing)				# --skip_lines_string command line argument
-	verbose = args["verbose"]		# --verbose command line argument
 	files = args["files"]			# names of data files 
 
 	# Set default values for options if not provided on command line
@@ -283,15 +317,15 @@ function main()
 	end
 
 	if isnothing(print_digits_string)
-		precision = 64			# set default value of output format to effectively "%.64g" or "%.64e"
+		print_format_digits = 64			# set default value of output format to effectively "%.64g" or "%.64e"
 	else
-		precision = parse(Int64, print_digits_string)
-		if precision < 0		# Don't allow negetive numbers in the "%.*e" output format
-			println("Warning: Unable to set print_digits to \"$precision\" digits - limiting to 0 digits")
-			precision = 0
-		elseif precision > 256	# Limit the print_digits to 256 digits
-			println("Warning: Unable to set print_digits to \"$precision\" digits - limiting to 256 digits")
-			precision = 256
+		print_format_digits = parse(Int64, print_digits_string)
+		if print_format_digits < 0		# Don't allow negetive numbers in the "%.*e" output format
+			println("Warning: Unable to set print_digits to \"$print_format_digits\" digits - limiting to 0 digits")
+			print_format_digits = 0
+		elseif print_format_digits > 256	# Limit the print_digits to 256 digits
+			println("Warning: Unable to set print_digits to \"$print_format_digits\" digits - limiting to 256 digits")
+			print_format_digits = 256
 		end
 	end
 
@@ -311,14 +345,14 @@ function main()
 	# Announce Julia version
 	if verbose || args["debug"]
 		versioninfo()	# Show Julia version information
-	else
+	elseif !args["quiet"]		# test --quiet option for version output supression
 		println("Julia version $(VERSION)")
 	end
 
 	# Report current precision and settings if verbose or debug mode is active
 	setprecision(BigFloat, precision_bits)	# Defaults to set BigFloat precision to 256 bits (about 77 decimal digits)
 	println("BigFloat precision: $precision_bits bits")
-	print("Results output using $precision digits in ")
+	print("Results output using $print_format_digits digits in ")
 	if args["scientific"]
 		println("scientific number format")
 	else
@@ -329,11 +363,15 @@ function main()
 		println("Column delimiter is: '$delimiter'")
 		println("Start of Comment delimiter is: '$comment_start'")
 		println("Skip lines before starting to read data: $skip_lines")
-		println("Use number of samples n as devisor in Standard Deviation: $n_divisor")
 	end
 
 	if args["version"]
 		return		# terminate the execution (a bit like the help option)
+	end
+
+	if isempty(files)
+		println("Warning: No input files provided. Nothing to do. Use --help option for usage information.")
+		return
 	end
 
 	# Loop through any file names on the command line
@@ -350,43 +388,52 @@ function main()
 		num_rows, num_cols = size(bignum_matrix)
 
 		# Show matrix with full BigFloat precision if Debug mode is active
+		debug_print_digits = print_format_digits + 10	# use more digits in debug printout to show more of the precision
 		if args["debug"]
 			println("Data dimensions are $num_cols columns x $num_rows rows")
-			print_bigfloat_matrix(bignum_matrix, precision)
+			print_bigfloat_matrix(bignum_matrix, debug_print_digits)
+			println()
 		end
 
 		# Now compute stats with high precision
 		if !args["no_row_stats"] && num_cols > 1		# Don't calc row stats unless more than 1 column
 			# Calculate row results with high precision
-			row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds = row_stats(bignum_matrix, n_divisor)
+			row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds, row_varn, row_stdn = row_stats(bignum_matrix)
 			# Display rows results
 			if args["scientific"]
-				print_basic_stats_e_format("Row", precision, row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds)
+				print_basic_stats_e_format("Row", print_format_digits, row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds, row_varn, row_stdn)
 			else
-				print_basic_stats_g_format("Row", precision, row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds)
+				print_basic_stats_g_format("Row", print_format_digits, row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds, row_varn, row_stdn)
+			end
+			if args["debug"]
+				print_basic_statistics("\nDebug Row(s): - ", debug_print_digits, row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds, row_varn, row_stdn)
+				println()
 			end
 		end
 		if !args["no_column_stats"] && num_rows > 1		# Don't calc column stats unless more than 1 row
 			# Calculate column results with high precision
-			col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds = col_stats(bignum_matrix, n_divisor)
+			col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds, col_varn, col_stdn = col_stats(bignum_matrix)
 			# Display column results
 			if args["scientific"]
-				print_basic_stats_e_format("Column", precision, col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds)
+				print_basic_stats_e_format("Column", print_format_digits, col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds, col_varn, col_stdn)
 			else
-				print_basic_stats_g_format("Column", precision, col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds)
+				print_basic_stats_g_format("Column", print_format_digits, col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds, col_varn, col_stdn)
+			end
+			if args["debug"]
+				print_basic_statistics("\nDebug Column(s): - ", debug_print_digits, col_cnts, col_mins, col_medians, col_maxs, col_ranges, col_means, col_sums, col_vars, col_stds, col_varn, col_stdn)
+				println()
 			end
 		end
     end
+
+	if !args["quiet"]		# test --quiet option for timing output supression
+		# End the timer at the end of the script
+		end_time = time()
+
+		# Calculate the elapsed time and print it
+		elapsed_time = end_time - start_time
+		@printf("bfbs.jl script execution time: %.4g  [sec]\n", elapsed_time )
+	end
 end
 
-# Start the timer at the beginning of the script
-start_time = time()
-
 main()
-
-# End the timer at the end of the script
-end_time = time()
-
-# Calculate the elapsed time and print it
-elapsed_time = end_time - start_time
-@printf("bfbs.jl script execution time: %.4g  [sec]\n", elapsed_time )

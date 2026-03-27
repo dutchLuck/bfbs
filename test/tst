@@ -2,12 +2,12 @@
 #
 # T S T
 #
-# tst last edited on Fri Jun 21 23:26:28 2024 
+# tst last edited on Fri Mar 27 21:18:39 2026 
 #
 # To redirect both stdout and stderr to a file, use ampersand redirect operation, for example; -
 #  ./tst &> outputFile
 #
-EXE="julia ../bfbs.jl"
+EXE="julia ../bfbs.jl -q"
 TEN_PLUSS=++++++++++
 #
 # Test space as a column separator mode
@@ -78,30 +78,30 @@ $EXE NIST_StRD_NumAcc1.dat
 echo "${TEN_PLUSS} Shell got Return code number $? for 1st NIST numerical accuracy file ( 10000002, 1)${TEN_PLUSS}"
 #
 echo ""
-echo "${TEN_PLUSS} $EXE NIST_StRD_NumAcc2.dat  +++NIST numerical accurracy file of close numbers${TEN_PLUSS}"
-$EXE NIST_StRD_NumAcc2.dat
+echo "${TEN_PLUSS} $EXE -e NIST_StRD_NumAcc2.dat  +++NIST numerical accurracy file of close numbers${TEN_PLUSS}"
+$EXE -e NIST_StRD_NumAcc2.dat
 echo "${TEN_PLUSS} Shell got Return code number $? for 2nd NIST numerical accuracy file ( 1.2, 0.1)${TEN_PLUSS}"
 #
 echo ""
-echo "${TEN_PLUSS} $EXE NIST_StRD_NumAcc3.dat  +++NIST numerical accurracy file of close numbers${TEN_PLUSS}"
-$EXE NIST_StRD_NumAcc3.dat
+echo "${TEN_PLUSS} $EXE --scientific NIST_StRD_NumAcc3.dat  +++NIST numerical accurracy file of close numbers${TEN_PLUSS}"
+$EXE --scientific NIST_StRD_NumAcc3.dat
 echo "${TEN_PLUSS} Shell got Return code number $? for 3rd NIST numerical accuracy file (1000000.2, 0.1)${TEN_PLUSS}"
 #
 echo ""
-echo "${TEN_PLUSS} $EXE NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers${TEN_PLUSS}"
-$EXE NIST_StRD_NumAcc4.dat
+echo "${TEN_PLUSS} $EXE --precision 320 --print_digits 80 NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers${TEN_PLUSS}"
+$EXE --precision 320 --print_digits 80 NIST_StRD_NumAcc4.dat
 echo "${TEN_PLUSS} Shell got Return code number $? for 4th NIST numerical accuracy file (10000000.2, 0.1)${TEN_PLUSS}"
 #
 # Test multiple data file handling and smaller number of output digits
 echo ""
-echo "${TEN_PLUSS} $EXE -n -v -p 10 NIST_StRD_NumAcc*.dat  +++NIST numerical accurracy files of large close numbers${TEN_PLUSS}"
-$EXE -n -v -p 10 NIST_StRD_NumAcc*.dat
+echo "${TEN_PLUSS} $EXE -p 20 -P 128 NIST_StRD_NumAcc*.dat  +++NIST numerical accurracy files of large close numbers${TEN_PLUSS}"
+$EXE -p 20 -P 128 NIST_StRD_NumAcc*.dat
 echo "${TEN_PLUSS} Shell got Return code number $? for NIST numerical accuracy files ${TEN_PLUSS}"
 #
 # Test multiple data file handling including a missing file
 echo ""
-echo "${TEN_PLUSS} $EXE -C non_existent_file.csv test/data.csv  +++Handles non-existent file check${TEN_PLUSS}"
-$EXE -C non_existent_file.csv test/data.csv
+echo "${TEN_PLUSS} $EXE -C non_existent_file.csv data.csv  +++Handles non-existent file check${TEN_PLUSS}"
+$EXE -C non_existent_file.csv data.csv
 echo "${TEN_PLUSS} Shell got Return code number $? for Handles non-existent file options${TEN_PLUSS}"
 #
 # Test usage messages

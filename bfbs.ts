@@ -3,7 +3,7 @@
 //
 // B F B S . T S
 //
-// bfbs.ts last edited on Thu Feb 26 21:15:11 2026
+// bfbs.ts last edited on Sat Mar 28 23:50:51 2026 as version 0.0.3
 //
 
 // A Deno script to compute statistics from CSV files with arbitrary precision.
@@ -26,22 +26,26 @@
 // to handle headers in the top of row of the CSV columns when
 // the user flags this in the command line.
 
-// run with; -
-// deno run --allow-read bfbs.ts [options] <file1.csv> [file2.csv...]
+// Usage/Help message is; -
+// Usage: deno run --allow-read bfbs.ts [options] <file1.csv> [file2.csv...]
 // Options:
-//   --precision N    Set decimal precision (default 40)
-//   --header         First row contains column headers
-//   --population     Use population variance formula
-//   --quiet          Suppress some output information
+//   --precision N or -P N   Set decimal precision to N (default is 40)
+//   --header or -H   First row contains column headers
+//   --help or -h     Show this help message
+//   --quiet or -q    Suppress some output information
 
-// 0.0.2 - Added quiet mode option.
+// 0.0.3 - Check for unknown options. Calc both sample and population
+//         variance / standard deviation. Removed --population option.
+// 0.0.2 - Added --quiet option to suppress some output information.
 // 0.0.1 - Initial version.
 
 import Decimal from "https://esm.sh/decimal.js@10.4.3";
 
-// ----------------------
+// MARK: Command line parsing
+
+// --------------------
 // Command line parsing
-// ----------------------
+// --------------------
 
 interface Options {
   precision: number;
@@ -65,17 +69,19 @@ function parseArgs(args: string[]): Options {
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
 
-    if (arg === "--precision" && args[i + 1]) {
+    if ((arg === "--precision" || arg === "-P") && args[i + 1]) {
       options.precision = parseInt(args[++i], 10);
-    } else if (arg === "--header") {
+    } else if (arg === "--header" || arg === "-H") {
       options.header = true;
-    } else if (arg === "--population") {
-      options.population = true;
-    } else if (arg === "--quiet") {
+    } else if (arg === "--quiet" || arg === "-q") {
       options.quiet = true;
-    } else if (arg === "--help") {
+    } else if (arg === "--help" || arg === "-h") {
       options.help = true;
-    } else {
+    } else if (arg.slice(0, 2) === "--") {
+      console.error(`Warning: Ignoring unknown long option: ${arg}`);
+    } else if (arg.slice(0, 1) === "-") {
+      console.error(`Warning: Ignoring unknown short option: ${arg}`);
+    }  else {
       options.files.push(arg);
     }
   }
@@ -83,11 +89,10 @@ function parseArgs(args: string[]): Options {
   if (options.files.length === 0 || options.help ) {
     console.error("Usage: deno run --allow-read bfbs.ts [options] <file1.csv> [file2.csv...]");
     console.error("Options:");
-    console.error("  --precision N    Set decimal precision (default 50)");
-    console.error("  --help           Show this help message");
-    console.error("  --header         First row contains column headers");
-    console.error("  --population     Use population variance formula");
-    console.error("  --quiet          Suppress some output information");
+    console.error("  --precision N or -P N   Set decimal precision to N (default is 40)");
+    console.error("  --help or -h     Show this help message");
+    console.error("  --header or -H   First row contains column headers");
+    console.error("  --quiet or -q    Suppress some output information");
     Deno.exit(1);
   }
 
@@ -99,9 +104,11 @@ const options = parseArgs(Deno.args);
 // Configure decimal precision
 Decimal.set({ precision: options.precision });
 
-// ----------------------
+// MARK: Utility functions
+
+// -----------------
 // Utility functions
-// ----------------------
+// -----------------
 
 function median(values: Decimal[]): Decimal {
   const sorted = [...values].sort((a, b) => a.comparedTo(b));
@@ -116,7 +123,7 @@ function median(values: Decimal[]): Decimal {
   }
 }
 
-function computeStats(values: Decimal[], population: boolean) {
+function computeStats(values: Decimal[]) {
   const n = values.length;
 
   if (n === 0) return null;
@@ -125,14 +132,19 @@ function computeStats(values: Decimal[], population: boolean) {
   const mean = sum.div(n);
 
   let variance = new Decimal(0);
+  let pvariance = new Decimal(0);
 
-  if (n > 1) {
+  if (n > 0) {
     const squaredDiffs = values.map(v => v.minus(mean).pow(2));
     const numerator = squaredDiffs.reduce((acc, v) => acc.plus(v), new Decimal(0));
-    variance = numerator.div(population ? n : n - 1);
+    if (n > 1) {
+      variance = numerator.div(n - 1);
+    }
+    pvariance = numerator.div(n);
   }
 
   const stddev = variance.sqrt();
+  const pstddev = pvariance.sqrt();
 
   const min = values.reduce((a, b) => Decimal.min(a, b));
   const max = values.reduce((a, b) => Decimal.max(a, b));
@@ -148,12 +160,16 @@ function computeStats(values: Decimal[], population: boolean) {
     range,
     variance,
     stddev,
+    pvariance,
+    pstddev
   };
 }
 
-// ----------------------
-// CSV Processing
-// ----------------------
+// MARK: Process a File
+
+// -------------------
+// CSV File Processing
+// -------------------
 
 async function processFile(filename: string) {
   const text = await Deno.readTextFile(filename);
@@ -197,7 +213,7 @@ async function processFile(filename: string) {
   console.log(`\nProcessing file: ${filename}`);
 
   columns.forEach((col, i) => {
-    const stats = computeStats(col, options.population);
+    const stats = computeStats(col);
     if (!stats) return;
 
     const name = options.header && headers[i]
@@ -205,25 +221,29 @@ async function processFile(filename: string) {
       : `Column: ${i + 1}`;
 
     console.log(`\n${name}`);
-    console.log(`Count:     ${stats.count}`);
-    console.log(`Min:       ${stats.min.toString()}`);
-    console.log(`Mean:      ${stats.mean.toString()}`);
-    console.log(`Median:    ${stats.median.toString()}`);
-    console.log(`Max:       ${stats.max.toString()}`);
-    console.log(`Range:     ${stats.range.toString()}`);
-    console.log(`Sum:       ${stats.sum.toString()}`);
-    console.log(`Variance:  ${stats.variance.toString()} ${options.population ? "(population)" : "(sample)"}`);
-    console.log(`Std Dev:   ${stats.stddev.toString()}`);
+    console.log(`Count.       : ${stats.count}`);
+    console.log(`Min.         : ${stats.min.toString()}`);
+    console.log(`Mean.        : ${stats.mean.toString()}`);
+    console.log(`Median.      : ${stats.median.toString()}`);
+    console.log(`Max.         : ${stats.max.toString()}`);
+    console.log(`Range.       : ${stats.range.toString()}`);
+    console.log(`Sum.         : ${stats.sum.toString()}`);
+    console.log(`Variance (s²): ${stats.variance.toString()}`);
+    console.log(`Std. Dev. (s): ${stats.stddev.toString()}`);
+    console.log(`Variance (σ²): ${stats.pvariance.toString()}`);
+    console.log(`Std. Dev. (σ): ${stats.pstddev.toString()}`);
   });
 }
 
-// ----------------------
-// Run
-// ----------------------
+// MARK: Main processing loop
+
+// ------------------------
+// Run main processing loop
+// ------------------------
 
 const start = performance.now();
 if (!options.quiet) {
-  console.log("bfbs.ts version 0.0.2");
+  console.log("bfbs.ts version 0.0.3");
   console.log(`Processing files with ${options.precision} digits of precision `);
 }
 

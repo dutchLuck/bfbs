@@ -1,7 +1,7 @@
 //
 // B F B S . G O
 //
-// bfbs.go last edited on Mon Nov 17 10:20:33 2025
+// bfbs.go last edited on Mon Nov 17 10:20:33 2025 as v0.0.10 by O.H.
 //
 // This script reads one or more CSV files, containing one or more columns of
 // numbers and calculates basic statistics for each column (including sum,
@@ -62,6 +62,8 @@
 // correctly with Go 1.25.0 on MacOS Sequoia/Tahoe. It should work on
 // any platform that supports Go and the math/big package.
 
+// v0.0.10 2026-03-29 Changed output labels to use σ² and σ symbols.
+//                    changed -output_digits to -print_digits option.
 // v0.0.9 2025-11-15 -quiet now suppresses elapsed time output. Added some exit error codes.
 // v0.0.8 2025-11-08 Added elapsed time output.
 // v0.0.7 2025-09-29 Added --quiet option and rearranged CSV output order.
@@ -84,7 +86,7 @@ import (
 
 const (
 	programName    = "bfbs"
-	programVersion = "v0.0.9"
+	programVersion = "v0.0.10"
 )
 
 type ColumnStats struct {
@@ -117,7 +119,7 @@ func main() {
 	headersFlag := flag.Bool("headers", false, "Indicates that the first non-skipped row of the CSV contains headers")
 	skipLines := flag.Int("skip", 0, "Number of lines to skip at the start of each file (before headers or data)")
 	precisionFlag := flag.Int("precision", 256, "Floating-point precision (in bits) for calculations")
-	outputDigits := flag.Int("output_digits", 64, "Number of digits to show in output")
+	outputDigits := flag.Int("print_digits", 64, "Number of digits to show in output")
 	outputCSV := flag.String("out", "", "Write computed statistics to a CSV file")
 	scientificFlag := flag.Bool("scientific", false, "Show numeric output in scientific notation")
 	quietFlag := flag.Bool("quiet", false, "Suppress version and elapsed execution time output")
@@ -353,21 +355,21 @@ func main() {
 
 			// Output results to stdout
 			fmt.Printf("%s:\n", stats.Header)
-			fmt.Printf("  Count      : %s\n", n.Text('g', -1))
-			fmt.Printf("  Min        : %s\n", stats.Min.Text(format, *outputDigits))
-			fmt.Printf("  Mean       : %s\n", stats.Mean.Text(format, *outputDigits))
-			fmt.Printf("  Median     : %s\n", stats.Median.Text(format, *outputDigits))
-			fmt.Printf("  Max        : %s\n", stats.Max.Text(format, *outputDigits))
-			fmt.Printf("  Range      : %s\n", stats.Range.Text(format, *outputDigits))
-			fmt.Printf("  Sum        : %s\n", stats.Sum.Text(format, *outputDigits))
-			fmt.Printf("  Variance   : %s\n", stats.Var.Text(format, *outputDigits))
-			fmt.Printf("  Std. Dev.  : %s\n", stats.StdDev.Text(format, *outputDigits))
-			fmt.Printf("  VarianceN  : %s\n", stats.VarN.Text(format, *outputDigits))
-			fmt.Printf("  Std. Dev.N : %s\n", stats.StdDevN.Text(format, *outputDigits))
-			fmt.Printf("  Skewness   : %s\n", stats.SkewBig.Text(format, *outputDigits))
-			fmt.Printf("  Excess Kurt: %s\n", stats.KurtBig.Text(format, *outputDigits))
-			fmt.Printf("  f64 Skew   : %.6f\n", stats.Skew)
-			fmt.Printf("  f64 Kurt   : %.6f\n", stats.Kurtosis)
+			fmt.Printf("  Count         : %s\n", n.Text('g', -1))
+			fmt.Printf("  Min           : %s\n", stats.Min.Text(format, *outputDigits))
+			fmt.Printf("  Mean          : %s\n", stats.Mean.Text(format, *outputDigits))
+			fmt.Printf("  Median        : %s\n", stats.Median.Text(format, *outputDigits))
+			fmt.Printf("  Max           : %s\n", stats.Max.Text(format, *outputDigits))
+			fmt.Printf("  Range         : %s\n", stats.Range.Text(format, *outputDigits))
+			fmt.Printf("  Sum           : %s\n", stats.Sum.Text(format, *outputDigits))
+			fmt.Printf("  Variance (s²) : %s\n", stats.Var.Text(format, *outputDigits))
+			fmt.Printf("  Std. Dev. (s) : %s\n", stats.StdDev.Text(format, *outputDigits))
+			fmt.Printf("  Variance (σ²) : %s\n", stats.VarN.Text(format, *outputDigits))
+			fmt.Printf("  Std. Dev. (σ) : %s\n", stats.StdDevN.Text(format, *outputDigits))
+			fmt.Printf("  Skewness      : %s\n", stats.SkewBig.Text(format, *outputDigits))
+			fmt.Printf("  Excess Kurtosis: %s\n", stats.KurtBig.Text(format, *outputDigits))
+			fmt.Printf("  f64 Skew      : %.6f\n", stats.Skew)
+			fmt.Printf("  f64 Kurt      : %.6f\n", stats.Kurtosis)
 			fmt.Println()
 
 			// Output results to CSV if requested

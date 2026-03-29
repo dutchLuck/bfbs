@@ -3,7 +3,7 @@
 //
 // Big Float Basic Statistics
 //
-// bfbs.cpp last updated on Sun Mar 22 22:53:18 2026 by O.H. as 0v7
+// bfbs.cpp last updated on Sun Mar 29 17:17:46 2026 by O.H. as 0v8
 //
 
 //
@@ -57,6 +57,8 @@
 //
 
 //
+// 0v8 Calculate and output population variance and population standard deviation
+//     in addition to sample variance and sample standard deviation.
 // 0v7 Short form option parsing and help/usage message
 // 0v6 More comprehensive argument parsing and more detailed help/usage message
 // output to include all options and their descriptions
@@ -79,7 +81,7 @@
 using namespace std;
 
 #define PROGRAM_NAME __FILE__
-#define PROGRAM_VERSION "0v7"
+#define PROGRAM_VERSION "0v8"
 
 // RAII Wrapper for mpfr_t
 class MpfrFloat {
@@ -233,8 +235,8 @@ void computeStats(const vector<MpfrFloat>& col, int precision, int base, int dig
     size_t n = col.size();
     if (n == 0) return;
 
-    mpfr_t sum, mean, minVal, maxVal, range, var, stddev, temp, diff, median;
-    mpfr_inits2(precision, sum, mean, minVal, maxVal, range, var, stddev, temp, diff, median, (mpfr_ptr) nullptr);
+    mpfr_t sum, mean, minVal, maxVal, range, var, stddev, pvar, pstddev, temp, diff, median;
+    mpfr_inits2(precision, sum, mean, minVal, maxVal, range, var, stddev, pvar, pstddev, temp, diff, median, (mpfr_ptr) nullptr);
 
     mpfr_set(sum, col[0].value, MPFR_RNDN);
     mpfr_set(minVal, col[0].value, MPFR_RNDN);
@@ -257,12 +259,16 @@ void computeStats(const vector<MpfrFloat>& col, int precision, int base, int dig
         mpfr_mul(diff, diff, diff, MPFR_RNDN);          /* diff squared */
         mpfr_add(var, var, diff, MPFR_RNDN);            /* totalize the diff squared values */
     }
+    if (n > 0) {
+        mpfr_div(pvar, var, temp, MPFR_RNDN);   /* population variance = total diff squared / n */
+    }
     if (n > 1) {
         mpfr_set_ui(temp, n - 1, MPFR_RNDN);
-        mpfr_div(var, var, temp, MPFR_RNDN);
+        mpfr_div(var, var, temp, MPFR_RNDN);    /* sample variance = total diff squared / (n - 1) */
     }
 
     mpfr_sqrt(stddev, var, MPFR_RNDN);
+    mpfr_sqrt(pstddev, pvar, MPFR_RNDN);
 
     // Median
     vector<MpfrFloat> sorted = sortColumn(col);
@@ -277,17 +283,19 @@ void computeStats(const vector<MpfrFloat>& col, int precision, int base, int dig
     cout << "Column: " << name << endl;
     cout << "  Count            : " << n << endl;
     cout << fixed << setprecision(digits);
-    cout << "  Minimum          : "; mpfr_out_str(stdout, base, digits, minVal, MPFR_RNDN); cout << endl;
-    cout << "  Mean             : "; mpfr_out_str(stdout, base, digits, mean, MPFR_RNDN); cout << endl;
-    cout << "  Median           : "; mpfr_out_str(stdout, base, digits, median, MPFR_RNDN); cout << endl;
-    cout << "  Maximum          : "; mpfr_out_str(stdout, base, digits, maxVal, MPFR_RNDN); cout << endl;
-    cout << "  Range            : "; mpfr_out_str(stdout, base, digits, range, MPFR_RNDN); cout << endl;
-    cout << "  Sum              : "; mpfr_out_str(stdout, base, digits, sum, MPFR_RNDN); cout << endl;
-    cout << "  Sample Variance  : "; mpfr_out_str(stdout, base, digits, var, MPFR_RNDN); cout << endl;
-    cout << "  Sample Std. Dev. : "; mpfr_out_str(stdout, base, digits, stddev, MPFR_RNDN); cout << endl;
+    cout << "  Minimum       : "; mpfr_out_str(stdout, base, digits, minVal, MPFR_RNDN); cout << endl;
+    cout << "  Mean          : "; mpfr_out_str(stdout, base, digits, mean, MPFR_RNDN); cout << endl;
+    cout << "  Median        : "; mpfr_out_str(stdout, base, digits, median, MPFR_RNDN); cout << endl;
+    cout << "  Maximum       : "; mpfr_out_str(stdout, base, digits, maxVal, MPFR_RNDN); cout << endl;
+    cout << "  Range         : "; mpfr_out_str(stdout, base, digits, range, MPFR_RNDN); cout << endl;
+    cout << "  Sum           : "; mpfr_out_str(stdout, base, digits, sum, MPFR_RNDN); cout << endl;
+    cout << "  Variance (s²) : "; mpfr_out_str(stdout, base, digits, var, MPFR_RNDN); cout << endl;
+    cout << "  Std. Dev. (s) : "; mpfr_out_str(stdout, base, digits, stddev, MPFR_RNDN); cout << endl;
+    cout << "  Variance (σ²) : "; mpfr_out_str(stdout, base, digits, pvar, MPFR_RNDN); cout << endl;
+    cout << "  Std. Dev. (σ) : "; mpfr_out_str(stdout, base, digits, pstddev, MPFR_RNDN); cout << endl;
     cout << endl;
 
-    mpfr_clears(sum, mean, minVal, maxVal, range, var, stddev, temp, diff, median, (mpfr_ptr) nullptr);
+    mpfr_clears(sum, mean, minVal, maxVal, range, var, stddev, pvar, pstddev, temp, diff, median, (mpfr_ptr) nullptr);
 }
 
 int main(int argc, char* argv[]) {

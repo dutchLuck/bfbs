@@ -4,7 +4,7 @@
 #
 # Big Float Basic Statistics
 #
-# bfbs.jl last updated on Fri Mar 27 22:46:14 2026 by O.H. as 0v12
+# bfbs.jl last updated on Mon Mar 30 23:01:45 2026 by O.H. as 0v13
 #
 # Descendant of readdatafile.jl 0v1
 #
@@ -36,6 +36,7 @@
 ##
 
 #
+# 0v13 added information on mantissa bits and approx equivalent decimal digits
 # 0v12 added --quiet option to suppress output of time and version information
 #      and added population variance & standard deviation calculations to output
 # 0v11 output the elapsed time for the script to run
@@ -277,7 +278,7 @@ function main()
 		verbose = false		# --quiet command line argument overrides --verbose
 	else
 		# Announce bfbs version if --quiet is not active
-		println("bfbs version 0v12 (2026-03-27)")
+		println("bfbs version 0v13 (2026-03-30)")
 		verbose = args["verbose"]	# --verbose command line argument
 	end
 	comment_delimiter_string = get(args, "comment_char", nothing)	# --comment_char command line argument
@@ -351,7 +352,7 @@ function main()
 
 	# Report current precision and settings if verbose or debug mode is active
 	setprecision(BigFloat, precision_bits)	# Defaults to set BigFloat precision to 256 bits (about 77 decimal digits)
-	println("BigFloat precision: $precision_bits bits")
+	println("BigFloat precision: $precision_bits mantissa bits (about $(floor(Int64, precision_bits * log10(2))) decimal digits)")
 	print("Results output using $print_format_digits digits in ")
 	if args["scientific"]
 		println("scientific number format")

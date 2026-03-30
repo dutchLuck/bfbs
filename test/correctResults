@@ -1,6 +1,6 @@
 
 ++++++++++ julia ../bfbs.jl -q -d ' ' data.dat +++Small valid 3 column file, no options check++++++++++
-BigFloat precision: 256 bits
+BigFloat precision: 256 mantissa bits (about 77 decimal digits)
 Results output using 64 digits in general number format
 
 Basic Statistics for Data from file: "data.dat"
@@ -79,7 +79,7 @@ Column: 3
 ++++++++++ Shell got Return code number 0 for small valid file data.dat, no options check++++++++++
 
 ++++++++++ julia ../bfbs.jl -q data.csv  +++Small valid 3 column file, with header option check++++++++++
-BigFloat precision: 256 bits
+BigFloat precision: 256 mantissa bits (about 77 decimal digits)
 Results output using 64 digits in general number format
 
 Basic Statistics for Data from file: "data.csv"
@@ -158,7 +158,7 @@ Column: 3
 ++++++++++ Shell got Return code number 0 for small valid file data.csv, with header option check++++++++++
 
 ++++++++++ julia ../bfbs.jl -q -d '	' data.tab  +++Small valid 3 column file, with header and extra line options check++++++++++
-BigFloat precision: 256 bits
+BigFloat precision: 256 mantissa bits (about 77 decimal digits)
 Results output using 64 digits in general number format
 
 Basic Statistics for Data from file: "data.tab"
@@ -237,7 +237,7 @@ Column: 3
 ++++++++++ Shell got Return code number 0 for small valid file data.tab, with header and extra line options check++++++++++
 
 ++++++++++ julia ../bfbs.jl -q -d ';' data.txt  +++Small valid 3 column file, with header and extra line options check++++++++++
-BigFloat precision: 256 bits
+BigFloat precision: 256 mantissa bits (about 77 decimal digits)
 Results output using 64 digits in general number format
 
 Basic Statistics for Data from file: "data.txt"
@@ -316,7 +316,7 @@ Column: 3
 ++++++++++ Shell got Return code number 0 for small valid file data.txt, with header and extra line options check++++++++++
 
 ++++++++++ julia ../bfbs.jl -q cols7rows4.csv +++Small valid 7 column file and no options check++++++++++
-BigFloat precision: 256 bits
+BigFloat precision: 256 mantissa bits (about 77 decimal digits)
 Results output using 64 digits in general number format
 
 Basic Statistics for Data from file: "cols7rows4.csv"
@@ -455,7 +455,7 @@ Column: 7
 ++++++++++ Shell got Return code number 0 for small valid file cols7rows4.csv, no options check++++++++++
 
 ++++++++++ julia ../bfbs.jl -q -R heights.csv +++Somewhat longer file with 2 columns, 1 column the reverse of the other++++++++++
-BigFloat precision: 256 bits
+BigFloat precision: 256 mantissa bits (about 77 decimal digits)
 Results output using 64 digits in general number format
 
 Basic Statistics for Data from file: "heights.csv"
@@ -510,7 +510,7 @@ Column: 4
 ++++++++++ Shell got Return code number 0 for longer file with lengthier lines++++++++++
 
 ++++++++++ julia ../bfbs.jl -q NIST_StRD_PiDigits.dat +++Long file of 1 column of single digits, no options check++++++++++
-BigFloat precision: 256 bits
+BigFloat precision: 256 mantissa bits (about 77 decimal digits)
 Results output using 64 digits in general number format
 
 Basic Statistics for Data from file: "NIST_StRD_PiDigits.dat"
@@ -529,7 +529,7 @@ Column: 1
 ++++++++++ Shell got Return code number 0 for long file with single column (4.5348, 2.86733906028871)++++++++++
 
 ++++++++++ julia ../bfbs.jl -q NIST_StRD_Lew.dat +++Long file of 1 column of single digits, no options check++++++++++
-BigFloat precision: 256 bits
+BigFloat precision: 256 mantissa bits (about 77 decimal digits)
 Results output using 64 digits in general number format
 
 Basic Statistics for Data from file: "NIST_StRD_Lew.dat"
@@ -548,7 +548,7 @@ Column: 1
 ++++++++++ Shell got Return code number 0 for 200 long file with single column (-177.435, 277.332168044316)++++++++++
 
 ++++++++++ julia ../bfbs.jl -q NIST_StRD_Lottery.dat +++Long file of 1 column of single digits, no options check++++++++++
-BigFloat precision: 256 bits
+BigFloat precision: 256 mantissa bits (about 77 decimal digits)
 Results output using 64 digits in general number format
 
 Basic Statistics for Data from file: "NIST_StRD_Lottery.dat"
@@ -567,7 +567,7 @@ Column: 1
 ++++++++++ Shell got Return code number 0 for 218 long file with single column (518.958715596330, 291.699727470969)++++++++++
 
 ++++++++++ julia ../bfbs.jl -q NIST_StRD_Mavro.dat +++Long file of 1 column of single digits, no options check++++++++++
-BigFloat precision: 256 bits
+BigFloat precision: 256 mantissa bits (about 77 decimal digits)
 Results output using 64 digits in general number format
 
 Basic Statistics for Data from file: "NIST_StRD_Mavro.dat"
@@ -586,7 +586,7 @@ Column: 1
 ++++++++++ Shell got Return code number 0 for 50 long file with single column (2.001856, 0.000429123454003053)++++++++++
 
 ++++++++++ julia ../bfbs.jl -q NIST_StRD_Michelso.dat +++Long file of 1 column of single digits, no options check++++++++++
-BigFloat precision: 256 bits
+BigFloat precision: 256 mantissa bits (about 77 decimal digits)
 Results output using 64 digits in general number format
 
 Basic Statistics for Data from file: "NIST_StRD_Michelso.dat"
@@ -605,7 +605,7 @@ Column: 1
 ++++++++++ Shell got Return code number 0 for 100 long file with single column (299.8524, 0.0790105478190518)++++++++++
 
 ++++++++++ julia ../bfbs.jl -q NIST_StRD_NumAcc1.dat  +++NIST numerical accurracy file of 3 large close numbers++++++++++
-BigFloat precision: 256 bits
+BigFloat precision: 256 mantissa bits (about 77 decimal digits)
 Results output using 64 digits in general number format
 
 Basic Statistics for Data from file: "NIST_StRD_NumAcc1.dat"
@@ -624,7 +624,7 @@ Column: 1
 ++++++++++ Shell got Return code number 0 for 1st NIST numerical accuracy file ( 10000002, 1)++++++++++
 
 ++++++++++ julia ../bfbs.jl -q -e NIST_StRD_NumAcc2.dat  +++NIST numerical accurracy file of close numbers++++++++++
-BigFloat precision: 256 bits
+BigFloat precision: 256 mantissa bits (about 77 decimal digits)
 Results output using 64 digits in scientific number format
 
 Basic Statistics for Data from file: "NIST_StRD_NumAcc2.dat"
@@ -643,7 +643,7 @@ Column: 1
 ++++++++++ Shell got Return code number 0 for 2nd NIST numerical accuracy file ( 1.2, 0.1)++++++++++
 
 ++++++++++ julia ../bfbs.jl -q --scientific NIST_StRD_NumAcc3.dat  +++NIST numerical accurracy file of close numbers++++++++++
-BigFloat precision: 256 bits
+BigFloat precision: 256 mantissa bits (about 77 decimal digits)
 Results output using 64 digits in scientific number format
 
 Basic Statistics for Data from file: "NIST_StRD_NumAcc3.dat"
@@ -662,7 +662,7 @@ Column: 1
 ++++++++++ Shell got Return code number 0 for 3rd NIST numerical accuracy file (1000000.2, 0.1)++++++++++
 
 ++++++++++ julia ../bfbs.jl -q --precision 320 --print_digits 80 NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers++++++++++
-BigFloat precision: 320 bits
+BigFloat precision: 320 mantissa bits (about 96 decimal digits)
 Results output using 80 digits in general number format
 
 Basic Statistics for Data from file: "NIST_StRD_NumAcc4.dat"
@@ -681,7 +681,7 @@ Column: 1
 ++++++++++ Shell got Return code number 0 for 4th NIST numerical accuracy file (10000000.2, 0.1)++++++++++
 
 ++++++++++ julia ../bfbs.jl -q -p 20 -P 128 NIST_StRD_NumAcc*.dat  +++NIST numerical accurracy files of large close numbers++++++++++
-BigFloat precision: 128 bits
+BigFloat precision: 128 mantissa bits (about 38 decimal digits)
 Results output using 20 digits in general number format
 
 Basic Statistics for Data from file: "NIST_StRD_NumAcc1.dat"
@@ -756,7 +756,7 @@ Column: 1
 ++++++++++ Shell got Return code number 0 for NIST numerical accuracy files ++++++++++
 
 ++++++++++ julia ../bfbs.jl -q -C non_existent_file.csv data.csv  +++Handles non-existent file check++++++++++
-BigFloat precision: 256 bits
+BigFloat precision: 256 mantissa bits (about 77 decimal digits)
 Results output using 64 digits in general number format
 
 Warning: file "non_existent_file.csv" not found?!

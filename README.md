@@ -39,8 +39,9 @@ The C++ version of bfbs uses the
 the basis of all the calculations. This program compiles on Ubuntu 22.04 LTS Linux after
 the MPFR and GMP dev libraries are installed using the apt package manager. It also compiles
 on MacOS after mpfr and gmp are installed with the homebrew package manager. It outputs
-minimum, median, maximum and range in addition to sum, mean, sample variance (s^2) and
-sample standard deviation (s). The results are produced without any noticeable delay.
+minimum, median, maximum and range in addition to sum, mean, both sample (s²) & population (σ²)
+variances and both sample (s) and population (σ) standard deviations. The results are produced
+without any noticeable delay.
 ## bfbs.ts
 The <a href="https://deno.com">deno</a> (typescript) bfbs code uses the
 <a href="https://mikemcl.github.io/decimal.js/">decimal.js</a>
@@ -55,16 +56,19 @@ The Fortran version of bfbs, like the C++ version, uses the
 the basis of all the calculations. This program compiles on Ubuntu 22.04 LTS Linux after
 the MPFR and GMP dev libraries and the gfortran compiler are installed using the apt package
 manager. It outputs minimum, median, maximum and range in addition to sum, mean, sample variance
-(s^2) and sample standard deviation (s). The current version of fortran bfbs only handles a
-single CSV file at a time. The results are produced without any noticeable delay.
+(s²) & sample standard deviation (s). The current version of fortran bfbs only handles a
+single CSV file at a time. It currently compiles ok on a Mac, but crashes when run. The results
+are produced without any noticeable delay. This fortran version of bfbs took a lot of interaction
+over a number of days to get a working version from free A.I.
 ## bfbs.go
 The golang version of bfbs uses the
 <a href="https://pkg.go.dev/math/big">math/big</a> package and builds and runs without trouble
 on Linux, MacOS and Windows. It outputs min, median, max, range, skew and kurtosis in
 addition to sum, mean, variance and standard deviation. N.B. that the skew and kurtosis
-are calculated as both float64 values and big float values in the current (v0.0.9) version, but
-the float64 values will be removed in a future version.
-The results are produced without any noticeable delay.
+are calculated as both float64 values and big float values in versions since v0.0.9, but
+the float64 values will be removed in a future version. The results are produced without
+any noticeable delay. This golang version of bfbs only has long form command line
+options, such as "-quiet", and does not have short form equivalents, like "-q".
 ## bfbs.java
 The java bfbs code uses the
 <a href="https://docs.oracle.com/javase/10/docs/api/index.html?java/math/BigDecimal.html">java.math.BigDecimal</a>
@@ -77,8 +81,9 @@ delay before results appear.
 The julia bfbs code uses the built-in
 <a href="https://docs.julialang.org/en/v1/manual/integers-and-floating-point-numbers/#Arbitrary-Precision-Arithmetic">
 BigFloat</a> number type and runs ok on Linux, 
-MacOS and Windows. It outputs min, median, max, range in addition to sum, mean,
-variance and standard deviation. There is a noticeable delay before results appear
+MacOS and Windows. It outputs min, median, max and range in addition to sum, mean,
+both sample (s²) & population (σ²) variances and both sample (s) & population (σ)
+standard deviations. There is a noticeable delay before results appear
 particularly on computers with modest specs. This code outputs stats for all rows
 as well as columns of numbers, unless the -R option is specified. Analyzing rows
 may be useful if the data was created by data acquisition software that sampled a
@@ -185,10 +190,10 @@ A suitable, but contrived file of test data has the following contents; -
 ```
 The results from bfbs.jl on the just shown file contents are; -
 ```
-% julia bfbs.jl -p 80 -P 340 test/data.csv
-bfbs version 0v12 (2026-03-27)
+% julia bfbs.jl -p 80 -P 320 test/data.csv
+bfbs version 0v13 (2026-03-30)
 Julia version 1.12.5
-BigFloat precision: 340 bits
+BigFloat precision: 320 mantissa bits (about 96 decimal digits)
 Results output using 80 digits in general number format
 
 Basic Statistics for Data from file: "test/data.csv"
@@ -264,7 +269,7 @@ Column: 3
  Std. Dev. s : 100000000000000000000000000000000000000100000000000
  Variance σ² : 6.6666666666666666666666666666666666666800000000000000000000000000000000000000067e+99
  Std. Dev. σ : 81649658092772603273242802490196379732279899013315.110217696328377522208961642699
-bfbs.jl script execution time: 0.8898  [sec]
+bfbs.jl script execution time: 0.8751  [sec]
 %
 ```
 The useage information for bfbs.jl is; -
@@ -796,44 +801,51 @@ bfbs.rb execution time was 0.000842 [sec]
 ```
 ### rust
 ```
-% cargo run --release -- --precision 340 --print_digits 80 test/data.csv
-    Finished `release` profile [optimized] target(s) in 0.02s
-     Running `target/release/bfbs --precision 340 --print_digits 80 test/data.csv`
-bfbs version v0.1.9
-Using 340 bit precision for calculation and 80 digit decimal print out.
+% cargo run --release -- --precision 320 --print_digits 80 test/data.csv
+    Finished `release` profile [optimized] target(s) in 0.09s
+     Running `target/release/bfbs --precision 320 --print_digits 80 test/data.csv`
+bfbs version v0.1.10
+Info: Using 320 bit mantissa precision (about 96 decimal digits) for calculation.
+Info: Using 80 digit decimal print out.
 
 Processing file: "test/data.csv"
 Column: 1
-  Count     : 3
-  Minimum   : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
-  Mean      : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
-  Median    : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
-  Maximum   : 300000000000000000000000000000000000000300000000000.00000000000000000000000000000
-  Range     : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
-  Sum       : 600000000000000000000000000000000000000600000000000.00000000000000000000000000000
-  Variance  : 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e100
-  Std. Dev. : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
+  Count         : 3
+  Minimum       : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
+  Mean          : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
+  Median        : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
+  Maximum       : 300000000000000000000000000000000000000300000000000.00000000000000000000000000000
+  Range         : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
+  Sum           : 600000000000000000000000000000000000000600000000000.00000000000000000000000000000
+  Variance (s²) : 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e100
+  Std. Dev. (s) : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
+  Variance (σ²) : 6.6666666666666666666666666666666666666800000000000000000000000000000000000000067e99
+  Std. Dev. (σ) : 81649658092772603273242802490196379732279899013315.110217696328377522208961642699
 Column: 2
-  Count     : 3
-  Minimum   : 400000000000000000000000000000000000000400000000000.00000000000000000000000000000
-  Mean      : 500000000000000000000000000000000000000500000000000.00000000000000000000000000000
-  Median    : 500000000000000000000000000000000000000500000000000.00000000000000000000000000000
-  Maximum   : 600000000000000000000000000000000000000600000000000.00000000000000000000000000000
-  Range     : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
-  Sum       : 1500000000000000000000000000000000000001500000000000.0000000000000000000000000000
-  Variance  : 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e100
-  Std. Dev. : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
+  Count         : 3
+  Minimum       : 400000000000000000000000000000000000000400000000000.00000000000000000000000000000
+  Mean          : 500000000000000000000000000000000000000500000000000.00000000000000000000000000000
+  Median        : 500000000000000000000000000000000000000500000000000.00000000000000000000000000000
+  Maximum       : 600000000000000000000000000000000000000600000000000.00000000000000000000000000000
+  Range         : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
+  Sum           : 1500000000000000000000000000000000000001500000000000.0000000000000000000000000000
+  Variance (s²) : 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e100
+  Std. Dev. (s) : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
+  Variance (σ²) : 6.6666666666666666666666666666666666666800000000000000000000000000000000000000067e99
+  Std. Dev. (σ) : 81649658092772603273242802490196379732279899013315.110217696328377522208961642699
 Column: 3
-  Count     : 3
-  Minimum   : 700000000000000000000000000000000000000700000000000.00000000000000000000000000000
-  Mean      : 800000000000000000000000000000000000000800000000000.00000000000000000000000000000
-  Median    : 800000000000000000000000000000000000000800000000000.00000000000000000000000000000
-  Maximum   : 900000000000000000000000000000000000000900000000000.00000000000000000000000000000
-  Range     : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
-  Sum       : 2400000000000000000000000000000000000002400000000000.0000000000000000000000000000
-  Variance  : 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e100
-  Std. Dev. : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
-bfbs (rust executable) time taken: 0.001087 [sec]
+  Count         : 3
+  Minimum       : 700000000000000000000000000000000000000700000000000.00000000000000000000000000000
+  Mean          : 800000000000000000000000000000000000000800000000000.00000000000000000000000000000
+  Median        : 800000000000000000000000000000000000000800000000000.00000000000000000000000000000
+  Maximum       : 900000000000000000000000000000000000000900000000000.00000000000000000000000000000
+  Range         : 200000000000000000000000000000000000000200000000000.00000000000000000000000000000
+  Sum           : 2400000000000000000000000000000000000002400000000000.0000000000000000000000000000
+  Variance (s²) : 1.0000000000000000000000000000000000000020000000000000000000000000000000000000010e100
+  Std. Dev. (s) : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
+  Variance (σ²) : 6.6666666666666666666666666666666666666800000000000000000000000000000000000000067e99
+  Std. Dev. (σ) : 81649658092772603273242802490196379732279899013315.110217696328377522208961642699
+bfbs (rust executable) time taken: 0.001182 [sec]
 %
 ```
 ### swift

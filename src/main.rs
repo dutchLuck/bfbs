@@ -1,7 +1,7 @@
 //
 // B F B S . R S
 //
-// main.rs last edited on Mon Mar  2 13:41:56 2026
+// main.rs last edited on Wed Apr  1 21:59:04 2026 as v0.1.9
 //
 // This ChatGPT code appears to calculate test cases correctly
 // However cargo did not successfully compile the needed 
@@ -14,7 +14,7 @@
 // requires Cargo.toml as follows; -
 // [package]
 // name = "bfbs"
-// version = "0.1.9"
+// version = "0.1.10"
 // edition = "2024"
 //
 // [dependencies]
@@ -26,15 +26,17 @@
 // Run with `cargo run -- <options> <csv file>`
 // Options are shown with `cargo run -- --help`
 //
-// Usage examples:
+// Command line run examples:
 //   cargo run -- test/heights.csv
 //   cargo r -- -P 80 -p 16 -s 60 test/NIST_StRD_NumAcc4.dat
+//   cargo run --release -- --precision 320 --print_digits 80 test/data.csv
 //
 // Building on Ubuntu may require installation of m4 (i.e. sudo apt install m4)
 // to allow gmp-mpfr-sys to build correctly.
 //
 
 //
+// v0.1.10 Added population variance (σ²) and population standard deviation (σ) to output
 // v0.1.9 AI fix for output column order, and added some comments to code
 // v0.1.8 suppress time output with --quiet option
 // v0.1.7 Added elapsed execution time output
@@ -114,6 +116,7 @@ struct ColumnStats {
     max: Float,
     min: Float,
     values: Vec<Float>,
+    sum_sq_diff: Option<Float>,  // New field to cache sum of differences squared
 }
 
 impl ColumnStats {
@@ -124,6 +127,7 @@ impl ColumnStats {
             max: Float::with_val(precision, 0),
             min: Float::with_val(precision, 0),
             values: Vec::new(),
+            sum_sq_diff: None,  // Initialize as None
         }
     }
 
@@ -171,21 +175,37 @@ impl ColumnStats {
         &self.sum / Float::with_val(precision, self.count)
     }
 
-    fn variance(&self, precision: u32) -> Float {
-        if self.count == 0 {
-            return Float::with_val(precision, 0);
+    fn sum_of_differences_squared(&mut self, precision: u32) -> Float {
+        if self.sum_sq_diff.is_none() {
+            if self.count == 0 {
+                self.sum_sq_diff = Some(Float::with_val(precision, 0));
+            } else {
+                let mean = self.mean(precision);
+                let mut sum_sq_diff = Float::with_val(precision, 0);
+                for v in &self.values {
+                    let diff = Float::with_val(precision, v - &mean);
+                    sum_sq_diff += diff.square();
+                }
+                self.sum_sq_diff = Some(sum_sq_diff);
+            }
         }
-        let mean = self.mean(precision);
-        let mut sum_sq_diff = Float::with_val(precision, 0);
-        for v in &self.values {
-            let diff = Float::with_val(precision, v - &mean);
-            sum_sq_diff += diff.square();
-        }
-        sum_sq_diff / Float::with_val(precision, self.count - 1)
+        self.sum_sq_diff.as_ref().unwrap().clone()
     }
 
-    fn stddev(&self, precision: u32) -> Float {
+    fn variance(&mut self, precision: u32) -> Float {
+        self.sum_of_differences_squared(precision) / Float::with_val(precision, self.count - 1)
+    }
+
+    fn population_variance(&mut self, precision: u32) -> Float {
+        self.sum_of_differences_squared(precision) / Float::with_val(precision, self.count)
+    }
+
+    fn stddev(&mut self, precision: u32) -> Float {
         self.variance(precision).sqrt()
+    }
+
+    fn population_stddev(&mut self, precision: u32) -> Float {
+        self.population_variance(precision).sqrt()
     }
 
     /// Compute the median of all values
@@ -329,8 +349,12 @@ fn main() {
         println!("{} version v{}", MAIN_NAME, MAIN_VERSION);
     }
     println!(
-        "Using {} bit precision for calculation and {} digit {} print out.",
-        args.precision, args.digits,
+        "Info: Using {} bit mantissa precision (about {} decimal digits) for calculation.",
+        args.precision, (0.30103 * args.precision as f32).floor() as i32
+    );
+    println!(
+        "Info: Using {} digit {} print out.",
+        args.digits,
         if args.scientific { "scientific" } else { "decimal" }
     );
 
@@ -344,20 +368,22 @@ fn main() {
             args.skip_lines,
             args.comment_char,
         ) {
-            Ok((headers, stats)) => {
+            Ok((headers, mut stats)) => {  // Make stats mutable here
                 // iterate in the original column order stored in headers
                 for col in headers {
-                    if let Some(data) = stats.get(&col) {
+                    if let Some(data) = stats.get_mut(&col) {  // Use get_mut to allow mutation for caching
                         println!("Column: {}", col);
-                        println!("  Count     : {}", data.cnt());
-                        println!("  Minimum   : {}", format_float(&data.minimum(args.precision), args.scientific, args.digits));
-                        println!("  Mean      : {}", format_float(&data.mean(args.precision), args.scientific, args.digits));
-                        println!("  Median    : {}", format_float(&data.median(args.precision), args.scientific, args.digits));
-                        println!("  Maximum   : {}", format_float(&data.maximum(args.precision), args.scientific, args.digits));
-                        println!("  Range     : {}", format_float(&data.range(args.precision), args.scientific, args.digits));
-                        println!("  Sum       : {}", format_float(data.sum(args.precision), args.scientific, args.digits));
-                        println!("  Variance  : {}", format_float(&data.variance(args.precision), args.scientific, args.digits));
-                        println!("  Std. Dev. : {}", format_float(&data.stddev(args.precision), args.scientific, args.digits));
+                        println!("  Count         : {}", data.cnt());
+                        println!("  Minimum       : {}", format_float(&data.minimum(args.precision), args.scientific, args.digits));
+                        println!("  Mean          : {}", format_float(&data.mean(args.precision), args.scientific, args.digits));
+                        println!("  Median        : {}", format_float(&data.median(args.precision), args.scientific, args.digits));
+                        println!("  Maximum       : {}", format_float(&data.maximum(args.precision), args.scientific, args.digits));
+                        println!("  Range         : {}", format_float(&data.range(args.precision), args.scientific, args.digits));
+                        println!("  Sum           : {}", format_float(&data.sum(args.precision), args.scientific, args.digits));
+                        println!("  Variance (s²) : {}", format_float(&data.variance(args.precision), args.scientific, args.digits));
+                        println!("  Std. Dev. (s) : {}", format_float(&data.stddev(args.precision), args.scientific, args.digits));
+                        println!("  Variance (σ²) : {}", format_float(&data.population_variance(args.precision), args.scientific, args.digits));
+                        println!("  Std. Dev. (σ) : {}", format_float(&data.population_stddev(args.precision), args.scientific, args.digits));
                     }
                 }
             }

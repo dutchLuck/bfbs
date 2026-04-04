@@ -49,7 +49,7 @@ If not, see <https://www.gnu.org/licenses/>. */
 MPFR_VERSION_NUM(MPFR_VERSION_MAJOR,MPFR_VERSION_MINOR,MPFR_VERSION_PATCHLEVEL)
 
 #ifndef MPFR_USE_MINI_GMP
-#include "/opt/homebrew/include/gmp.h"
+#include "gmp.h"
 #else
 #include "mini-gmp.h"
 #endif

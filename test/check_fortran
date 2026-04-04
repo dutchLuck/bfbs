@@ -9,6 +9,6 @@ echo 1. Test predefined test against known correct results
 rm -f tstResults_fortran
 #
 # redirect both stdout and stderr output to tstResults file
-./tst_fortran > tstResults_fortran 2>&1
+./tst_fortran 2>&1 | tr -d '\r' > tstResults_fortran
 diff -s tstResults_fortran correctResults_fortran
 #

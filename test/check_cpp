@@ -9,6 +9,6 @@ echo 1. Test predefined test against known correct results
 rm -f tstResults_cpp
 #
 # redirect both stdout and stderr output to tstResults file
-./tst_cpp > tstResults_cpp 2>&1
+./tst_cpp 2>&1 | tr -d '\r' > tstResults_cpp
 diff -s tstResults_cpp correctResults_cpp
 #

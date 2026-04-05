@@ -1,7 +1,7 @@
 //
 // B F B S . S W I F T
 //
-// bfbs.swift last edited on Sun Apr  5 18:51:00 2026 as 0v2
+// bfbs.swift last edited on Sun Apr  5 21:20:26 2026 as 0v2
 //
 // Arbitrary Precision Basic Statistics for one or more
 // files of one or more CSV columns. This version uses
@@ -21,11 +21,15 @@
 // "sudo apt install libmpfr-dev libgmp-dev". The C header files and libraries must be accessible to
 // the Swift compiler.
 
-// 0v2 (2026-04-05) - Added remove string to free C strings returned by mpfr_to_string().
+// 0v3 (2026-04-05) - Attempted to speed up the autocorrelation calculation.
+// 0v2 (2026-04-05) - Added -P & -p options and print out for mantissa bits conversion to approx decimal places.
 // 0v1 (2026-03-18) - Initial version: Only known to compile and run on Apple Silicon MacOS.
 
 // Short-comings; -
 // CMPFR has copies of mpfr.h and gmp.h with local references so manual update is required if MPFR or GMP is updated.
+// Doesn't have a skip lines at start of file option (e.g. for NIST files).
+// Doesn't calculate standard error.
+// Doesn't have an option to specify which columns to process (e.g. for files with many columns where only a few are of interest).
 // - No error handling for invalid CSV files or non-numeric data (except skipping non-numeric lines)
 // - No support for quoted CSV fields with embedded commas
 // - No support for locale-specific number formats (e.g. 1.234,56 in some European locales)
@@ -37,7 +41,7 @@ import CMPFR
 
 
 let PROGRAM_NAME = "bfbs_swift"
-let PROGRAM_VERSION = "0v2 (2026-04-05)"
+let PROGRAM_VERSION = "0v3 (2026-04-05)"
 
 
 struct Options {
@@ -108,7 +112,7 @@ func printBanner(_ opts: Options) {
         print("Info: MPFR version:", String(cString: mpfr_get_version()))
     }
 
-    print("Info: Using \(opts.precision) bit precision (about \(Int(floor(Double(opts.precision) * log10(2)))) decimal digits)")
+    print("Info: Using \(opts.precision) bit mantissa precision (about \(Int(floor(Double(opts.precision) * log10(2)))) decimal digits)")
     print("Info: Using \(opts.digits) output digits\n")
 }
 
@@ -213,6 +217,7 @@ func computeStats(column: [MPFRFloat], name: String, digits: Int32) {
     }
 
     let pVariance = MPFRFloat(copy: variance)
+    let denominator = MPFRFloat(copy: variance) // used for denominator in autocorrelation calculation
 
     if n > 1 {
         variance.divideByUInt(UInt(n-1))
@@ -228,15 +233,8 @@ func computeStats(column: [MPFRFloat], name: String, digits: Int32) {
     // --- Autocorrelation r(1) ---
 
     let numerator = MPFRFloat()
-    let denominator = MPFRFloat()
 
     // denominator = sum((x - mean)^2)
-    for v in column {
-        let diff = v - mean
-        let sq = diff * diff
-        denominator.add(sq)
-    }
-
     // numerator = sum((xi - mean)*(xi+1 - mean))
     if column.count > 1 {
         for i in 0..<(column.count - 1) {

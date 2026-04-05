@@ -1,6 +1,6 @@
 
 ++++++++++ ../bfbs_swift --quiet         data.csv  +++Small valid 3 column file, with header option check++++++++++
-Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 256 bit mantissa precision (about 77 decimal digits)
 Info: Using 64 output digits
 
 Processing file: data.csv
@@ -49,7 +49,7 @@ Column: Column 3
 ++++++++++ Shell got Return code number 0 for small valid file data.csv, with header option check++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         cols7rows4.csv +++Small valid 7 column file and no options check++++++++++
-Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 256 bit mantissa precision (about 77 decimal digits)
 Info: Using 64 output digits
 
 Processing file: cols7rows4.csv
@@ -154,7 +154,7 @@ Column: Column 7
 ++++++++++ Shell got Return code number 0 for small valid file cols7rows4.csv, no options check++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         heights.csv +++Somewhat longer file with 2 columns, 1 column the reverse of the other++++++++++
-Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 256 bit mantissa precision (about 77 decimal digits)
 Info: Using 64 output digits
 
 Processing file: heights.csv
@@ -217,7 +217,7 @@ Column: Column 4
 ++++++++++ Shell got Return code number 0 for longer file with lengthier lines++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         NIST_StRD_PiDigits.dat +++Long file of 1 column of single digits, no options check++++++++++
-Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 256 bit mantissa precision (about 77 decimal digits)
 Info: Using 64 output digits
 
 Processing file: NIST_StRD_PiDigits.dat
@@ -238,7 +238,7 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for long file with single column (4.5348, 2.86733906028871)++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         NIST_StRD_Lew.dat +++Long file of 1 column of single digits, no options check++++++++++
-Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 256 bit mantissa precision (about 77 decimal digits)
 Info: Using 64 output digits
 
 Processing file: NIST_StRD_Lew.dat
@@ -259,7 +259,7 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 200 long file with single column (-177.435, 277.332168044316)++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         NIST_StRD_Lottery.dat +++Long file of 1 column of single digits, no options check++++++++++
-Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 256 bit mantissa precision (about 77 decimal digits)
 Info: Using 64 output digits
 
 Processing file: NIST_StRD_Lottery.dat
@@ -280,7 +280,7 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 218 long file with single column (518.958715596330, 291.699727470969)++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         NIST_StRD_Mavro.dat +++Long file of 1 column of single digits, no options check++++++++++
-Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 256 bit mantissa precision (about 77 decimal digits)
 Info: Using 64 output digits
 
 Processing file: NIST_StRD_Mavro.dat
@@ -301,7 +301,7 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 50 long file with single column (2.001856, 0.000429123454003053)++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         NIST_StRD_Michelso.dat +++Long file of 1 column of single digits, no options check++++++++++
-Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 256 bit mantissa precision (about 77 decimal digits)
 Info: Using 64 output digits
 
 Processing file: NIST_StRD_Michelso.dat
@@ -322,7 +322,7 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 100 long file with single column (299.8524, 0.0790105478190518)++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         NIST_StRD_NumAcc1.dat  +++NIST numerical accurracy file of 3 large close numbers++++++++++
-Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 256 bit mantissa precision (about 77 decimal digits)
 Info: Using 64 output digits
 
 Processing file: NIST_StRD_NumAcc1.dat
@@ -343,7 +343,7 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 1st NIST numerical accuracy file ( 10000002, 1)++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         NIST_StRD_NumAcc2.dat  +++NIST numerical accurracy file of close numbers++++++++++
-Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 256 bit mantissa precision (about 77 decimal digits)
 Info: Using 64 output digits
 
 Processing file: NIST_StRD_NumAcc2.dat
@@ -364,7 +364,7 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 2nd NIST numerical accuracy file ( 1.2, 0.1)++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         NIST_StRD_NumAcc3.dat  +++NIST numerical accurracy file of close numbers++++++++++
-Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 256 bit mantissa precision (about 77 decimal digits)
 Info: Using 64 output digits
 
 Processing file: NIST_StRD_NumAcc3.dat
@@ -385,7 +385,7 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 3rd NIST numerical accuracy file (1000000.2, 0.1)++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         --precision 320 NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers++++++++++
-Info: Using 320 bit precision (about 96 decimal digits)
+Info: Using 320 bit mantissa precision (about 96 decimal digits)
 Info: Using 64 output digits
 
 Processing file: NIST_StRD_NumAcc4.dat
@@ -407,7 +407,7 @@ Column: Column 1
 
 ++++++++++ ../bfbs_swift --precision 320 --digits 80 --quiet         NIST_StRD_NumAcc?.dat  +++NIST numerical accurracy files of large close numbers++++++++++
 Warning: unknown option --digits
-Info: Using 320 bit precision (about 96 decimal digits)
+Info: Using 320 bit mantissa precision (about 96 decimal digits)
 Info: Using 64 output digits
 
 
@@ -477,7 +477,7 @@ Column: Column 1
 
 ++++++++++ ../bfbs_swift --quiet         --precision 320 --digits 80 non_existent_file.csv ./data.csv  +++Handles non-existent file check++++++++++
 Warning: unknown option --digits
-Info: Using 320 bit precision (about 96 decimal digits)
+Info: Using 320 bit mantissa precision (about 96 decimal digits)
 Info: Using 64 output digits
 
 

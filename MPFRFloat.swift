@@ -1,7 +1,7 @@
 //
 // M P F R F L O A T . S W I F T
 //
-// MPFRFloat.swift last edited on Wed Mar 18 14:41:34 2026
+// MPFRFloat.swift last edited on Sun Apr  5 16:43:19 2026
 //
 // Arbitrary Precision Basic Statistics for one or more
 // files of one or more CSV columns. This version uses
@@ -106,7 +106,7 @@ final class MPFRFloat: Comparable {
         let cstr = mpfr_to_string(&value, digits)
 
         defer {
-            free(cstr)
+            free(cstr)      // Free the C string buffer allocated by mpfr_to_string.
         }
 
         return String(cString: cstr!)

@@ -11,14 +11,14 @@
 
 #include "mpfr.h"
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdlib.h>     /* malloc() */
 
 char* mpfr_to_string(mpfr_t val, int digits) {
 
     // allocate buffer (safe upper bound)
     size_t size = digits + 32;
 
-    char* buffer = (char*)malloc(size);
+    char* buffer = (char*)malloc(size);     // Caller is responsible for freeing this buffer.
 
     if (!buffer) return NULL;
 
@@ -27,4 +27,3 @@ char* mpfr_to_string(mpfr_t val, int digits) {
 
     return buffer;
 }
-

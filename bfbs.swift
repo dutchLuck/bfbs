@@ -1,19 +1,43 @@
 //
 // B F B S . S W I F T
 //
-// bfbs.swift last edited on Wed Mar 18 14:41:34 2026
+// bfbs.swift last edited on Sun Apr  5 18:51:00 2026 as 0v2
 //
 // Arbitrary Precision Basic Statistics for one or more
 // files of one or more CSV columns. This version uses
 // MPFR and GMP libraries for calculations.
 //
 
+// This program is free software: you can redistribute it and/or modify it.
+// It is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+// without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// This program was largley written by free A.I. It is not a product of any company or
+// organization and is intended for (self) education and non-commercial use.
+
+// The libraries used by this program (MPFR and GMP) are also free software, licensed under the LGPL.
+// ( MPFR: https://www.mpfr.org/ and GMP: https://gmplib.org/ ) 
+// It is assumed that the user has these libraries installed and properly configured. On Apple
+// MacOS, these can be installed via Homebrew with "brew install mpfr gmp" and on (Ubuntu) Linux with
+// "sudo apt install libmpfr-dev libgmp-dev". The C header files and libraries must be accessible to
+// the Swift compiler.
+
+// 0v2 (2026-04-05) - Added remove string to free C strings returned by mpfr_to_string().
+// 0v1 (2026-03-18) - Initial version: Only known to compile and run on Apple Silicon MacOS.
+
+// Short-comings; -
+// CMPFR has copies of mpfr.h and gmp.h with local references so manual update is required if MPFR or GMP is updated.
+// - No error handling for invalid CSV files or non-numeric data (except skipping non-numeric lines)
+// - No support for quoted CSV fields with embedded commas
+// - No support for locale-specific number formats (e.g. 1.234,56 in some European locales)
+//
+
+
 import Foundation
 import CMPFR
 
 
 let PROGRAM_NAME = "bfbs_swift"
-let PROGRAM_VERSION = "0v1 (2026-03-18)"
+let PROGRAM_VERSION = "0v2 (2026-04-05)"
 
 
 struct Options {
@@ -37,10 +61,10 @@ func parseArgs() -> Options {
         let arg = args[i]
 
         switch arg {
-        case "--precision":
+        case "-P", "--precision":
             i += 1
             opts.precision = Int32(args[i])!
-        case "--digits":
+        case "-p", "--print_digits":
             i += 1
             opts.digits = Int32(args[i])!
         case "-H", "--header":
@@ -63,14 +87,14 @@ func parseArgs() -> Options {
     if opts.files.isEmpty || opts.help {
         print("""
 Usage:
-bfbs_swift file1.csv [file2.csv ...] [--help] [--quiet] [--header] [--precision N] [--digits N]
+bfbs_swift file1.csv [file2.csv ...] [--help] [--quiet] [--header] [--precision N] [--print_digits N]
 
 Options:
-  -h --help        Show help / usage information and exit
-  -q --quiet       Suppress banner and timing information
-  -H --header      First row is column names
-  --precision N    MPFR precision bits (default 256)
-  --digits N       Output digits (default 64)
+  -h or --help            Show help / usage information and exit
+  -q or --quiet           Suppress banner and timing information
+  -H or --header          First CSV row is column names
+  -P or --precision N     Use N mantissa bits in MPFR calculations (default 256)
+  -p or --print_digits N  Use up to N digits in printed output (default 64)
 """)
         exit(1)
     }
@@ -81,10 +105,11 @@ Options:
 func printBanner(_ opts: Options) {
     if !opts.quiet {
         print("\(PROGRAM_NAME) version \(PROGRAM_VERSION)")
-        print("MPFR version:", String(cString: mpfr_get_version()))
+        print("Info: MPFR version:", String(cString: mpfr_get_version()))
     }
 
-    print("Using \(opts.precision) bit precision and \(opts.digits) output digits\n")
+    print("Info: Using \(opts.precision) bit precision (about \(Int(floor(Double(opts.precision) * log10(2)))) decimal digits)")
+    print("Info: Using \(opts.digits) output digits\n")
 }
 
 // MARK: - read and process CSV

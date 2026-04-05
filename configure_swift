@@ -2,11 +2,12 @@
 #
 # C O N F I G U R E _ S W I F T
 #
-# configure last edited on Fri Feb 13 09:20:09 2026 
+# configure last edited on Sun Apr  5 17:05:41 2026 
 #
 NAME1=bfbs
 NAME2=MPFRFloat
-NAME3=CMPFR/mpfr_wrapper
+NAME3=mpfr_wrapper
+DIR3=CMPFR
 #
 OP_FILE_NAME=Makefile
 COMPILER="swiftc"
@@ -17,6 +18,8 @@ TRGT=${NAME1}_swift
 SRC1=${NAME1}.swift
 SRC2=${NAME2}.swift
 SRC3=${NAME3}.c
+HDR3=${NAME3}.h
+OBJ3=${NAME3}.o
 #
 # Determine generic OS name, e.g. 'darwin'
 OS_FAMILY="${OSTYPE%[0-9][0-9]}"
@@ -29,8 +32,12 @@ if [[ "$OS_FAMILY" == "darwin" ]]; then
     RELEASE_LNK_OPTIONS=$LNK_OPTIONS
 fi
 #
-echo "$TRGT: $SRC1 $SRC2 $SRC3" > $OP_FILE_NAME
+echo "$TRGT: $SRC1 $SRC2 $DIR3/${OBJ3}" > $OP_FILE_NAME
 echo -e "\t$COMPILER $OPTIONS "'$^'" $LNK_OPTIONS -o "'$@' >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "$DIR3/${OBJ3}: $DIR3/${SRC3} $DIR3/${HDR3}" >> $OP_FILE_NAME
+echo -e "\tcd $DIR3; cc -c ${SRC3} -o ${OBJ3}" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "check: $TRGT" >> $OP_FILE_NAME
@@ -42,12 +49,12 @@ echo -e "\tcd test; ./chk_swift" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "clean:" >> $OP_FILE_NAME
-echo -e "\trm -f $TRGT" >> $OP_FILE_NAME
+echo -e "\trm -f $TRGT $DIR3/${OBJ3}" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 # Release target with optimization and stripped binary
 echo "release: clean" >> $OP_FILE_NAME
-echo -e "\t$COMPILER $OPTIONS $SRC1 $SRC2 $SRC3 $RELEASE_LNK_OPTIONS -o $TRGT" >> $OP_FILE_NAME
+echo -e "\t$COMPILER $OPTIONS $SRC1 $SRC2 $DIR3/${OBJ3} $RELEASE_LNK_OPTIONS -o $TRGT" >> $OP_FILE_NAME
 echo -e "\tstrip $TRGT" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #

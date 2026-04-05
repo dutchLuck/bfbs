@@ -1,6 +1,7 @@
 
 ++++++++++ ../bfbs_swift --quiet         data.csv  +++Small valid 3 column file, with header option check++++++++++
-Using 256 bit precision and 64 output digits
+Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 64 output digits
 
 Processing file: data.csv
 Column: Column 1
@@ -48,7 +49,8 @@ Column: Column 3
 ++++++++++ Shell got Return code number 0 for small valid file data.csv, with header option check++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         cols7rows4.csv +++Small valid 7 column file and no options check++++++++++
-Using 256 bit precision and 64 output digits
+Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 64 output digits
 
 Processing file: cols7rows4.csv
 Column: Column 1
@@ -152,7 +154,8 @@ Column: Column 7
 ++++++++++ Shell got Return code number 0 for small valid file cols7rows4.csv, no options check++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         heights.csv +++Somewhat longer file with 2 columns, 1 column the reverse of the other++++++++++
-Using 256 bit precision and 64 output digits
+Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 64 output digits
 
 Processing file: heights.csv
 Column: Column 1
@@ -214,7 +217,8 @@ Column: Column 4
 ++++++++++ Shell got Return code number 0 for longer file with lengthier lines++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         NIST_StRD_PiDigits.dat +++Long file of 1 column of single digits, no options check++++++++++
-Using 256 bit precision and 64 output digits
+Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 64 output digits
 
 Processing file: NIST_StRD_PiDigits.dat
 Column: Column 1
@@ -234,7 +238,8 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for long file with single column (4.5348, 2.86733906028871)++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         NIST_StRD_Lew.dat +++Long file of 1 column of single digits, no options check++++++++++
-Using 256 bit precision and 64 output digits
+Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 64 output digits
 
 Processing file: NIST_StRD_Lew.dat
 Column: Column 1
@@ -254,7 +259,8 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 200 long file with single column (-177.435, 277.332168044316)++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         NIST_StRD_Lottery.dat +++Long file of 1 column of single digits, no options check++++++++++
-Using 256 bit precision and 64 output digits
+Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 64 output digits
 
 Processing file: NIST_StRD_Lottery.dat
 Column: Column 1
@@ -274,7 +280,8 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 218 long file with single column (518.958715596330, 291.699727470969)++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         NIST_StRD_Mavro.dat +++Long file of 1 column of single digits, no options check++++++++++
-Using 256 bit precision and 64 output digits
+Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 64 output digits
 
 Processing file: NIST_StRD_Mavro.dat
 Column: Column 1
@@ -294,7 +301,8 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 50 long file with single column (2.001856, 0.000429123454003053)++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         NIST_StRD_Michelso.dat +++Long file of 1 column of single digits, no options check++++++++++
-Using 256 bit precision and 64 output digits
+Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 64 output digits
 
 Processing file: NIST_StRD_Michelso.dat
 Column: Column 1
@@ -314,7 +322,8 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 100 long file with single column (299.8524, 0.0790105478190518)++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         NIST_StRD_NumAcc1.dat  +++NIST numerical accurracy file of 3 large close numbers++++++++++
-Using 256 bit precision and 64 output digits
+Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 64 output digits
 
 Processing file: NIST_StRD_NumAcc1.dat
 Column: Column 1
@@ -334,7 +343,8 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 1st NIST numerical accuracy file ( 10000002, 1)++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         NIST_StRD_NumAcc2.dat  +++NIST numerical accurracy file of close numbers++++++++++
-Using 256 bit precision and 64 output digits
+Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 64 output digits
 
 Processing file: NIST_StRD_NumAcc2.dat
 Column: Column 1
@@ -354,7 +364,8 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 2nd NIST numerical accuracy file ( 1.2, 0.1)++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         NIST_StRD_NumAcc3.dat  +++NIST numerical accurracy file of close numbers++++++++++
-Using 256 bit precision and 64 output digits
+Info: Using 256 bit precision (about 77 decimal digits)
+Info: Using 64 output digits
 
 Processing file: NIST_StRD_NumAcc3.dat
 Column: Column 1
@@ -374,7 +385,8 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 3rd NIST numerical accuracy file (1000000.2, 0.1)++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         --precision 320 NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers++++++++++
-Using 320 bit precision and 64 output digits
+Info: Using 320 bit precision (about 96 decimal digits)
+Info: Using 64 output digits
 
 Processing file: NIST_StRD_NumAcc4.dat
 Column: Column 1
@@ -394,7 +406,12 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 4th NIST numerical accuracy file (10000000.2, 0.1)++++++++++
 
 ++++++++++ ../bfbs_swift --precision 320 --digits 80 --quiet         NIST_StRD_NumAcc?.dat  +++NIST numerical accurracy files of large close numbers++++++++++
-Using 320 bit precision and 80 output digits
+Warning: unknown option --digits
+Info: Using 320 bit precision (about 96 decimal digits)
+Info: Using 64 output digits
+
+
+Error: File named "80" not found.
 
 Processing file: NIST_StRD_NumAcc1.dat
 Column: Column 1
@@ -408,8 +425,8 @@ Column: Column 1
   Variance (s²) : 1
   Std.Dev. (s)  : 1
   Autocorr r(1) : -0.5
-  Variance (σ²) : 0.66666666666666666666666666666666666666666666666666666666666666666666666666666667
-  Std.Dev. (σ)  : 0.81649658092772603273242802490196379732198249355222337614423085575032012581910501
+  Variance (σ²) : 0.6666666666666666666666666666666666666666666666666666666666666667
+  Std.Dev. (σ)  : 0.8164965809277260327324280249019637973219824935522233761442308558
 
 Processing file: NIST_StRD_NumAcc2.dat
 Column: Column 1
@@ -423,8 +440,8 @@ Column: Column 1
   Variance (s²) : 0.01
   Std.Dev. (s)  : 0.1
   Autocorr r(1) : -0.999
-  Variance (σ²) : 0.00999000999000999000999000999000999000999000999000999000999000999000999000999001
-  Std.Dev. (σ)  : 0.099950037468777319163162666103907068234524478643334713241902394789294315074013981
+  Variance (σ²) : 0.00999000999000999000999000999000999000999000999000999000999000999
+  Std.Dev. (σ)  : 0.09995003746877731916316266610390706823452447864333471324190239479
 
 Processing file: NIST_StRD_NumAcc3.dat
 Column: Column 1
@@ -438,8 +455,8 @@ Column: Column 1
   Variance (s²) : 0.01
   Std.Dev. (s)  : 0.1
   Autocorr r(1) : -0.999
-  Variance (σ²) : 0.00999000999000999000999000999000999000999000999000999000999000999000999000999001
-  Std.Dev. (σ)  : 0.099950037468777319163162666103907068234524478643334713241902394789294315074013981
+  Variance (σ²) : 0.00999000999000999000999000999000999000999000999000999000999000999
+  Std.Dev. (σ)  : 0.09995003746877731916316266610390706823452447864333471324190239479
 
 Processing file: NIST_StRD_NumAcc4.dat
 Column: Column 1
@@ -453,13 +470,18 @@ Column: Column 1
   Variance (s²) : 0.01
   Std.Dev. (s)  : 0.1
   Autocorr r(1) : -0.999
-  Variance (σ²) : 0.00999000999000999000999000999000999000999000999000999000999000999000999000999001
-  Std.Dev. (σ)  : 0.099950037468777319163162666103907068234524478643334713241902394789294315074013981
+  Variance (σ²) : 0.00999000999000999000999000999000999000999000999000999000999000999
+  Std.Dev. (σ)  : 0.09995003746877731916316266610390706823452447864333471324190239479
 
 ++++++++++ Shell got Return code number 0 for NIST numerical accuracy files ++++++++++
 
 ++++++++++ ../bfbs_swift --quiet         --precision 320 --digits 80 non_existent_file.csv ./data.csv  +++Handles non-existent file check++++++++++
-Using 320 bit precision and 80 output digits
+Warning: unknown option --digits
+Info: Using 320 bit precision (about 96 decimal digits)
+Info: Using 64 output digits
+
+
+Error: File named "80" not found.
 
 
 Error: File named "non_existent_file.csv" not found.
@@ -473,11 +495,11 @@ Column: Column 1
   Maximum       : 300000000000000000000000000000000000000300000000000
   Range         : 200000000000000000000000000000000000000200000000000
   Sum           : 600000000000000000000000000000000000000600000000000
-  Variance (s²) : 1.000000000000000000000000000000000000002000000000000000000000000000000000000001e+100
+  Variance (s²) : 1.000000000000000000000000000000000000002e+100
   Std.Dev. (s)  : 100000000000000000000000000000000000000100000000000
   Autocorr r(1) : 0
-  Variance (σ²) : 6.6666666666666666666666666666666666666800000000000000000000000000000000000000067e+99
-  Std.Dev. (σ)  : 81649658092772603273242802490196379732279899013315.110217696328377522208961642699
+  Variance (σ²) : 6.66666666666666666666666666666666666668e+99
+  Std.Dev. (σ)  : 81649658092772603273242802490196379732279899013315.11021769632838
 
 Column: Column 2
   Count         : 3
@@ -487,11 +509,11 @@ Column: Column 2
   Maximum       : 600000000000000000000000000000000000000600000000000
   Range         : 200000000000000000000000000000000000000200000000000
   Sum           : 1500000000000000000000000000000000000001500000000000
-  Variance (s²) : 1.000000000000000000000000000000000000002000000000000000000000000000000000000001e+100
+  Variance (s²) : 1.000000000000000000000000000000000000002e+100
   Std.Dev. (s)  : 100000000000000000000000000000000000000100000000000
   Autocorr r(1) : 0
-  Variance (σ²) : 6.6666666666666666666666666666666666666800000000000000000000000000000000000000067e+99
-  Std.Dev. (σ)  : 81649658092772603273242802490196379732279899013315.110217696328377522208961642699
+  Variance (σ²) : 6.66666666666666666666666666666666666668e+99
+  Std.Dev. (σ)  : 81649658092772603273242802490196379732279899013315.11021769632838
 
 Column: Column 3
   Count         : 3
@@ -501,22 +523,22 @@ Column: Column 3
   Maximum       : 900000000000000000000000000000000000000900000000000
   Range         : 200000000000000000000000000000000000000200000000000
   Sum           : 2400000000000000000000000000000000000002400000000000
-  Variance (s²) : 1.000000000000000000000000000000000000002000000000000000000000000000000000000001e+100
+  Variance (s²) : 1.000000000000000000000000000000000000002e+100
   Std.Dev. (s)  : 100000000000000000000000000000000000000100000000000
   Autocorr r(1) : 0
-  Variance (σ²) : 6.6666666666666666666666666666666666666800000000000000000000000000000000000000067e+99
-  Std.Dev. (σ)  : 81649658092772603273242802490196379732279899013315.110217696328377522208961642699
+  Variance (σ²) : 6.66666666666666666666666666666666666668e+99
+  Std.Dev. (σ)  : 81649658092772603273242802490196379732279899013315.11021769632838
 
 ++++++++++ Shell got Return code number 0 for Handles non-existent file options++++++++++
 
 ++++++++++ ../bfbs_swift --help --quiet         +++Usage/help and information check++++++++++
 Usage:
-bfbs_swift file1.csv [file2.csv ...] [--help] [--quiet] [--header] [--precision N] [--digits N]
+bfbs_swift file1.csv [file2.csv ...] [--help] [--quiet] [--header] [--precision N] [--print_digits N]
 
 Options:
-  -h --help        Show help / usage information and exit
-  -q --quiet       Suppress banner and timing information
-  -H --header      First row is column names
-  --precision N    MPFR precision bits (default 256)
-  --digits N       Output digits (default 64)
+  -h or --help            Show help / usage information and exit
+  -q or --quiet           Suppress banner and timing information
+  -H or --header          First CSV row is column names
+  -P or --precision N     Use N mantissa bits in MPFR calculations (default 256)
+  -p or --print_digits N  Use up to N digits in printed output (default 64)
 ++++++++++ Shell got Return code number 1 for usage/help, options++++++++++

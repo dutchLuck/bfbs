@@ -3,7 +3,7 @@
 //
 // Big Float Basic Statistics
 //
-// bfbs.cpp last updated on Sun Mar 29 17:17:46 2026 by O.H. as 0v8
+// bfbs.cpp last updated on Sun Mar 29 17:17:46 2026 by O.H. as 0v9
 //
 
 //
@@ -57,6 +57,7 @@
 //
 
 //
+// 0v9 Realign count output Calculate deviation
 // 0v8 Calculate and output population variance and population standard deviation
 //     in addition to sample variance and sample standard deviation.
 // 0v7 Short form option parsing and help/usage message
@@ -76,12 +77,12 @@
 #include <algorithm>
 #include <iomanip>
 #include <mpfr.h>
-#include <time.h>   // clock_gettime()
-
+#include <time.h>	// clock_gettime()
+#include <math.h>	// log10()
 using namespace std;
 
 #define PROGRAM_NAME __FILE__
-#define PROGRAM_VERSION "0v8"
+#define PROGRAM_VERSION "0v9"
 
 // RAII Wrapper for mpfr_t
 class MpfrFloat {
@@ -156,7 +157,7 @@ Options parseArgs(int argc, char* argv[]) {
         cerr << "    -h  or  --help             - show this help message and exit\n";
         cerr << "    -H  or  --header           - treat first CSV row as (text) column headers\n";
         cerr << "    -p  or --print_digits N    - set output digits to N (default: 64)\n";
-        cerr << "    -P  or --precision N       - set calculation precision to N bits (default: 256)\n";
+        cerr << "    -P  or --precision N       - set mantissa precision to N bits (default: 256)\n";
         cerr << "    -q  or  --quiet            - suppress version info and timing info\n";
         exit(1);
     }
@@ -166,14 +167,15 @@ Options parseArgs(int argc, char* argv[]) {
 void printBanner(const Options& opts) {
     if( ! opts.quiet ) {
         cout << PROGRAM_NAME << " version " << PROGRAM_VERSION << endl;
-        cout << "Compiler version: " << __VERSION__ << endl;
+        cout << "Info: Compiler version: " << __VERSION__ << endl;
 
-        cout << "MPFR version: " << mpfr_get_version() << endl;
-        cout << "GMP version:  " << gmp_version << endl;
+        cout << "Info: MPFR version: " << mpfr_get_version() << endl;
+        cout << "Info: GMP version:  " << gmp_version << endl;
     }
-    cout << "Using " << opts.precision << " bits Calculation precision ";
-    cout << "and " << opts.digits << " digits Output precision ";
-    cout << "with Rounding mode: MPFR_RNDN (round to nearest)" << endl;
+    cout << "Info: Using " << opts.precision << " mantissa bits calculation precision (";
+    cout << "about " << floor(log10(2.0) * opts.precision) << " decimal digits of precision)" << endl;
+    cout << "Info: Using " << opts.digits << " decimal digits in print output" << endl;
+    cout << "Info: Rounding mode: MPFR_RNDN (round to nearest)" << endl;
     cout << endl;
 }
 
@@ -281,7 +283,7 @@ void computeStats(const vector<MpfrFloat>& col, int precision, int base, int dig
 
     // Output
     cout << "Column: " << name << endl;
-    cout << "  Count            : " << n << endl;
+    cout << "  Count         : " << n << endl;
     cout << fixed << setprecision(digits);
     cout << "  Minimum       : "; mpfr_out_str(stdout, base, digits, minVal, MPFR_RNDN); cout << endl;
     cout << "  Mean          : "; mpfr_out_str(stdout, base, digits, mean, MPFR_RNDN); cout << endl;

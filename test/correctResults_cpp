@@ -1,10 +1,12 @@
 
 ++++++++++ ../bfbs_cpp -q data.csv  +++Small valid 3 column file, with header option check++++++++++
-Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
+Info: Using 256 mantissa bits calculation precision (about 77 decimal digits of precision)
+Info: Using 64 decimal digits in print output
+Info: Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: data.csv
 Column: Column 1
-  Count            : 3
+  Count         : 3
   Minimum       : 1.000000000000000000000000000000000000001000000000000000000000000e50
   Mean          : 2.000000000000000000000000000000000000002000000000000000000000000e50
   Median        : 2.000000000000000000000000000000000000002000000000000000000000000e50
@@ -17,7 +19,7 @@ Column: Column 1
   Std. Dev. (σ) : 8.164965809277260327324280249019637973227989901331511021769632838e49
 
 Column: Column 2
-  Count            : 3
+  Count         : 3
   Minimum       : 4.000000000000000000000000000000000000004000000000000000000000000e50
   Mean          : 5.000000000000000000000000000000000000005000000000000000000000000e50
   Median        : 5.000000000000000000000000000000000000005000000000000000000000000e50
@@ -30,7 +32,7 @@ Column: Column 2
   Std. Dev. (σ) : 8.164965809277260327324280249019637973227989901331511021769632838e49
 
 Column: Column 3
-  Count            : 3
+  Count         : 3
   Minimum       : 7.000000000000000000000000000000000000007000000000000000000000000e50
   Mean          : 8.000000000000000000000000000000000000008000000000000000000000000e50
   Median        : 8.000000000000000000000000000000000000008000000000000000000000000e50
@@ -45,11 +47,13 @@ Column: Column 3
 ++++++++++ Shell got Return code number 0 for small valid file data.csv, with header option check++++++++++
 
 ++++++++++ ../bfbs_cpp -q cols7rows4.csv +++Small valid 7 column file and no options check++++++++++
-Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
+Info: Using 256 mantissa bits calculation precision (about 77 decimal digits of precision)
+Info: Using 64 decimal digits in print output
+Info: Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: cols7rows4.csv
 Column: Column 1
-  Count            : 4
+  Count         : 4
   Minimum       : -8.000000000000000000000000000000000000000000000000000000000000000e-1
   Mean          : -7.359608525000000000000000000000000000000000000000000000000000000e-1
   Median        : -7.219217050000000000000000000000000000000000000000000000000000000e-1
@@ -62,7 +66,7 @@ Column: Column 1
   Std. Dev. (σ) : 3.804073688201578791809062084432050939374168222410567907904917117e-2
 
 Column: Column 2
-  Count            : 4
+  Count         : 4
   Minimum       : -8.000000000000000000000000000000000000000000000000000000000000000e-1
   Mean          : -7.404131975000000000000000000000000000000000000000000000000000000e-1
   Median        : -7.308263950000000000000000000000000000000000000000000000000000000e-1
@@ -75,7 +79,7 @@ Column: Column 2
   Std. Dev. (σ) : 3.663204583658966555262928251125322165390293176204979659737104353e-2
 
 Column: Column 3
-  Count            : 4
+  Count         : 4
   Minimum       : -8.000000000000000000000000000000000000000000000000000000000000000e-1
   Mean          : -7.484444525000000000000000000000000000000000000000000000000000000e-1
   Median        : -7.468889050000000000000000000000000000000000000000000000000000000e-1
@@ -88,7 +92,7 @@ Column: Column 3
   Std. Dev. (σ) : 3.538954263655799564732878116161198832279960800810015655287368346e-2
 
 Column: Column 4
-  Count            : 4
+  Count         : 4
   Minimum       : -5.000000000000000000000000000000000000000000000000000000000000000e-2
   Mean          : -4.544947000000000000000000000000000000000000000000000000000000000e-2
   Median        : -4.589894000000000000000000000000000000000000000000000000000000000e-2
@@ -101,7 +105,7 @@ Column: Column 4
   Std. Dev. (σ) : 3.563989798091459183799778544946704463848867271846044627117097456e-3
 
 Column: Column 5
-  Count            : 4
+  Count         : 4
   Minimum       : 4.000000000000000000000000000000000000000000000000000000000000000e-2
   Mean          : 4.361755000000000000000000000000000000000000000000000000000000000e-2
   Median        : 4.223510000000000000000000000000000000000000000000000000000000000e-2
@@ -114,7 +118,7 @@ Column: Column 5
   Std. Dev. (σ) : 3.796204420536386235980449362346341413548603024675739957669794181e-3
 
 Column: Column 6
-  Count            : 4
+  Count         : 4
   Minimum       : 2.000000000000000000000000000000000000000000000000000000000000000e-2
   Mean          : 2.551974000000000000000000000000000000000000000000000000000000000e-2
   Median        : 2.603948000000000000000000000000000000000000000000000000000000000e-2
@@ -127,7 +131,7 @@ Column: Column 6
   Std. Dev. (σ) : 3.573531819866726749893924022874121674891335507975582192846224290e-3
 
 Column: Column 7
-  Count            : 4
+  Count         : 4
   Minimum       : 1.000000000000000000000000000000000000000000000000000000000000000e-2
   Mean          : 1.285281750000000000000000000000000000000000000000000000000000000e-2
   Median        : 1.070563500000000000000000000000000000000000000000000000000000000e-2
@@ -142,11 +146,13 @@ Column: Column 7
 ++++++++++ Shell got Return code number 0 for small valid file cols7rows4.csv, no options check++++++++++
 
 ++++++++++ ../bfbs_cpp -q heights.csv +++Somewhat longer file with 2 columns, 1 column the reverse of the other++++++++++
-Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
+Info: Using 256 mantissa bits calculation precision (about 77 decimal digits of precision)
+Info: Using 64 decimal digits in print output
+Info: Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: heights.csv
 Column: Column 1
-  Count            : 2113
+  Count         : 2113
   Minimum       : 5.600000000000000000000000000000000000000000000000000000000000000e1
   Mean          : 6.945811642214860388073828679602460955986748698532891623284429721e1
   Median        : 7.000000000000000000000000000000000000000000000000000000000000000e1
@@ -159,7 +165,7 @@ Column: Column 1
   Std. Dev. (σ) : 2.674531800484562418189672161152057756785590662655662952824838576e0
 
 Column: Column 2
-  Count            : 2113
+  Count         : 2113
   Minimum       : 5.600000000000000000000000000000000000000000000000000000000000000e1
   Mean          : 6.945811642214860388073828679602460955986748698532891623284429721e1
   Median        : 7.000000000000000000000000000000000000000000000000000000000000000e1
@@ -172,7 +178,7 @@ Column: Column 2
   Std. Dev. (σ) : 2.674531800484562418189672161152057756785590662655662952824838576e0
 
 Column: Column 3
-  Count            : 2113
+  Count         : 2113
   Minimum       : 5.600000000000000000000000000000000000000000000000000000000000000e1
   Mean          : 6.945811642214860388073828679602460955986748698532891623284429721e1
   Median        : 7.000000000000000000000000000000000000000000000000000000000000000e1
@@ -185,7 +191,7 @@ Column: Column 3
   Std. Dev. (σ) : 2.674531800484562418189672161152057756785590662655662952824838576e0
 
 Column: Column 4
-  Count            : 2113
+  Count         : 2113
   Minimum       : 5.600000000000000000000000000000000000000000000000000000000000000e1
   Mean          : 6.945811642214860388073828679602460955986748698532891623284429721e1
   Median        : 7.000000000000000000000000000000000000000000000000000000000000000e1
@@ -200,11 +206,13 @@ Column: Column 4
 ++++++++++ Shell got Return code number 0 for longer file with lengthier lines++++++++++
 
 ++++++++++ ../bfbs_cpp -q NIST_StRD_PiDigits.dat +++Long file of 1 column of single digits, no options check++++++++++
-Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
+Info: Using 256 mantissa bits calculation precision (about 77 decimal digits of precision)
+Info: Using 64 decimal digits in print output
+Info: Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_PiDigits.dat
 Column: Column 1
-  Count            : 5000
+  Count         : 5000
   Minimum       : 0
   Mean          : 4.534800000000000000000000000000000000000000000000000000000000000e0
   Median        : 5.000000000000000000000000000000000000000000000000000000000000000e0
@@ -219,11 +227,13 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for long file with single column (4.5348, 2.86733906028871)++++++++++
 
 ++++++++++ ../bfbs_cpp -q NIST_StRD_Lew.dat +++Long file of 1 column of single digits, no options check++++++++++
-Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
+Info: Using 256 mantissa bits calculation precision (about 77 decimal digits of precision)
+Info: Using 64 decimal digits in print output
+Info: Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_Lew.dat
 Column: Column 1
-  Count            : 200
+  Count         : 200
   Minimum       : -5.790000000000000000000000000000000000000000000000000000000000000e2
   Mean          : -1.774350000000000000000000000000000000000000000000000000000000000e2
   Median        : -1.620000000000000000000000000000000000000000000000000000000000000e2
@@ -238,11 +248,13 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 200 long file with single column (-177.435, 277.332168044316)++++++++++
 
 ++++++++++ ../bfbs_cpp -q NIST_StRD_Lottery.dat +++Long file of 1 column of single digits, no options check++++++++++
-Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
+Info: Using 256 mantissa bits calculation precision (about 77 decimal digits of precision)
+Info: Using 64 decimal digits in print output
+Info: Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_Lottery.dat
 Column: Column 1
-  Count            : 218
+  Count         : 218
   Minimum       : 4.000000000000000000000000000000000000000000000000000000000000000e0
   Mean          : 5.189587155963302752293577981651376146788990825688073394495412844e2
   Median        : 5.225000000000000000000000000000000000000000000000000000000000000e2
@@ -257,11 +269,13 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 218 long file with single column (518.958715596330, 291.699727470969)++++++++++
 
 ++++++++++ ../bfbs_cpp -q NIST_StRD_Mavro.dat +++Long file of 1 column of single digits, no options check++++++++++
-Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
+Info: Using 256 mantissa bits calculation precision (about 77 decimal digits of precision)
+Info: Using 64 decimal digits in print output
+Info: Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_Mavro.dat
 Column: Column 1
-  Count            : 50
+  Count         : 50
   Minimum       : 2.001300000000000000000000000000000000000000000000000000000000000e0
   Mean          : 2.001856000000000000000000000000000000000000000000000000000000000e0
   Median        : 2.001800000000000000000000000000000000000000000000000000000000000e0
@@ -276,11 +290,13 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 50 long file with single column (2.001856, 0.000429123454003053)++++++++++
 
 ++++++++++ ../bfbs_cpp -q NIST_StRD_Michelso.dat +++Long file of 1 column of single digits, no options check++++++++++
-Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
+Info: Using 256 mantissa bits calculation precision (about 77 decimal digits of precision)
+Info: Using 64 decimal digits in print output
+Info: Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_Michelso.dat
 Column: Column 1
-  Count            : 100
+  Count         : 100
   Minimum       : 2.996200000000000000000000000000000000000000000000000000000000000e2
   Mean          : 2.998524000000000000000000000000000000000000000000000000000000000e2
   Median        : 2.998500000000000000000000000000000000000000000000000000000000000e2
@@ -295,11 +311,13 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 100 long file with single column (299.8524, 0.0790105478190518)++++++++++
 
 ++++++++++ ../bfbs_cpp -q NIST_StRD_NumAcc1.dat  +++NIST numerical accurracy file of 3 large close numbers++++++++++
-Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
+Info: Using 256 mantissa bits calculation precision (about 77 decimal digits of precision)
+Info: Using 64 decimal digits in print output
+Info: Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_NumAcc1.dat
 Column: Column 1
-  Count            : 3
+  Count         : 3
   Minimum       : 1.000000100000000000000000000000000000000000000000000000000000000e7
   Mean          : 1.000000200000000000000000000000000000000000000000000000000000000e7
   Median        : 1.000000200000000000000000000000000000000000000000000000000000000e7
@@ -314,11 +332,13 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 1st NIST numerical accuracy file ( 10000002, 1)++++++++++
 
 ++++++++++ ../bfbs_cpp -q NIST_StRD_NumAcc2.dat  +++NIST numerical accurracy file of close numbers++++++++++
-Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
+Info: Using 256 mantissa bits calculation precision (about 77 decimal digits of precision)
+Info: Using 64 decimal digits in print output
+Info: Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_NumAcc2.dat
 Column: Column 1
-  Count            : 1001
+  Count         : 1001
   Minimum       : 1.100000000000000000000000000000000000000000000000000000000000000e0
   Mean          : 1.200000000000000000000000000000000000000000000000000000000000000e0
   Median        : 1.200000000000000000000000000000000000000000000000000000000000000e0
@@ -333,11 +353,13 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 2nd NIST numerical accuracy file ( 1.2, 0.1)++++++++++
 
 ++++++++++ ../bfbs_cpp -q NIST_StRD_NumAcc3.dat  +++NIST numerical accurracy file of close numbers++++++++++
-Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
+Info: Using 256 mantissa bits calculation precision (about 77 decimal digits of precision)
+Info: Using 64 decimal digits in print output
+Info: Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_NumAcc3.dat
 Column: Column 1
-  Count            : 1001
+  Count         : 1001
   Minimum       : 1.000000100000000000000000000000000000000000000000000000000000000e6
   Mean          : 1.000000200000000000000000000000000000000000000000000000000000000e6
   Median        : 1.000000200000000000000000000000000000000000000000000000000000000e6
@@ -352,11 +374,13 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 3rd NIST numerical accuracy file (1000000.2, 0.1)++++++++++
 
 ++++++++++ ../bfbs_cpp -q NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers++++++++++
-Using 256 bits Calculation precision and 64 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
+Info: Using 256 mantissa bits calculation precision (about 77 decimal digits of precision)
+Info: Using 64 decimal digits in print output
+Info: Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_NumAcc4.dat
 Column: Column 1
-  Count            : 1001
+  Count         : 1001
   Minimum       : 1.000000010000000000000000000000000000000000000000000000000000000e7
   Mean          : 1.000000020000000000000000000000000000000000000000000000000000000e7
   Median        : 1.000000020000000000000000000000000000000000000000000000000000000e7
@@ -371,11 +395,13 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for 4th NIST numerical accuracy file (10000000.2, 0.1)++++++++++
 
 ++++++++++ ../bfbs_cpp -q --print_digits 10 NIST_StRD_NumAcc?.dat  +++NIST numerical accurracy files of large close numbers++++++++++
-Using 256 bits Calculation precision and 10 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
+Info: Using 256 mantissa bits calculation precision (about 77 decimal digits of precision)
+Info: Using 10 decimal digits in print output
+Info: Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: NIST_StRD_NumAcc1.dat
 Column: Column 1
-  Count            : 3
+  Count         : 3
   Minimum       : 1.000000100e7
   Mean          : 1.000000200e7
   Median        : 1.000000200e7
@@ -389,7 +415,7 @@ Column: Column 1
 
 Processing file: NIST_StRD_NumAcc2.dat
 Column: Column 1
-  Count            : 1001
+  Count         : 1001
   Minimum       : 1.100000000e0
   Mean          : 1.200000000e0
   Median        : 1.200000000e0
@@ -403,7 +429,7 @@ Column: Column 1
 
 Processing file: NIST_StRD_NumAcc3.dat
 Column: Column 1
-  Count            : 1001
+  Count         : 1001
   Minimum       : 1.000000100e6
   Mean          : 1.000000200e6
   Median        : 1.000000200e6
@@ -417,7 +443,7 @@ Column: Column 1
 
 Processing file: NIST_StRD_NumAcc4.dat
 Column: Column 1
-  Count            : 1001
+  Count         : 1001
   Minimum       : 1.000000010e7
   Mean          : 1.000000020e7
   Median        : 1.000000020e7
@@ -432,13 +458,15 @@ Column: Column 1
 ++++++++++ Shell got Return code number 0 for NIST numerical accuracy files ++++++++++
 
 ++++++++++ ../bfbs_cpp -q --print_digits 80 --precision 320 non_existent_file.csv data.csv  +++Handles non-existent file check++++++++++
-Using 320 bits Calculation precision and 80 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
+Info: Using 320 mantissa bits calculation precision (about 96 decimal digits of precision)
+Info: Using 80 decimal digits in print output
+Info: Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: non_existent_file.csv
 Error: Cannot open file: non_existent_file.csv
 Processing file: data.csv
 Column: Column 1
-  Count            : 3
+  Count         : 3
   Minimum       : 1.0000000000000000000000000000000000000010000000000000000000000000000000000000000e50
   Mean          : 2.0000000000000000000000000000000000000020000000000000000000000000000000000000000e50
   Median        : 2.0000000000000000000000000000000000000020000000000000000000000000000000000000000e50
@@ -451,7 +479,7 @@ Column: Column 1
   Std. Dev. (σ) : 8.1649658092772603273242802490196379732279899013315110217696328377522208961642699e49
 
 Column: Column 2
-  Count            : 3
+  Count         : 3
   Minimum       : 4.0000000000000000000000000000000000000040000000000000000000000000000000000000000e50
   Mean          : 5.0000000000000000000000000000000000000050000000000000000000000000000000000000000e50
   Median        : 5.0000000000000000000000000000000000000050000000000000000000000000000000000000000e50
@@ -464,7 +492,7 @@ Column: Column 2
   Std. Dev. (σ) : 8.1649658092772603273242802490196379732279899013315110217696328377522208961642699e49
 
 Column: Column 3
-  Count            : 3
+  Count         : 3
   Minimum       : 7.0000000000000000000000000000000000000070000000000000000000000000000000000000000e50
   Mean          : 8.0000000000000000000000000000000000000080000000000000000000000000000000000000000e50
   Median        : 8.0000000000000000000000000000000000000080000000000000000000000000000000000000000e50
@@ -486,6 +514,6 @@ Usage:
     -h  or  --help             - show this help message and exit
     -H  or  --header           - treat first CSV row as (text) column headers
     -p  or --print_digits N    - set output digits to N (default: 64)
-    -P  or --precision N       - set calculation precision to N bits (default: 256)
+    -P  or --precision N       - set mantissa precision to N bits (default: 256)
     -q  or  --quiet            - suppress version info and timing info
 ++++++++++ Shell got Return code number 1 for usage/help, options++++++++++

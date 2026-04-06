@@ -3,7 +3,7 @@
 //
 // Big Float Basic Statistics
 //
-// bfbs.java last updated on Sun Dec  7 22:15:48 2025 by O.H. as 0v10
+// bfbs.java last updated on Mon Apr  6 17:01:48 2025 by O.H. as 0v11
 //
 
 //
@@ -12,9 +12,13 @@
 //
 // Run with; -
 //  java bfbs data.csv
+// OR
+//  java bfbs --precision=50 --round=4 --has-header data_with_column_titles.csv
+// OR
+//  java -classpath ".." bfbs --precision=80  "NIST_StRD_NumAcc?.dat"
 //
 // Usage; -
-//  Usage: Usage: java bfbs [--precision=<n>] [--round=<n>] [--has-header] [--help] <file1.csv> [file2.csv] ...
+//  Usage: Usage: java bfbs [--precision=<n>] [--round=<n>] [--has-header] [--help] [--quiet] <file1.csv> [file2.csv] ...
 //
 
 
@@ -47,6 +51,7 @@
 //
 
 //
+// 0v11 Added -q quiet flag, σ² & σ (population) stats and some minor output formatting changes
 // 0v10 Added execution time output
 // 0v9 Very minor mod to testing for even number of values
 // 0v8 Rearrange order of output and make output a bit more consistant with other bfbs programs
@@ -62,10 +67,14 @@
 // 5. Naive Histogram output
 //
 
+// MARK: - Imports
+
 import java.io.*;
 import java.math.*;
 import java.nio.file.*;
 import java.util.*;
+
+// MARK: - Main class
 
 public class bfbs {
 
@@ -79,10 +88,11 @@ public class bfbs {
         int roundDigits = -1;       // default to -1 (i.e full precision)
         boolean hasHeader = false;
         boolean hasHelp = false;
+        boolean hasQuiet = false;
         List<String> fileNames = new ArrayList<>();
 
         // 🎉 Program info banner
-        System.out.println("bfbs 0v10");
+        System.out.println("bfbs 0v11 (2026-04-06) - Big Float Basic Statistics in Java");
 
         // Parse arguments
         for (String arg : args) {
@@ -110,7 +120,13 @@ public class bfbs {
                     System.err.println("Error: Invalid --round value. Must be an integer.");
                     return;
                 }
+            } else if (arg.equalsIgnoreCase("--quiet")) {
+                hasQuiet = true;
+            } else if (arg.equalsIgnoreCase("-q")) {
+                hasQuiet = true;
             } else if (arg.equalsIgnoreCase("--has-header")) {
+                hasHeader = true;
+            } else if (arg.equalsIgnoreCase("-H")) {
                 hasHeader = true;
             } else if (arg.equalsIgnoreCase("--help")) {
                 hasHelp = true;
@@ -125,20 +141,32 @@ public class bfbs {
         }
 
         if (hasHelp || fileNames.isEmpty()) {
-            System.err.println("Usage: java bfbs [--precision=<n>] [--round=<n>] [--has-header] [--help] <file1.csv> [file2.csv] ...");
+            if (fileNames.isEmpty()) {
+                System.out.println("\nError: No input files specified. Please provide the name of at least one CSV file to process.");
+            }
+            System.err.println("\nUsage; -\n java bfbs [--precision=<n>] [--round=<n>] [--has-header] [--quiet] [--help] <file1.csv> [file2.csv] ...");
+            System.err.println(" Where; -");
+            System.err.println("  --precision=<n>     : Set the precision (number of digits) for calculations (default: 40)");
+            System.err.println("  --round=<n>         : Set the number of decimal places to round output to (default: full precision)");
+            System.err.println("  --has-header or -H  : Indicates that the first row of each CSV file contains column headers");
+            System.err.println("  --quiet or -q       : Suppress timing info and version output");
+            System.err.println("  --help or -h        : Show this help message and exit");
+            System.err.println("  <file1.csv> [file2.csv] ... : One or more CSV files to process\n");
             return;
         }
 
         // 🎉 Further Program info banner
         String javaVersion = System.getProperty("java.version");
-        System.out.println("Running on Java version: " + javaVersion);
-        System.out.println("Using java.math.BigDecimal (standard library)");
-        System.out.println("Calculation precision: " + precision + " digits");
+        if (!hasQuiet) {
+            System.out.println("Info: bfbs.java interpreted by Java version: " + javaVersion);
+            System.out.println("Info: Using java.math.BigDecimal (standard library)");
+        }
+        System.out.println("Info: Calculation precision: " + precision + " decimal digits");
 
         if (roundDigits >= 0) {
-            System.out.println("Output rounding: " + roundDigits + " decimal places");
+            System.out.println("Info: Output rounding: " + roundDigits + " decimal places");
         } else {
-            System.out.println("Output rounding: full precision");
+            System.out.println("Info: Output rounding: full precision");
         }
         System.out.println();    // spacer line
 
@@ -169,12 +197,15 @@ public class bfbs {
             }
         }
 
-        long endTime = System.currentTimeMillis();
-        long durationInMillis = endTime - startTime;
+        if(!hasQuiet) {
+            long endTime = System.currentTimeMillis();
+            long durationInMillis = endTime - startTime;
 
-        System.out.println("bfbs.java execution time: " + durationInMillis + " [mS]");
+            System.out.println("bfbs.java execution time: " + durationInMillis + " [mS]");
+        }
     }
 
+    // MARK: - CSV Reading
 
     private static List<List<BigDecimal>> readCSV(String fileName, boolean hasHeader, List<String> headers) throws IOException {
         List<List<BigDecimal>> columns = new ArrayList<>();
@@ -219,6 +250,8 @@ public class bfbs {
         return columns;
     }
 
+    // MARK: - Print Stats
+
     private static void printStats(List<BigDecimal> data, MathContext mc, int roundDigits) {
         int n = data.size();
 
@@ -247,6 +280,12 @@ public class bfbs {
             varianceSum = varianceSum.add(squared, mc);
         }
 
+        BigDecimal populationVariance = (n > 0)
+                ? varianceSum.divide(BigDecimal.valueOf(n), mc)
+                : BigDecimal.ZERO;
+
+        BigDecimal populationStdDev = sqrt(populationVariance, mc);
+
         BigDecimal sampleVariance = (n > 1)
                 ? varianceSum.divide(BigDecimal.valueOf(n - 1), mc)
                 : BigDecimal.ZERO;
@@ -254,16 +293,20 @@ public class bfbs {
         BigDecimal sampleStdDev = sqrt(sampleVariance, mc);
 
         // Display results (rounded if requested)
-        System.out.println("  Count            : " + n);
-        System.out.println("  Minimum          : " + format(min, roundDigits));
-        System.out.println("  Mean             : " + format(mean, roundDigits));
-        System.out.println("  Median           : " + format(median, roundDigits));
-        System.out.println("  Maximum          : " + format(max, roundDigits));
-        System.out.println("  Range            : " + format(range, roundDigits));
-        System.out.println("  Sum              : " + format(sum, roundDigits));
-        System.out.println("  Sample Variance  : " + format(sampleVariance, roundDigits));
-        System.out.println("  Sample Std. Dev. : " + format(sampleStdDev, roundDigits));
+        System.out.println("  Count         : " + n);
+        System.out.println("  Minimum       : " + format(min, roundDigits));
+        System.out.println("  Mean          : " + format(mean, roundDigits));
+        System.out.println("  Median        : " + format(median, roundDigits));
+        System.out.println("  Maximum       : " + format(max, roundDigits));
+        System.out.println("  Range         : " + format(range, roundDigits));
+        System.out.println("  Sum           : " + format(sum, roundDigits));
+        System.out.println("  Variance (s²) : " + format(sampleVariance, roundDigits));
+        System.out.println("  Std. Dev. (s) : " + format(sampleStdDev, roundDigits));
+        System.out.println("  Variance (σ²) : " + format(populationVariance, roundDigits));
+        System.out.println("  Std. Dev. (σ) : " + format(populationStdDev, roundDigits));
     }
+
+    // MARK: - Utility methods
 
     private static String format(BigDecimal value, int roundDigits) {
         if (roundDigits >= 0) {

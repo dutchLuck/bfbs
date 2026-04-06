@@ -74,9 +74,9 @@ The java bfbs code uses the
 <a href="https://docs.oracle.com/javase/10/docs/api/index.html?java/math/BigDecimal.html">java.math.BigDecimal</a>
 package, which is part of the standard
 library. It provides decimal arbitrary-precision calculations and bfbs.java compiles ok
-and runs ok on open JDK 21. The java code outputs min, median, max and range
-in addition to sum, mean, variance and standard deviation. There is no observable
-delay before results appear.
+and runs ok on open JDK 21. The java code outputs min, median, max and range in addition
+to sum, mean, both sample (s²) & population (σ²) variances and both sample (s) & population
+(σ) standard deviations. There is no observable delay before results appear.
 ## bfbs.jl
 The julia bfbs code uses the built-in
 <a href="https://docs.julialang.org/en/v1/manual/integers-and-floating-point-numbers/#Arbitrary-Precision-Arithmetic">
@@ -367,16 +367,18 @@ The long double precision epsilon floating point value ("LDBL_EPSILON") is 1.084
 ## Output from languages other than julia; -
 ### C++
 ```
-% ./bfbs_cpp --precision 340 --print_digits 80 test/data.csv
-bfbs.cpp version 0v8
-Compiler version: Apple LLVM 17.0.0 (clang-1700.6.4.2)
-MPFR version: 4.2.2
-GMP version:  6.3.0
-Using 340 bits Calculation precision and 80 digits Output precision with Rounding mode: MPFR_RNDN (round to nearest)
+$ ./bfbs_cpp --precision 320 --print_digits 80 test/data.csv
+bfbs.cpp version 0v9
+Info: Compiler version: 11.4.0
+Info: MPFR version: 4.1.0
+Info: GMP version:  6.2.1
+Info: Using 320 mantissa bits calculation precision (about 96 decimal digits of precision)
+Info: Using 80 decimal digits in print output
+Info: Rounding mode: MPFR_RNDN (round to nearest)
 
 Processing file: test/data.csv
 Column: Column 1
-  Count            : 3
+  Count         : 3
   Minimum       : 1.0000000000000000000000000000000000000010000000000000000000000000000000000000000e50
   Mean          : 2.0000000000000000000000000000000000000020000000000000000000000000000000000000000e50
   Median        : 2.0000000000000000000000000000000000000020000000000000000000000000000000000000000e50
@@ -389,7 +391,7 @@ Column: Column 1
   Std. Dev. (σ) : 8.1649658092772603273242802490196379732279899013315110217696328377522208961642699e49
 
 Column: Column 2
-  Count            : 3
+  Count         : 3
   Minimum       : 4.0000000000000000000000000000000000000040000000000000000000000000000000000000000e50
   Mean          : 5.0000000000000000000000000000000000000050000000000000000000000000000000000000000e50
   Median        : 5.0000000000000000000000000000000000000050000000000000000000000000000000000000000e50
@@ -402,7 +404,7 @@ Column: Column 2
   Std. Dev. (σ) : 8.1649658092772603273242802490196379732279899013315110217696328377522208961642699e49
 
 Column: Column 3
-  Count            : 3
+  Count         : 3
   Minimum       : 7.0000000000000000000000000000000000000070000000000000000000000000000000000000000e50
   Mean          : 8.0000000000000000000000000000000000000080000000000000000000000000000000000000000e50
   Median        : 8.0000000000000000000000000000000000000080000000000000000000000000000000000000000e50
@@ -414,8 +416,8 @@ Column: Column 3
   Variance (σ²) : 6.6666666666666666666666666666666666666800000000000000000000000000000000000000067e99
   Std. Dev. (σ) : 8.1649658092772603273242802490196379732279899013315110217696328377522208961642699e49
 
-./bfbs_cpp (c++ executable) time taken:  0.000570 [sec]
-%
+./bfbs_cpp (c++ executable) time taken:  0.000653 [sec]
+$
 ```
 ### deno
 ```
@@ -469,10 +471,10 @@ bfbs.ts processing took 3.38 [mS].
 ```
 ### fortran
 ```
-$ ./bfbs_fortran --prec 340 --digits 80 test/data.csv
-bfbs version 0.0.1
+$ ./bfbs_fortran --precision 320 --print_digits 80 test/data.csv
+bfbs version 0.0.2
 Fortran compiler: GCC version 11.4.0
-Using  340 bits of calculation precision and  80 digits output precision.
+Using  320 bits of calculation precision and  80 digits output precision.
 Column 1: 
   count  : 3
   min    : 100000000000000000000000000000000000000100000000000
@@ -570,49 +572,55 @@ bfbs (go executable) time taken:  337 [uS]
 ```
 ### java
 ```
-> java bfbs --precision=80 test\data.csv
-bfbs 0v10
-Running on Java version: 21.0.8
-Using java.math.BigDecimal (standard library)
-Calculation precision: 80 digits
-Output rounding: full precision
+$ java bfbs --precision=80 test/data.csv
+bfbs 0v11 (2026-04-06) - Big Float Basic Statistics in Java
+Info: bfbs.java interpreted by Java version: 21.0.10
+Info: Using java.math.BigDecimal (standard library)
+Info: Calculation precision: 80 decimal digits
+Info: Output rounding: full precision
 
-Processing file: test\data.csv
+Processing file: test/data.csv
 Column 1:
-  Count            : 3
-  Minimum          : 100000000000000000000000000000000000000100000000000
-  Mean             : 200000000000000000000000000000000000000200000000000
-  Median           : 200000000000000000000000000000000000000200000000000
-  Maximum          : 300000000000000000000000000000000000000300000000000
-  Range            : 200000000000000000000000000000000000000200000000000
-  Sum              : 600000000000000000000000000000000000000600000000000
-  Sample Variance  : 10000000000000000000000000000000000000020000000000000000000000000000000000000010000000000000000000000
-  Sample Std. Dev. : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
+  Count         : 3
+  Minimum       : 100000000000000000000000000000000000000100000000000
+  Mean          : 200000000000000000000000000000000000000200000000000
+  Median        : 200000000000000000000000000000000000000200000000000
+  Maximum       : 300000000000000000000000000000000000000300000000000
+  Range         : 200000000000000000000000000000000000000200000000000
+  Sum           : 600000000000000000000000000000000000000600000000000
+  Variance (s²) : 10000000000000000000000000000000000000020000000000000000000000000000000000000010000000000000000000000
+  Std. Dev. (s) : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
+  Variance (σ²) : 6666666666666666666666666666666666666680000000000000000000000000000000000000006700000000000000000000
+  Std. Dev. (σ) : 81649658092772603273242802490196379732279899013315.110217696328377522208961642700
 
 Column 2:
-  Count            : 3
-  Minimum          : 400000000000000000000000000000000000000400000000000
-  Mean             : 500000000000000000000000000000000000000500000000000
-  Median           : 500000000000000000000000000000000000000500000000000
-  Maximum          : 600000000000000000000000000000000000000600000000000
-  Range            : 200000000000000000000000000000000000000200000000000
-  Sum              : 1500000000000000000000000000000000000001500000000000
-  Sample Variance  : 10000000000000000000000000000000000000020000000000000000000000000000000000000010000000000000000000000
-  Sample Std. Dev. : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
+  Count         : 3
+  Minimum       : 400000000000000000000000000000000000000400000000000
+  Mean          : 500000000000000000000000000000000000000500000000000
+  Median        : 500000000000000000000000000000000000000500000000000
+  Maximum       : 600000000000000000000000000000000000000600000000000
+  Range         : 200000000000000000000000000000000000000200000000000
+  Sum           : 1500000000000000000000000000000000000001500000000000
+  Variance (s²) : 10000000000000000000000000000000000000020000000000000000000000000000000000000010000000000000000000000
+  Std. Dev. (s) : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
+  Variance (σ²) : 6666666666666666666666666666666666666680000000000000000000000000000000000000006700000000000000000000
+  Std. Dev. (σ) : 81649658092772603273242802490196379732279899013315.110217696328377522208961642700
 
 Column 3:
-  Count            : 3
-  Minimum          : 700000000000000000000000000000000000000700000000000
-  Mean             : 800000000000000000000000000000000000000800000000000
-  Median           : 800000000000000000000000000000000000000800000000000
-  Maximum          : 900000000000000000000000000000000000000900000000000
-  Range            : 200000000000000000000000000000000000000200000000000
-  Sum              : 2400000000000000000000000000000000000002400000000000
-  Sample Variance  : 10000000000000000000000000000000000000020000000000000000000000000000000000000010000000000000000000000
-  Sample Std. Dev. : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
+  Count         : 3
+  Minimum       : 700000000000000000000000000000000000000700000000000
+  Mean          : 800000000000000000000000000000000000000800000000000
+  Median        : 800000000000000000000000000000000000000800000000000
+  Maximum       : 900000000000000000000000000000000000000900000000000
+  Range         : 200000000000000000000000000000000000000200000000000
+  Sum           : 2400000000000000000000000000000000000002400000000000
+  Variance (s²) : 10000000000000000000000000000000000000020000000000000000000000000000000000000010000000000000000000000
+  Std. Dev. (s) : 100000000000000000000000000000000000000100000000000.00000000000000000000000000000
+  Variance (σ²) : 6666666666666666666666666666666666666680000000000000000000000000000000000000006700000000000000000000
+  Std. Dev. (σ) : 81649658092772603273242802490196379732279899013315.110217696328377522208961642700
 
-bfbs.java execution time: 62 [mS]
->
+bfbs.java execution time: 70 [mS]
+$
 ```
 ### perl
 ```
@@ -850,10 +858,11 @@ bfbs (rust executable) time taken: 0.001182 [sec]
 ```
 ### swift
 ```
-% ./bfbs_swift --precision 340 --digits 80 test/data.csv
-bfbs_swift version 0v1 (2026-03-18)
-MPFR version: 4.2.2
-Using 340 bit precision and 80 output digits
+$ ./bfbs_swift --precision 320 --print_digits 80 test/data.csv
+bfbs_swift version 0v3 (2026-04-05)
+Info: MPFR version: 4.2.2
+Info: Using 320 bit mantissa precision (about 96 decimal digits)
+Info: Using 80 output digits
 
 Processing file: test/data.csv
 Column: Column 1
@@ -898,8 +907,8 @@ Column: Column 3
   Variance (σ²) : 6.6666666666666666666666666666666666666800000000000000000000000000000000000000067e+99
   Std.Dev. (σ)  : 81649658092772603273242802490196379732279899013315.110217696328377522208961642699
 
-Info: bfbs (swift) execution time: 2.375 ms
-%
+Info: bfbs (swift) execution time: 1.755 ms
+$
 ```
 ### tcl
 ```
@@ -951,16 +960,20 @@ Info: bfbs (tcl) time taken: 0.009000 [sec]
 %
 ```
 ### Comparison Table
-Straw poll of current Microsoft WSL linux preformance numbers (please note: the numbers are meant to be generally indicative and comparing them depends on all manner of dubious assumptions - so use with extreme care); -
+Straw poll of current preformance numbers for versions of bfbs using 80 decimal digits of output when run on Ubuntu 25.10 linux (please note: the numbers are meant to be generally indicative and comparing them depends on all manner of dubious assumptions - so use with extreme caution); -
 
-| bfbs | src lines | exe size | 3x3 time | 1001x1 time | 2113x4 time |
-|:-----|:---------:|:--------:|:--------:|:-----------:|:-----------:|
-| c++     | 188    | 2.26 Mb  | 4 mS     | 31 mS       | 17 mS.      |
-| go      | 320    | 1.80 Mb  | 6 mS     | 11 mS       | 33 mS       |
-| java    | 176    | 7081 b   | 0.14 S   | 0.15 S      | 0.27 S      |
-| julia   | 269    |          | 9 S      | 12 S        | 9.2 S       |
-| perl    | 100    |          | 88 mS    | 0.38 S      | 3 S         |
-| python  | 105    |          | 49 mS    | 49 mS       | 81 mS       |
-| Rscript | 191    |          | 0.85 S   | 10 S        | 96 S        |
-| ruby    | 143    |          | 0.11 S   | 0.11 S      | 1.3 S       |
-| rust    | 277    | 1.75 Mb  | 6 mS     | 8 mS        | 17 mS       |
+| bfbs    | version | src lines | exe size | 3x3 time | 1001x1 time | 2113x4 time |
+|:--------|:-------:|:---------:|:--------:|:--------:|:-----------:|:-----------:|
+| go      | v0.0.10 | 342       | -    Mb  | 0.4 mS   | 2.4 mS      | 14 mS.      |
+| c++     | 0v9     | 223       | -    Mb  | 0.4 mS   | 2.6 mS      | 14 mS.      |
+| rust    | v0.1.10 | 277       | -    Mb  | 1 mS     | 6 mS        | 20 mS.      |
+| python  | 0v5     | 122       | -    Mb  | 4.1 mS   | 7 mS        | 22 mS.      |
+| swift   | 0v3     | 309       | -    Mb  | 1.7 mS   | 14 mS       | 53 mS.      |
+| deno    | 0.0.3   | 167       | -    Mb  | 5 mS     | 20 mS       | 95 mS.      |
+| java    | 0v11    | 207       | 8387 b   | 31 mS    | 41 mS       | 104 mS.     |
+| fortran | 0.0.2   | 472       | -    Mb  | 1 mS     | 9 mS        | 146 mS.     |
+| ruby    | 0v6     | 153       | -    Mb  | 1.2 mS   | 10 mS       | 1.1 S.      |
+| julia   | 0v13    | 303       | -    Mb  | 2.2 S    | 2.2 S       | 2.3 S.      |
+| perl    | 0v8     | 123       | -    Mb  | 4.7 mS   | 0.2 S       | 3 S.        |
+| tcl     | 0.1.0   | 264       | -    Mb  | 15 mS    | 0.4 S       | 3.3 S.      |
+| Rscript | 0v1     | 191       | -    Mb  | - mS     | 8.6 S       | 68 S.       |

@@ -1,21 +1,30 @@
 #! /bin/ruby -w
 #
-# bfbs.rb last edited on Sat Feb 28 16:13:33 2026
+# bfbs.rb last edited on Wed Apr  8 15:37:51 2026 as 0v7
 #
 # This script reads a CSV file, calculates statistics for each column,
-# including sum, average, standard deviation, and range, and outputs the results.
+# including sum, mean, standard deviation, and range, and outputs the results.
 #
 # Calculations use the  bigdecimal  module which provides
 # arbitrary-precision decimal floating-point arithmetic
 # to minimize floating-point errors.
-# The default precision can be adjusted by changing the 'precision' variable.
+# The default precision can be adjusted by using the '--precision' option.
 # The default precision is currently set to 40 decimal places.
 #
 # This script is designed to be simple to run in a standard Ruby environment
 # and does not require any external libraries beyond the standard library.
 #
 
-#
+# Usage: -
+# ruby bfbs.rb [options] file1 [file2 ...]
+#  Where Options are: -
+#   -H, --header     Treat first row as a title for each column of data
+#   -P, --precision  Set calculation precision to PRECISION decimal digits (default is 40)
+#   -q, --quiet      Suppress output of timing and version information
+#   -h, --help       Show this message
+
+# Version history; -
+# 0v7 Added population variance and standard deviation output
 # 0v6 Add --quiet option to suppress version and elapsed time output
 # 0v5 Provide execution time output
 # 0v4 Provide median
@@ -106,7 +115,7 @@ BigDecimal.limit(options[:precision])  # Set global precision limit for BigDecim
 #
 # Output version and environment information unless quiet option is set
 unless options[:quiet]
-  puts "bfbs.rb version 0v6"
+  puts "bfbs.rb version 0v7"
   puts "ruby version: #{RUBY_VERSION}"
   puts "csv module version: #{CSV::VERSION}"
   puts "bigdecimal module version: #{BigDecimal::VERSION}"
@@ -206,9 +215,29 @@ filenames.each do |name|
     end
   end
 
+  # Calculate the population variance of each column
+  pvarOfColumns = Array.new
+  pvarOfColumns = sqrOfColumns.map do |var|
+    if rowCount > 0
+      (var.div((rowCount), options[:precision]))  # Calculate variance
+    else
+      (0.0).to_d
+    end
+  end
+
   # Calculate the sample standard deviation of each column
   stddevOfColumns = Array.new
   stddevOfColumns = varOfColumns.map do |var|
+    if var > (0.0).to_d
+      (bsqrt(var, options[:precision]))  # Calculate standard deviation
+    else
+      (0.0).to_d
+    end
+  end
+
+  # Calculate the population standard deviation of each column
+  pstddevOfColumns = Array.new
+  pstddevOfColumns = pvarOfColumns.map do |var|
     if var > (0.0).to_d
       (bsqrt(var, options[:precision]))  # Calculate standard deviation
     else
@@ -227,15 +256,17 @@ filenames.each do |name|
     else
       print "Column: ", i + 1, "\n"
     end
-    print "  Count     : ", rowCount, "\n"
-    print "  Minimum   : ", minOfColumns[i], "\n"
-    print "  Mean      : ", avgOfColumns[i], "\n"
-    print "  Median    : ", medianOfColumns[i], "\n"
-    print "  Maximum   : ", maxOfColumns[i], "\n"
-    print "  Range     : ", rangeOfColumns[i], "\n"
-    print "  Sum       : ", sumOfColumns[i], "\n"
-    print "  Variance  : ", varOfColumns[i], "\n"
-    print "  Std. Dev. : ", stddevOfColumns[i], "\n"
+    print "  Count        : ", rowCount, "\n"
+    print "  Minimum      : ", minOfColumns[i], "\n"
+    print "  Mean         : ", avgOfColumns[i], "\n"
+    print "  Median       : ", medianOfColumns[i], "\n"
+    print "  Maximum      : ", maxOfColumns[i], "\n"
+    print "  Range        : ", rangeOfColumns[i], "\n"
+    print "  Sum          : ", sumOfColumns[i], "\n"
+    print "  Variance (s\u00B2): ", varOfColumns[i], "\n"
+    print "  Std. Dev. (s): ", stddevOfColumns[i], "\n"
+    print "  Variance (\u03C3\u00B2): ", pvarOfColumns[i], "\n"
+    print "  Std. Dev. (\u03C3): ", pstddevOfColumns[i], "\n"
   end
 
   unless options[:quiet]

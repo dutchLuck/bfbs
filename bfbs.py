@@ -2,7 +2,7 @@
 #
 # B F B S . P Y
 #
-# bfbs.py last edited on Fri Feb 27 22:57:21 2026
+# bfbs.py last edited on Wed Apr  8 14:53:02 2026 as 0v6
 #
 # This script reads one or more CSV files and calculates
 # basic statistics for each column in each file, including sum,
@@ -17,7 +17,15 @@
 # and does not require any external libraries beyond the standard library.
 #
 
-#
+# Usage: -
+#   python3 bfbs.py [options] file1.csv file2.csv ...
+#   Where Options are: -
+#    -H, --header ...   Treat the first non-comment row as a header row
+#    -P, --precision PRECISION ... Set calculations to PRECISION decimal digits (default is 40)
+#    -q, --quiet ...    Suppress some output including execution time
+
+# Version history; -
+# 0v6 Added Population standard deviation and variance calculations
 # 0v5 Added --quiet option to suppress some output including execution time
 # 0v4 Added wall clock timer and reformatted with black
 # 0v3 Added calculation of median
@@ -94,7 +102,7 @@ getcontext().prec = calc_precision
 
 # Output version and environment information
 if not args.quiet:
-    print("bfbs.py version 0v5")
+    print("bfbs.py version 0v6")
     print(f"python version: {platform.python_version()}")
     print(f"csv module version: {csv.__version__}")
     print(f"decimal module version: {platform.python_version()}")
@@ -148,11 +156,22 @@ for file_path in args.files:
         total = sum(col)
         mean = total / count
 
+        # Sum of Squared differences (for variance)
+        sum_of_squares = (
+            sum((mean - x) ** 2 for x in col)
+        )
+
         # Sample standard deviation
         variance = (
-            sum((mean - x) ** 2 for x in col) / (count - 1) if count > 1 else Decimal(0)
+            sum_of_squares / (count - 1) if count > 1 else Decimal(0)
         )
         stddev = variance.sqrt()
+
+        # Population standard deviation
+        pvariance = (
+            sum_of_squares / count if count > 0 else Decimal(0)
+        )
+        pstddev = pvariance.sqrt()
 
         min_val = min(col)
         max_val = max(col)
@@ -170,15 +189,18 @@ for file_path in args.files:
                 median = (col_sorted[indx - 1] + col_sorted[indx]) / safe_decimal("2")
 
         print(f"\n{headers[i]}:")
-        print(f"  Count     : {count}")
-        print(f"  Minimum   : {min_val}")
-        print(f"  Mean      : {mean}")
-        print(f"  Median    : {median}")
-        print(f"  Maximum   : {max_val}")
-        print(f"  Range     : {range_val}")
-        print(f"  Sum       : {total}")
-        print(f"  Variance  : {variance}")
-        print(f"  Std. Dev. : {stddev}")
+        print(f"  Count        : {count}")
+        print(f"  Minimum      : {min_val}")
+        print(f"  Mean         : {mean}")
+        print(f"  Median       : {median}")
+        print(f"  Maximum      : {max_val}")
+        print(f"  Range        : {range_val}")
+        print(f"  Sum          : {total}")
+        print(f"  Variance (s\u00B2): {variance}")
+        print(f"  Std. Dev. (s): {stddev}")
+        print(f"  Variance (\u03C3\u00B2): {pvariance}")
+        print(f"  Std. Dev. (\u03C3): {pstddev}")
+
 
 if not args.quiet:
     print("bfbs.py execution time was: %9.3f [mS]" % ((getClockTime() - startTime) * 1000))

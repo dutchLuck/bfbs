@@ -2,7 +2,7 @@
 #
 # B F B S . T C L
 #
-# bfbs.tcl last edited on Sat Mar  7 10:21:58 2026
+# bfbs.tcl last edited on Wed Apr  8 21:15:04 2026 as 0.1.1
 
 # This script reads the columns of data contained in one or more
 # CSV files and outputs the basic statistics of each column. It
@@ -12,10 +12,8 @@
 # small check scripts and struggled to come up with a script
 # that worked for both integer data and floating point data on
 # the old tcl version that comes with MacOS (tcl 8.5.9). This
-# script is only known to work on MacOS and tcl version 8.5.9,
-# but it may work on later tcl versions and on other operating
-# systems. Currently it has not been tested on anything other than
-# MacOS.
+# script is known to work on MacOS with tcl version 8.5.9 and
+# also on Ubuntu 22.04 LTS with tcl version 8.6.12.
 
 # Requirements:
 #   tcllib (for math::bigfloat)
@@ -29,9 +27,11 @@
 #       -q / --quiet suppress timing and header output
 
 # Known or suspected script short-comings; -
-# 1. AI seems to have over-developed it and included excess lines of code
-# 2. May prove to be a tcl version 8.5 specific implementation
+# 1. No CSV header line handling
+# 2. AI seems to have over-developed it and included excess lines of code
+# 3. May prove to be tcl version 8.5 or 8.6 specific
 
+# 0.1.1  Tweaked the format of the print-out statements
 # 0.1.0  Original version of bfbs.tcl
 
 package require Tcl 8.5
@@ -41,7 +41,7 @@ package require math::bigfloat
 set start_time [clock milliseconds]
 
 # script version
-set script_version "0.1.0"
+set script_version "0.1.1"
 
 # ---- Command line argument processing ----
 
@@ -207,12 +207,13 @@ proc initColumnStats {ncol} {
 # ---- Process a single file ----
 proc processFile {fname precision} {
     global digits has_precision
-    puts "Processing: $fname  (precision = $precision bits)"
 
     if {[catch {set f [open $fname r]} err]} {
-        puts stderr "Cannot open file $fname: $err"
+        puts stderr "\nError: Cannot open file $fname: $err"
         return
     }
+
+    puts "\nProcessing: $fname  (precision: $precision bits)"
 
     set stats {}
     set ncol 0
@@ -377,19 +378,19 @@ proc processFile {fname precision} {
 
         # output in desired order: minimum, mean, median, maximum, range, sum, variance, stddev
         puts "Column [expr {$i+1}]:"
-        puts "    count      = $count"
-        puts "    minimum    = [format_bf $min $digits]"
-        puts "    mean       = [format_bf $mean $digits]"
+        puts "    Count        : $count"
+        puts "    Minimum      : [format_bf $min $digits]"
+        puts "    Mean         : [format_bf $mean $digits]"
         if {$med ne ""} {
-            puts "    median     = [format_bf $med $digits]"
+            puts "    Median       : [format_bf $med $digits]"
         }
-        puts "    maximum    = [format_bf $max $digits]"
-        puts "    range      = [format_bf $range $digits]"
-        puts "    sum        = [format_bf $sum $digits]"
-        puts "    variance   = [format_bf $var $digits]"
-        puts "    stddev     = [format_bf $stddev $digits]"
-        puts "    variance n = [format_bf $var_n $digits]"
-        puts "    stddev n   = [format_bf $stddev_n $digits]"
+        puts "    Maximum      : [format_bf $max $digits]"
+        puts "    Range        : [format_bf $range $digits]"
+        puts "    Sum          : [format_bf $sum $digits]"
+        puts "    Variance (s\u00B2): [format_bf $var $digits]"
+        puts "    Std. Dev. (s): [format_bf $stddev $digits]"
+        puts "    Variance (\u03C3\u00B2): [format_bf $var_n $digits]"
+        puts "    Std. Dev. (\u03C3): [format_bf $stddev_n $digits]"
     }
 
     puts ""

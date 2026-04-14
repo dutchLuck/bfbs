@@ -2,7 +2,7 @@
 #
 # B F B S . P L
 #
-# bfbs.pl last edited on Sat Feb 28 17:17:13 2026
+# bfbs.pl last edited on Sat Feb 28 17:17:13 2026 as version 0v9
 #
 # This script reads one or more CSV files, containing one or more columns of
 # numbers and calculates basic statistics for each column (including sum,
@@ -40,6 +40,7 @@
 #    being used.
 
 #
+# 0v9 Added population variance and population standard deviation calculations and output
 # 0v8 Add --quiet option to suppress elapsed time output
 # 0v7 Add code execution elapsed calculation
 # 0v6 Cosmetic changes to output labels
@@ -64,6 +65,7 @@
 # specified number of digits, regardless of their size.
 # (see https://perldoc.perl.org/Math::BigFloat)
 
+# MARK: 
 # === Modules ===
 use strict;
 use warnings;
@@ -76,21 +78,20 @@ my $start_time = time();
 
 # === Program Info ===
 my $PROGRAM_NAME    = "bfbs.pl";
-my $PROGRAM_VERSION = "0v8 (2026-02-28)";
+my $PROGRAM_VERSION = "0v9 (2026-04-14)";
 
+# MARK:
 # === Settings ===
 my $precision       = 40;
-my $use_population  = 0;
 my $use_header      = 0;
 my $use_scientific  = 0;
 my $quiet           = 0;
 my $help            = 0;
 my $helpMsg         = << "HELP_MSG";
-[--header] [--help] [--population] [--precision=N] [--scientific] [--quiet] file1.csv [file2.csv ...]
+[--header] [--help] [--precision=N] [--scientific] [--quiet] file1.csv [file2.csv ...]
  where:
   --header       : Treat first CSV row as column headers
   --help         : Show this help message and exit
-  --population   : Use population variance (divide by n) instead of sample variance (divide by n-1)
   --precision=N  : Set precision to N digits (default: 40)
   --scientific   : Output numbers in scientific notation (e.g. 1.0e1)
   --quiet        : Suppress version and elapsed time info output
@@ -99,7 +100,6 @@ HELP_MSG
 
 GetOptions(
     "precision=i"   => \$precision,
-    "population"    => \$use_population,
     "header"        => \$use_header,
     "help"          => \$help,
     "scientific"    => \$use_scientific,
@@ -124,6 +124,7 @@ unless ($quiet) {
 }
 print "Precision: $precision digits, Output Format: ", ($use_scientific ? "Scientific" : "Decimal"), "\n";
 
+# MARK:
 # === File Processing ===
 foreach my $file (@ARGV) {
     open my $fh, '<', $file or die "Error: Cannot open \"$file\": $!";
@@ -179,19 +180,19 @@ foreach my $file (@ARGV) {
             $var_sum->badd($diff->bpow(2));
         }
 
-        my $divisor;
-        if ($use_population) {
-            $divisor = Math::BigFloat->new($n);
-        } else {
-            if ($n <= 1) {
-                warn "Not enough data in $label to compute sample variance (n = $n)\n";
-                next;
-            }
-            $divisor = Math::BigFloat->new($n - 1);
+        my $ndivisor;
+        my $n1divisor;
+        if ($n <= 1) {
+            warn "Not enough data in $label to compute sample variance (n = $n)\n";
+            next;
         }
+        $ndivisor = Math::BigFloat->new($n);
+        $n1divisor = Math::BigFloat->new($n - 1);
 
-        my $variance = $var_sum->copy()->bdiv($divisor);
-        my $stddev   = $variance->copy()->bsqrt();
+        my $pvariance = $var_sum->copy()->bdiv($ndivisor);
+        my $pstddev   = $pvariance->copy()->bsqrt();
+        my $svariance = $var_sum->copy()->bdiv($n1divisor);
+        my $sstddev   = $svariance->copy()->bsqrt();
 
         # Min, Median, Max, Range
         my @sorted = sort { $a->bcmp($b) } @$data;
@@ -209,21 +210,23 @@ foreach my $file (@ARGV) {
         }
 
         print "\nColumn: $label\n";
-        print "  Count     : $n\n";
-        print "  Minimum   : ", ($use_scientific ? $min->bnstr() : $min->bstr()), "\n";
-        print "  Mean      : ", ($use_scientific ? $mean->bnstr() : $mean->bstr()), "\n";
-        print "  Median    : ", ($use_scientific ? $median->bnstr() : $median->bstr()), "\n";
-        print "  Maximum   : ", ($use_scientific ? $max->bnstr() : $max->bstr()), "\n";
-        print "  Range     : ", ($use_scientific ? $range->bnstr() : $range->bstr()), "\n";
-        print "  Sum       : ", ($use_scientific ? $sum->bnstr() : $sum->bstr()), "\n";
-        print "  Variance  : ", ($use_scientific ? $variance->bnstr() : $variance->bstr()), " ", ($use_population ? "(population)" : "(sample)"), "\n";
-        print "  Std. Dev. : ", ($use_scientific ? $stddev->bnstr() : $stddev->bstr()), " ", ($use_population ? "(population)" : "(sample)"),"\n";
+        print "  Count        : $n\n";
+        print "  Minimum      : ", ($use_scientific ? $min->bnstr() : $min->bstr()), "\n";
+        print "  Mean         : ", ($use_scientific ? $mean->bnstr() : $mean->bstr()), "\n";
+        print "  Median       : ", ($use_scientific ? $median->bnstr() : $median->bstr()), "\n";
+        print "  Maximum      : ", ($use_scientific ? $max->bnstr() : $max->bstr()), "\n";
+        print "  Range        : ", ($use_scientific ? $range->bnstr() : $range->bstr()), "\n";
+        print "  Sum          : ", ($use_scientific ? $sum->bnstr() : $sum->bstr()), "\n";
+        print "  Variance (s²): ", ($use_scientific ? $svariance->bnstr() : $svariance->bstr()), "\n";
+        print "  Std. Dev. (s): ", ($use_scientific ? $sstddev->bnstr() : $sstddev->bstr()), "\n";
+        print "  Variance (σ²): ", ($use_scientific ? $pvariance->bnstr() : $pvariance->bstr()), "\n";
+        print "  Std. Dev. (σ): ", ($use_scientific ? $pstddev->bnstr() : $pstddev->bstr()), "\n";
     }
+}
 
-    # === Elapsed Time Calculation ===
-    unless ($quiet) {
-        my $end_time = time();
-        my $elapsed = $end_time - $start_time;
-        printf("bfbs.pl execution elapsed time: %.6f [sec]\n", $elapsed);
-    }
+# === Elapsed Time Calculation ===
+unless ($quiet) {
+    my $end_time = time();
+    my $elapsed = $end_time - $start_time;
+    printf("\nbfbs.pl execution elapsed time: %.6f [sec]\n", $elapsed);
 }

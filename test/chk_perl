@@ -2,11 +2,15 @@
 #
 # C H K _ P E R L
 #
-# chk_perl last edited on Sun Mar  1 20:36:52 2026 
+# chk_perl last edited on Wed Apr 15 20:08:10 2026 as version 0v1
 #
 # To redirect both stdout and stderr to a file, use ampersand redirect operation, for example; -
 #  ./chk_perl &> outputFile
 #
+
+# 0v1 Added test cases for handling of files with no data, files with only one line of data,
+#     and files with a header but no data, with appropriate checks and warnings.
+
 EXE="perl ../bfbs.pl $1 $2 $3 $4 $5 $6 $7 $8 $9"
 TEN_PLUSS=++++++++++
 #
@@ -84,7 +88,31 @@ echo "${TEN_PLUSS} Shell got Return code number $? for NIST numerical accuracy f
 echo ""
 echo "${TEN_PLUSS} $EXE --precision 80 non_existent_file.csv ./data.csv  +++Handles non-existent file check${TEN_PLUSS}"
 $EXE --precision 80 non_existent_file.csv ./data.csv
-echo "${TEN_PLUSS} Shell got Return code number $? for Handles non-existent file options${TEN_PLUSS}"
+echo "${TEN_PLUSS} Shell got Return code number $? for Handles non-existent file${TEN_PLUSS}"
+#
+# Test data file handling with no data in the file
+echo ""
+echo "${TEN_PLUSS} $EXE no_data.csv  +++Handles no data file check${TEN_PLUSS}"
+$EXE no_data.csv
+echo "${TEN_PLUSS} Shell got Return code number $? for Handles no data in file${TEN_PLUSS}"
+#
+# Test data file handling with one line of data in the file
+echo ""
+echo "${TEN_PLUSS} $EXE only_one_data_line.csv  +++Handles single line data file check${TEN_PLUSS}"
+$EXE only_one_data_line.csv
+echo "${TEN_PLUSS} Shell got Return code number $? for Handles single line of data in file${TEN_PLUSS}"
+#
+# Test data file handling with a header, but no data in the file
+echo ""
+echo "${TEN_PLUSS} $EXE --header header_sans_data.csv  +++Handles no data in file with header check${TEN_PLUSS}"
+$EXE --header header_sans_data.csv
+echo "${TEN_PLUSS} Shell got Return code number $? for Handles no data in file with header${TEN_PLUSS}"
+#
+# Test data file handling with a header and only one data line in the file
+echo ""
+echo "${TEN_PLUSS} $EXE --header header_plus_one_data_line.csv  +++Handles single line of data in file with header check${TEN_PLUSS}"
+$EXE --header header_plus_one_data_line.csv
+echo "${TEN_PLUSS} Shell got Return code number $? for Handles single line of data in file with header${TEN_PLUSS}"
 #
 # Test usage messages
 echo ""

@@ -2,7 +2,7 @@
 #
 # B F B S . P L
 #
-# bfbs.pl last edited on Sat Feb 28 17:17:13 2026 as version 0v9
+# bfbs.pl last edited on Wed Apr 15 19:23:48 2026 as version 0v10
 #
 # This script reads one or more CSV files, containing one or more columns of
 # numbers and calculates basic statistics for each column (including sum,
@@ -40,6 +40,9 @@
 #    being used.
 
 #
+# 0v10 Added code to handle the case where there are no columns of data in a file,
+#      and to handle the case where there is not enough data to compute sample
+#      variance (n <= 1), with appropriate warnings.
 # 0v9 Added population variance and population standard deviation calculations and output
 # 0v8 Add --quiet option to suppress elapsed time output
 # 0v7 Add code execution elapsed calculation
@@ -53,7 +56,7 @@
 
 # Perl Math::BigFloat's precision method sets the
 # number of significant digits, not decimal places.
-# This 0v8 version of bfbs.pl uses the "accuracy"
+# Version 0v8 and later of bfbs.pl use the "accuracy"
 # method to set the number of digits each result
 # should have, which is more intuitive for users
 # who want to specify precision in terms of digits.
@@ -64,6 +67,15 @@
 # all results are consistently formatted to the
 # specified number of digits, regardless of their size.
 # (see https://perldoc.perl.org/Math::BigFloat)
+
+# Usage: bfbs.pl [--header] [--help] [--precision=N] [--scientific] [--quiet] file1.csv [file2.csv ...]
+# where:
+#  --header       : Treat first CSV row as column headers
+#  --help         : Show this help message and exit
+#  --precision=N  : Set precision to N digits (default: 40)
+#  --scientific   : Output numbers in scientific notation (e.g. 1.0e1)
+#  --quiet        : Suppress version and elapsed time info output
+#  file1.csv ...  : One or more CSV files to process
 
 # MARK: 
 # === Modules ===
@@ -78,7 +90,7 @@ my $start_time = time();
 
 # === Program Info ===
 my $PROGRAM_NAME    = "bfbs.pl";
-my $PROGRAM_VERSION = "0v9 (2026-04-14)";
+my $PROGRAM_VERSION = "0v10 (2026-04-15)";
 
 # MARK:
 # === Settings ===
@@ -113,7 +125,7 @@ if ($help) { die "Usage: $0 $helpMsg\n" };
 Math::BigFloat->accuracy($precision);  # "accuracy()" sets the number of digits each result should have
 
 # Require at least one file
-@ARGV or die "Error: No input files specified.\nUsage: $0 $helpMsg\n";
+@ARGV or die "\nError: No input files specified.\nUsage: $0 $helpMsg\n";
 
 # === Announce Info ===
 unless ($quiet) {
@@ -127,9 +139,9 @@ print "Precision: $precision digits, Output Format: ", ($use_scientific ? "Scien
 # MARK:
 # === File Processing ===
 foreach my $file (@ARGV) {
-    open my $fh, '<', $file or die "Error: Cannot open \"$file\": $!";
+    open my $fh, '<', $file or die "\nError: Cannot open file named: \"$file\": $!";
 
-    print "\nFile: $file\n";
+    print "\nProcessing file named: \"$file\"\n";
 
     my @columns;       # Array of arrayrefs for column data
     my @headers;       # Column headers
@@ -161,38 +173,53 @@ foreach my $file (@ARGV) {
 
     close $fh;
 
+    if ($#columns < 0) {
+        warn "\nWarning: No data to process in file named: \"$file\"\n";
+        next;   # Skip to next file if there are no columns of data
+    }
+
     for my $i (0 .. $#columns) {
         my $data = $columns[$i];
-        next unless @$data;
+        next unless @$data;     # Skip empty columns
 
         my $label = $use_header ? ($headers[$i] // ($i + 1)) : ($i + 1);
 
+        # Get Number of data points n
         my $n = scalar @$data;
+
+        # Calculate Sum of column values
         my $sum = Math::BigFloat->new(0);
         $sum->badd($_) for @$data;
 
+        # Calculate Mean
         my $mean = $sum->copy()->bdiv($n);
 
-        # Variance
+        # Calculate Sum of Differences Squared
         my $var_sum = Math::BigFloat->new(0);
         for my $x (@$data) {
             my $diff = $x->copy()->bsub($mean);
             $var_sum->badd($diff->bpow(2));
         }
 
-        my $ndivisor;
-        my $n1divisor;
-        if ($n <= 1) {
-            warn "Not enough data in $label to compute sample variance (n = $n)\n";
+        # Calculate Variance and Standard Deviation (Sample and Population)
+        my ($svariance, $sstddev, $pvariance, $pstddev);
+        if ($n <= 0) {
+            warn "\nWarning: No data in column: \"$label\" to compute statistics (n = $n)\n";
             next;
+        } else {
+            my $ndivisor = Math::BigFloat->new($n);
+            $pvariance = $var_sum->copy()->bdiv($ndivisor);
+            $pstddev   = $pvariance->copy()->bsqrt();
+            if ($n <= 1) {
+                warn "\nWarning: Not enough data in column: \"$label\" to compute sample variance (n = $n)\n";
+                $svariance = Math::BigFloat->new(0);
+                $sstddev   = Math::BigFloat->new(0);
+            } else {
+                my $n1divisor = Math::BigFloat->new($n - 1);
+                $svariance = $var_sum->copy()->bdiv($n1divisor);
+                $sstddev   = $svariance->copy()->bsqrt();
+            }
         }
-        $ndivisor = Math::BigFloat->new($n);
-        $n1divisor = Math::BigFloat->new($n - 1);
-
-        my $pvariance = $var_sum->copy()->bdiv($ndivisor);
-        my $pstddev   = $pvariance->copy()->bsqrt();
-        my $svariance = $var_sum->copy()->bdiv($n1divisor);
-        my $sstddev   = $svariance->copy()->bsqrt();
 
         # Min, Median, Max, Range
         my @sorted = sort { $a->bcmp($b) } @$data;

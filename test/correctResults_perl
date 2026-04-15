@@ -2,7 +2,7 @@
 ++++++++++ perl ../bfbs.pl --quiet         --precision 80 data.csv  +++Small valid 3 column file, with header option check++++++++++
 Precision: 80 digits, Output Format: Decimal
 
-File: data.csv
+Processing file named: "data.csv"
 
 Column: 1
   Count        : 3
@@ -47,7 +47,7 @@ Column: 3
 ++++++++++ perl ../bfbs.pl --quiet         cols7rows4.csv +++Small valid 7 column file and no options check++++++++++
 Precision: 40 digits, Output Format: Decimal
 
-File: cols7rows4.csv
+Processing file named: "cols7rows4.csv"
 
 Column: 1
   Count        : 4
@@ -144,7 +144,7 @@ Column: 7
 ++++++++++ perl ../bfbs.pl --quiet         heights.csv +++Somewhat longer file with 2 columns, 1 column the reverse of the other++++++++++
 Precision: 40 digits, Output Format: Decimal
 
-File: heights.csv
+Processing file named: "heights.csv"
 
 Column: 1
   Count        : 2113
@@ -202,7 +202,7 @@ Column: 4
 ++++++++++ perl ../bfbs.pl --quiet         NIST_StRD_PiDigits.dat +++Long file of 1 column of single digits, no options check++++++++++
 Precision: 40 digits, Output Format: Decimal
 
-File: NIST_StRD_PiDigits.dat
+Processing file named: "NIST_StRD_PiDigits.dat"
 
 Column: 1
   Count        : 5000
@@ -221,7 +221,7 @@ Column: 1
 ++++++++++ perl ../bfbs.pl --quiet         NIST_StRD_Lew.dat +++Long file of 1 column of single digits, no options check++++++++++
 Precision: 40 digits, Output Format: Decimal
 
-File: NIST_StRD_Lew.dat
+Processing file named: "NIST_StRD_Lew.dat"
 
 Column: 1
   Count        : 200
@@ -240,7 +240,7 @@ Column: 1
 ++++++++++ perl ../bfbs.pl --quiet         NIST_StRD_Lottery.dat +++Long file of 1 column of single digits, no options check++++++++++
 Precision: 40 digits, Output Format: Decimal
 
-File: NIST_StRD_Lottery.dat
+Processing file named: "NIST_StRD_Lottery.dat"
 
 Column: 1
   Count        : 218
@@ -259,7 +259,7 @@ Column: 1
 ++++++++++ perl ../bfbs.pl --quiet         NIST_StRD_Mavro.dat +++Long file of 1 column of single digits, no options check++++++++++
 Precision: 40 digits, Output Format: Decimal
 
-File: NIST_StRD_Mavro.dat
+Processing file named: "NIST_StRD_Mavro.dat"
 
 Column: 1
   Count        : 50
@@ -278,7 +278,7 @@ Column: 1
 ++++++++++ perl ../bfbs.pl --quiet         NIST_StRD_Michelso.dat +++Long file of 1 column of single digits, no options check++++++++++
 Precision: 40 digits, Output Format: Decimal
 
-File: NIST_StRD_Michelso.dat
+Processing file named: "NIST_StRD_Michelso.dat"
 
 Column: 1
   Count        : 100
@@ -297,7 +297,7 @@ Column: 1
 ++++++++++ perl ../bfbs.pl --quiet         NIST_StRD_NumAcc1.dat  +++NIST numerical accurracy file of 3 large close numbers++++++++++
 Precision: 40 digits, Output Format: Decimal
 
-File: NIST_StRD_NumAcc1.dat
+Processing file named: "NIST_StRD_NumAcc1.dat"
 
 Column: 1
   Count        : 3
@@ -316,7 +316,7 @@ Column: 1
 ++++++++++ perl ../bfbs.pl --quiet         NIST_StRD_NumAcc2.dat  +++NIST numerical accurracy file of close numbers++++++++++
 Precision: 40 digits, Output Format: Decimal
 
-File: NIST_StRD_NumAcc2.dat
+Processing file named: "NIST_StRD_NumAcc2.dat"
 
 Column: 1
   Count        : 1001
@@ -335,7 +335,7 @@ Column: 1
 ++++++++++ perl ../bfbs.pl --quiet         NIST_StRD_NumAcc3.dat  +++NIST numerical accurracy file of close numbers++++++++++
 Precision: 40 digits, Output Format: Decimal
 
-File: NIST_StRD_NumAcc3.dat
+Processing file named: "NIST_StRD_NumAcc3.dat"
 
 Column: 1
   Count        : 1001
@@ -354,7 +354,7 @@ Column: 1
 ++++++++++ perl ../bfbs.pl --quiet         --precision 80 NIST_StRD_NumAcc4.dat  +++NIST numerical accurracy file of large close numbers++++++++++
 Precision: 80 digits, Output Format: Decimal
 
-File: NIST_StRD_NumAcc4.dat
+Processing file named: "NIST_StRD_NumAcc4.dat"
 
 Column: 1
   Count        : 1001
@@ -373,7 +373,7 @@ Column: 1
 ++++++++++ perl ../bfbs.pl --quiet         --precision 32 NIST_StRD_NumAcc?.dat  +++NIST numerical accurracy files of large close numbers++++++++++
 Precision: 32 digits, Output Format: Decimal
 
-File: NIST_StRD_NumAcc1.dat
+Processing file named: "NIST_StRD_NumAcc1.dat"
 
 Column: 1
   Count        : 3
@@ -388,7 +388,7 @@ Column: 1
   Variance (σ²): 0.66666666666666666666666666666667
   Std. Dev. (σ): 0.81649658092772603273242802490197
 
-File: NIST_StRD_NumAcc2.dat
+Processing file named: "NIST_StRD_NumAcc2.dat"
 
 Column: 1
   Count        : 1001
@@ -403,7 +403,7 @@ Column: 1
   Variance (σ²): 0.0099900099900099900099900099900100
   Std. Dev. (σ): 0.099950037468777319163162666103907
 
-File: NIST_StRD_NumAcc3.dat
+Processing file named: "NIST_StRD_NumAcc3.dat"
 
 Column: 1
   Count        : 1001
@@ -418,7 +418,7 @@ Column: 1
   Variance (σ²): 0.0099900099900099900099900099900100
   Std. Dev. (σ): 0.099950037468777319163162666103907
 
-File: NIST_StRD_NumAcc4.dat
+Processing file named: "NIST_StRD_NumAcc4.dat"
 
 Column: 1
   Count        : 1001
@@ -435,9 +435,113 @@ Column: 1
 ++++++++++ Shell got Return code number 0 for NIST numerical accuracy files ++++++++++
 
 ++++++++++ perl ../bfbs.pl --quiet         --precision 80 non_existent_file.csv ./data.csv  +++Handles non-existent file check++++++++++
-Error: Cannot open "non_existent_file.csv": No such file or directory at ../bfbs.pl line 130.
+
+Error: Cannot open file named: "non_existent_file.csv": No such file or directory at ../bfbs.pl line 142.
 Precision: 80 digits, Output Format: Decimal
-++++++++++ Shell got Return code number 2 for Handles non-existent file options++++++++++
+++++++++++ Shell got Return code number 2 for Handles non-existent file++++++++++
+
+++++++++++ perl ../bfbs.pl --quiet         no_data.csv  +++Handles no data file check++++++++++
+
+Warning: No data to process in file named: "no_data.csv"
+Precision: 40 digits, Output Format: Decimal
+
+Processing file named: "no_data.csv"
+++++++++++ Shell got Return code number 0 for Handles no data in file++++++++++
+
+++++++++++ perl ../bfbs.pl --quiet         only_one_data_line.csv  +++Handles single line data file check++++++++++
+
+Warning: Not enough data in column: "1" to compute sample variance (n = 1)
+
+Warning: Not enough data in column: "2" to compute sample variance (n = 1)
+
+Warning: Not enough data in column: "3" to compute sample variance (n = 1)
+Precision: 40 digits, Output Format: Decimal
+
+Processing file named: "only_one_data_line.csv"
+
+Column: 1
+  Count        : 1
+  Minimum      : 100000000000000000000000000000000000000100000000000
+  Mean         : 100000000000000000000000000000000000000100000000000
+  Median       : 100000000000000000000000000000000000000100000000000
+  Maximum      : 100000000000000000000000000000000000000100000000000
+  Range        : 0
+  Sum          : 100000000000000000000000000000000000000100000000000
+  Variance (s²): 0
+  Std. Dev. (s): 0
+  Variance (σ²): 0
+  Std. Dev. (σ): 0
+
+Column: 2
+  Count        : 1
+  Minimum      : 400000000000000000000000000000000000000400000000000
+  Mean         : 400000000000000000000000000000000000000400000000000
+  Median       : 400000000000000000000000000000000000000400000000000
+  Maximum      : 400000000000000000000000000000000000000400000000000
+  Range        : 0
+  Sum          : 400000000000000000000000000000000000000400000000000
+  Variance (s²): 0
+  Std. Dev. (s): 0
+  Variance (σ²): 0
+  Std. Dev. (σ): 0
+
+Column: 3
+  Count        : 1
+  Minimum      : 700000000000000000000000000000000000000700000000000
+  Mean         : 700000000000000000000000000000000000000700000000000
+  Median       : 700000000000000000000000000000000000000700000000000
+  Maximum      : 700000000000000000000000000000000000000700000000000
+  Range        : 0
+  Sum          : 700000000000000000000000000000000000000700000000000
+  Variance (s²): 0
+  Std. Dev. (s): 0
+  Variance (σ²): 0
+  Std. Dev. (σ): 0
+++++++++++ Shell got Return code number 0 for Handles single line of data in file++++++++++
+
+++++++++++ perl ../bfbs.pl --quiet         --header header_sans_data.csv  +++Handles no data in file with header check++++++++++
+
+Warning: No data to process in file named: "header_sans_data.csv"
+Precision: 40 digits, Output Format: Decimal
+
+Processing file named: "header_sans_data.csv"
+++++++++++ Shell got Return code number 0 for Handles no data in file with header++++++++++
+
+++++++++++ perl ../bfbs.pl --quiet         --header header_plus_one_data_line.csv  +++Handles single line of data in file with header check++++++++++
+
+Warning: Not enough data in column: "heights" to compute sample variance (n = 1)
+
+Warning: Not enough data in column: "weights" to compute sample variance (n = 1)
+Precision: 40 digits, Output Format: Decimal
+
+Processing file named: "header_plus_one_data_line.csv"
+
+Column: heights
+  Count        : 1
+  Minimum      : 1.970000000000000000000000000000000000000
+  Mean         : 1.970000000000000000000000000000000000000
+  Median       : 1.970000000000000000000000000000000000000
+  Maximum      : 1.970000000000000000000000000000000000000
+  Range        : 0
+  Sum          : 1.970000000000000000000000000000000000000
+  Variance (s²): 0
+  Std. Dev. (s): 0
+  Variance (σ²): 0
+  Std. Dev. (σ): 0
+
+Column: weights
+  Count        : 1
+  Minimum      : 85.00000000000000000000000000000000000000
+  Mean         : 85.00000000000000000000000000000000000000
+  Median       : 85.00000000000000000000000000000000000000
+  Maximum      : 85.00000000000000000000000000000000000000
+  Range        : 0
+  Sum          : 85.00000000000000000000000000000000000000
+  Variance (s²): 0
+  Std. Dev. (s): 0
+  Variance (σ²): 0
+  Std. Dev. (σ): 0
+++++++++++ Shell got Return code number 0 for Handles single line of data in file with header++++++++++
 
 ++++++++++ perl ../bfbs.pl --quiet         --help +++Usage/help and information check++++++++++
 Usage: ../bfbs.pl [--header] [--help] [--precision=N] [--scientific] [--quiet] file1.csv [file2.csv ...]

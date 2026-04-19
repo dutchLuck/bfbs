@@ -3,7 +3,7 @@
 //
 // Big Float Basic Statistics
 //
-// bfbs.java last updated on Mon Apr  6 17:01:48 2025 by O.H. as 0v11
+// bfbs.java last updated on Sun Apr 19 20:53:48 2025 by O.H. as 0v12
 //
 
 //
@@ -51,6 +51,8 @@
 //
 
 //
+// 0v12 Added suppress version info -q quiet flag and output in engineering notation option
+//      -e or --engineering
 // 0v11 Added -q quiet flag, σ² & σ (population) stats and some minor output formatting changes
 // 0v10 Added execution time output
 // 0v9 Very minor mod to testing for even number of values
@@ -61,10 +63,9 @@
 //
 // Possible capability not yet implemented; -
 // 1. --skip=<n> to skip n lines from the start of each file
-// 2. --scientific to force 1.0e1 type output formatting
-// 3. Higher moments like skew and kurtosis
-// 4. Output to a file
-// 5. Naive Histogram output
+// 2. Higher moments like skew and kurtosis
+// 3. Output to a file
+// 4. Naive Histogram output
 //
 
 // MARK: - Imports
@@ -89,35 +90,37 @@ public class bfbs {
         boolean hasHeader = false;
         boolean hasHelp = false;
         boolean hasQuiet = false;
+        boolean hasEngineering = false;
         List<String> fileNames = new ArrayList<>();
-
-        // 🎉 Program info banner
-        System.out.println("bfbs 0v11 (2026-04-06) - Big Float Basic Statistics in Java");
 
         // Parse arguments
         for (String arg : args) {
             if (arg.startsWith("--precision=")) {
                 try {
                     precision = Integer.parseInt(arg.substring("--precision=".length()));
-                    if (precision > 1024) {    // limit user input
-                        precision = 1024;
-                    } else if (precision < 1) {
-                        precision = 1;
-                    }
                 } catch (NumberFormatException e) {
                     System.err.println("Error: Invalid --precision value. Must be an integer.");
+                    return;
+                }
+            } else if (arg.startsWith("-P=")) {
+                try {
+                    precision = Integer.parseInt(arg.substring("-P=".length()));
+                } catch (NumberFormatException e) {
+                    System.err.println("Error: Invalid -P (precision) value. Must be an integer.");
                     return;
                 }
             } else if (arg.startsWith("--round=")) {
                 try {
                     roundDigits = Integer.parseInt(arg.substring("--round=".length()));
-                    if (roundDigits > 1024) {       // limit user input
-                        roundDigits = 1024;
-                    } else if (roundDigits < -1) {
-                        roundDigits = -1;             // -1 = full precision
-                    }
                 } catch (NumberFormatException e) {
                     System.err.println("Error: Invalid --round value. Must be an integer.");
+                    return;
+                }
+            } else if (arg.startsWith("-r=")) {
+                try {
+                    roundDigits = Integer.parseInt(arg.substring("-r=".length()));
+                } catch (NumberFormatException e) {
+                    System.err.println("Error: Invalid -r (round) value. Must be an integer.");
                     return;
                 }
             } else if (arg.equalsIgnoreCase("--quiet")) {
@@ -128,6 +131,10 @@ public class bfbs {
                 hasHeader = true;
             } else if (arg.equalsIgnoreCase("-H")) {
                 hasHeader = true;
+            } else if (arg.equalsIgnoreCase("--engineering")) {
+                hasEngineering = true;
+            } else if (arg.equalsIgnoreCase("-e")) {
+                hasEngineering = true;
             } else if (arg.equalsIgnoreCase("--help")) {
                 hasHelp = true;
             } else if (arg.equalsIgnoreCase("-h")) {
@@ -140,24 +147,38 @@ public class bfbs {
             }
         }
 
+        if (precision > 1024) {    // limit user input
+            precision = 1024;
+        } else if (precision < 1) {
+            precision = 1;
+        }
+
+        if (roundDigits > 1024) {       // limit user input
+            roundDigits = 1024;
+        } else if (roundDigits < -1) {
+            roundDigits = -1;             // -1 = full precision
+        }
+
         if (hasHelp || fileNames.isEmpty()) {
             if (fileNames.isEmpty()) {
                 System.out.println("\nError: No input files specified. Please provide the name of at least one CSV file to process.");
             }
-            System.err.println("\nUsage; -\n java bfbs [--precision=<n>] [--round=<n>] [--has-header] [--quiet] [--help] <file1.csv> [file2.csv] ...");
+            System.err.println("\nUsage; -\n java bfbs [--has-header] [--engineering] [--precision=<n>] [--round=<n>]  [--quiet] [--help] <file1.csv> [file2.csv] ...");
             System.err.println(" Where; -");
-            System.err.println("  --precision=<n>     : Set the precision (number of digits) for calculations (default: 40)");
-            System.err.println("  --round=<n>         : Set the number of decimal places to round output to (default: full precision)");
-            System.err.println("  --has-header or -H  : Indicates that the first row of each CSV file contains column headers");
-            System.err.println("  --quiet or -q       : Suppress timing info and version output");
-            System.err.println("  --help or -h        : Show this help message and exit");
+            System.err.println("  --engineering or -e   : Output results in Engineering format (e.g. 12.3e3)");
+            System.err.println("  --has-header or -H    : Indicates that the first row of each CSV file contains column headers");
+            System.err.println("  --help or -h          : Show this help message and exit");
+            System.err.println("  --precision=<n> or -P=<n> : Set the precision (number of digits) for calculations (default: 40)");
+            System.err.println("  --quiet or -q         : Suppress timing info and version output");
+            System.err.println("  --round=<n> or -r=<n> : Set the number of decimal places to round output to (default: full precision)");
             System.err.println("  <file1.csv> [file2.csv] ... : One or more CSV files to process\n");
             return;
         }
 
-        // 🎉 Further Program info banner
+        // 🎉 Program info banner if not suppressed by --quiet
         String javaVersion = System.getProperty("java.version");
         if (!hasQuiet) {
+            System.out.println("bfbs 0v12 (2026-04-19) - Big Decimal Basic Statistics in Java");
             System.out.println("Info: bfbs.java interpreted by Java version: " + javaVersion);
             System.out.println("Info: Using java.math.BigDecimal (standard library)");
         }
@@ -168,6 +189,7 @@ public class bfbs {
         } else {
             System.out.println("Info: Output rounding: full precision");
         }
+        System.out.println("Info: Output in engineering format: " + hasEngineering);
         System.out.println();    // spacer line
 
         MathContext mc = new MathContext(precision, RoundingMode.HALF_UP);
@@ -192,7 +214,7 @@ public class bfbs {
                         : "Column " + (colIndex + 1);
 
                 System.out.println(label + ":");
-                printStats(column, mc, roundDigits);
+                printStats(column, mc, roundDigits, hasEngineering);
                 System.out.println();
             }
         }
@@ -252,7 +274,7 @@ public class bfbs {
 
     // MARK: - Print Stats
 
-    private static void printStats(List<BigDecimal> data, MathContext mc, int roundDigits) {
+    private static void printStats(List<BigDecimal> data, MathContext mc, int roundDigits, boolean scientific) {
         int n = data.size();
 
         BigDecimal min = data.get(0);
@@ -294,25 +316,31 @@ public class bfbs {
 
         // Display results (rounded if requested)
         System.out.println("  Count         : " + n);
-        System.out.println("  Minimum       : " + format(min, roundDigits));
-        System.out.println("  Mean          : " + format(mean, roundDigits));
-        System.out.println("  Median        : " + format(median, roundDigits));
-        System.out.println("  Maximum       : " + format(max, roundDigits));
-        System.out.println("  Range         : " + format(range, roundDigits));
-        System.out.println("  Sum           : " + format(sum, roundDigits));
-        System.out.println("  Variance (s²) : " + format(sampleVariance, roundDigits));
-        System.out.println("  Std. Dev. (s) : " + format(sampleStdDev, roundDigits));
-        System.out.println("  Variance (σ²) : " + format(populationVariance, roundDigits));
-        System.out.println("  Std. Dev. (σ) : " + format(populationStdDev, roundDigits));
+        System.out.println("  Minimum       : " + format(min, roundDigits, scientific));
+        System.out.println("  Mean          : " + format(mean, roundDigits, scientific));
+        System.out.println("  Median        : " + format(median, roundDigits, scientific));
+        System.out.println("  Maximum       : " + format(max, roundDigits, scientific));
+        System.out.println("  Range         : " + format(range, roundDigits, scientific));
+        System.out.println("  Sum           : " + format(sum, roundDigits, scientific));
+        System.out.println("  Variance (s²) : " + format(sampleVariance, roundDigits, scientific));
+        System.out.println("  Std. Dev. (s) : " + format(sampleStdDev, roundDigits, scientific));
+        System.out.println("  Variance (σ²) : " + format(populationVariance, roundDigits, scientific));
+        System.out.println("  Std. Dev. (σ) : " + format(populationStdDev, roundDigits, scientific));
     }
 
     // MARK: - Utility methods
 
-    private static String format(BigDecimal value, int roundDigits) {
+    private static String format(BigDecimal value, int roundDigits, boolean engineering) {
+        BigDecimal formattedValue = value;
+
         if (roundDigits >= 0) {
-            return value.setScale(roundDigits, RoundingMode.HALF_UP).toPlainString();
+            formattedValue = value.setScale(roundDigits, RoundingMode.HALF_UP);
         }
-        return value.toPlainString();
+        if (engineering) {
+            return formattedValue.toEngineeringString();
+        } else {
+            return formattedValue.toString();
+        }
     }
 
     public static BigDecimal sqrt(BigDecimal value, MathContext mc) {

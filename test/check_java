@@ -1,0 +1,15 @@
+#! /bin/sh
+#
+# check_java last edited on Sat Feb 28 17:04:17 2026 
+#
+# Test against known data
+#
+echo 1. Test predefined test against known correct results
+#
+rm -f tstResults_java
+#
+# redirect both stdout and stderr output to tstResults file
+#
+./chk_java --quiet > tstResults_java 2>&1
+diff -s tstResults_java correctResults_java
+#

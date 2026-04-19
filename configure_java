@@ -1,0 +1,35 @@
+#! /bin/bash
+#
+# C O N F I G U R E _ S W I F T
+#
+# configure last edited on Sun Apr  5 17:05:41 2026 
+#
+NAME1=bfbs
+#
+OP_FILE_NAME=Makefile
+COMPILER="javac"
+OPTIONS=""
+LNK_OPTIONS=""
+RELEASE_LNK_OPTIONS=""
+TRGT=${NAME1}.class
+SRC1=${NAME1}.java
+#
+# Determine generic OS name, e.g. 'darwin'
+OS_FAMILY="${OSTYPE%[0-9][0-9]}"
+#
+echo "$TRGT: $SRC1" > $OP_FILE_NAME
+echo -e "\t$COMPILER $OPTIONS "'$^'" $LNK_OPTIONS -o "'$@' >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "check: $TRGT" >> $OP_FILE_NAME
+echo -e "\tcd test; ./check_java" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "chk: $TRGT" >> $OP_FILE_NAME
+echo -e "\tcd test; ./chk_java" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "clean:" >> $OP_FILE_NAME
+echo -e "\trm -f $TRGT" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#

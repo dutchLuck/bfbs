@@ -76,14 +76,14 @@ echo "${TEN_PLUSS} Shell got Return code number $? for 4th NIST numerical accura
 #
 # Test multiple data file handling and smaller number of output digits
 echo ""
-echo "${TEN_PLUSS} $EXE --precision 320 --digits 80 $1 $2 $3 $4 $5 $6 $7 $8 $9 NIST_StRD_NumAcc?.dat  +++NIST numerical accurracy files of large close numbers${TEN_PLUSS}"
-$EXE --precision 320 --digits 80 $1 $2 $3 $4 $5 $6 $7 $8 $9 NIST_StRD_NumAcc?.dat
+echo "${TEN_PLUSS} $EXE --precision 320 --print_digits 80 $1 $2 $3 $4 $5 $6 $7 $8 $9 NIST_StRD_NumAcc?.dat  +++NIST numerical accurracy files of large close numbers${TEN_PLUSS}"
+$EXE --precision 320 --print_digits 80 $1 $2 $3 $4 $5 $6 $7 $8 $9 NIST_StRD_NumAcc?.dat
 echo "${TEN_PLUSS} Shell got Return code number $? for NIST numerical accuracy files ${TEN_PLUSS}"
 #
 # Test multiple data file handling including a missing file
 echo ""
-echo "${TEN_PLUSS} $EXE $1 $2 $3 $4 $5 $6 $7 $8 $9 --precision 320 --digits 80 non_existent_file.csv ./data.csv  +++Handles non-existent file check${TEN_PLUSS}"
-$EXE $1 $2 $3 $4 $5 $6 $7 $8 $9 --precision 320 --digits 80 non_existent_file.csv ./data.csv
+echo "${TEN_PLUSS} $EXE $1 $2 $3 $4 $5 $6 $7 $8 $9 --precision 320 --print_digits 80 non_existent_file.csv ./data.csv  +++Handles non-existent file check${TEN_PLUSS}"
+$EXE $1 $2 $3 $4 $5 $6 $7 $8 $9 --precision 320 --print_digits 80 non_existent_file.csv ./data.csv
 echo "${TEN_PLUSS} Shell got Return code number $? for Handles non-existent file options${TEN_PLUSS}"
 #
 # Test usage messages

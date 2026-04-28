@@ -2,7 +2,7 @@
 #
 # C O N F I G U R E _ R U S T
 #
-# configure last edited on Sat Sep 27 22:13:13 2025 
+# configure_rust last edited on Mon Apr 27 19:38:16 2026 
 #
 NAME1=bfbs
 #
@@ -19,17 +19,21 @@ echo -e "\t$COMPILER $OPTIONS $LNK_OPTIONS" >> $OP_FILE_NAME
 echo -e "\trsync -vut target/debug/${NAME1} ./$TRGT" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
-echo "check: $TRGT" >> $OP_FILE_NAME
+echo "check:" >> $OP_FILE_NAME
 echo -e "\tcd test; ./check_rust" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
-echo "chk: $TRGT" >> $OP_FILE_NAME
+echo "chk:" >> $OP_FILE_NAME
 echo -e "\tcd test; ./chk_rust" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "clean:" >> $OP_FILE_NAME
-echo -e "\tcargo clean" >> $OP_FILE_NAME
 echo -e "\trm -f $TRGT target/release/${NAME1}" >> $OP_FILE_NAME
+echo -e "\trm -f $TRGT target/debug/${NAME1}" >> $OP_FILE_NAME
+echo "" >> $OP_FILE_NAME
+#
+echo "cargo_clean: clean" >> $OP_FILE_NAME
+echo -e "\tcargo clean" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "debug: clean" >> $OP_FILE_NAME

@@ -1,0 +1,130 @@
+#! /bin/bash
+#
+# C H E C K _ A L L
+#
+# check_all last edited on Tue Apr 28 14:18:03 2026 
+#
+# Script to check validity of all the different language
+# source files by trying to compile them or interpret them
+# and then check their output against the expected output.
+#
+function print_1_label_line {
+ echo -e "================\033[1;35m $1 \033[0m====================="
+}
+#
+function print_2_label_line {
+ echo -e "==========\033[1;32m $1 \033[0m======\033[1;31m $2 $3 $4 $5\033[0m====================="
+}
+#
+function printSeparator {
+ echo ""
+ print_2_label_line $1 $2 $3 $4 $5
+}
+#
+# checkInterpreted checks if the configure script for the language exists and is executable,
+# then it checks if the required interpreter is available. If both conditions are met,
+# it runs the configure script and then runs the check target to verify the output.
+#
+# checkInterpreted takes two arguments: the language name and the interpreter command.
+#
+function checkInterpreted {
+ printSeparator $1 "check"
+ if [ -x "./configure_$1" ]; then
+  if command -v $2 &> /dev/null; then
+   ./configure_$1
+   make check
+  else
+   echo -e "\n\033[1;31m $2 interpreter\033[0m not found, skipping check for \033[1;35m $1 \033[0m"
+  fi
+ else
+  echo -e "\n\033[1;31m configure_$1\033[0m not found or not executable, skipping check for \033[1;35m $1 \033[0m"
+ fi
+}
+#
+# checkCompiled checks if the configure script for the language exists and is executable,
+# then it runs it to build the project. If the build is successful and the expected binary
+# is found and executable, it runs the check target to verify the output. If any of these steps fail,
+# it prints an appropriate message and skips the check for that language.
+#
+# Only 1 argument is needed for checkCompiled, which is the language name,
+# and it assumes the binary will be named bfbs_<language>.
+#
+function checkCompiled {
+ printSeparator $1 "build and check"
+ if [ -x "./configure_$1" ]; then
+  ./configure_$1
+  make release
+  if [ -x "./bfbs_$1" ]; then
+   print_1_label_line "check_$1"
+   make check
+  else
+   echo -e "\033[1;31m bfbs_$1\033[0m not found or not executable, skipping check for \033[1;35m $1 \033[0m"
+  fi
+ else
+  echo -e "\033[1;31m configure_$1\033[0m not found or not executable, skipping check for \033[1;35m $1 \033[0m"
+ fi
+}
+#
+# Now we can use the checkCompiled and checkInterpreted functions to check all the languages,
+# except a couple of special cases (e.g. java which could have both compile and interpret phases).
+#
+checkCompiled "cpp"
+#
+checkInterpreted "deno" "deno"
+#
+checkCompiled "fortran"
+#
+checkCompiled "go"
+#
+if [ -x "./configure_java" ]; then
+ printSeparator "java" "build and check"
+ ./configure_java
+ make
+ if [ -e "./bfbs.class" ]; then
+  if command -v java &> /dev/null; then
+   result=`java -v 2>&1 | grep "Unable to locate a Java Runtime."`
+   if [ -n "$result" ]; then
+     echo -e "\n\033[1;31m java runtime\033[0m not found, skipping check for \033[1;35m java \033[0m"
+   else
+     print_1_label_line "check_java"
+     make check
+   fi
+  else
+   echo -e "\n\033[1;31m java interpreter\033[0m not found, skipping check for \033[1;35m java \033[0m"
+  fi
+ else
+  echo -e "\n\033[1;31m bfbs.class\033[0m not found, skipping check for \033[1;35m java \033[0m"
+ fi
+else
+ print_1_label_line "java"
+ echo -e "\033[1;31m configure_java\033[0m not found or not executable, skipping check for \033[1;35m java \033[0m"
+fi
+#
+checkInterpreted "julia" "julia"
+#
+checkInterpreted "perl" "perl"
+#
+checkInterpreted "python" "python3"
+#
+checkInterpreted "Rscript" "Rscript"
+#
+checkInterpreted "ruby" "ruby"
+#
+checkCompiled "rust"
+#
+if [ -x "./configure_swift" ]; then
+ printSeparator "swift" "build and check"
+ ./configure_swift
+ make clean
+ make
+ if [ -x "./bfbs_swift" ]; then
+  print_1_label_line "check_swift"
+  make check
+ else
+  print_1_label_line "swift"
+  echo -e "\033[1;31m bfbs_swift\033[0m not found or not executable, skipping check for \033[1;35m swift \033[0m"
+ fi
+fi
+#
+checkInterpreted "tcl" "tclsh"
+#

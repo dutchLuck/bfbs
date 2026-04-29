@@ -1,17 +1,18 @@
 #! /bin/sh
 #
-# C H K _ P E R L
+# C H K _ D E C I M A L
 #
-# chk_perl last edited on Wed Apr 15 20:08:10 2026 as version 0v1
+# chk_decimal last edited on Wed Apr 15 20:08:10 2026 as version 0v1
 #
 # To redirect both stdout and stderr to a file, use ampersand redirect operation, for example; -
-#  ./chk_perl &> outputFile
+#  ./chk_decimal perl ../bfbs.pl --quiet &> correctResults_perl
 #
 
-# 0v1 Added test cases for handling of files with no data, files with only one line of data,
-#     and files with a header but no data, with appropriate checks and warnings.
+#
+# 0v0 Initial version created from chk_perl 0v1.
+#
 
-EXE="perl ../bfbs.pl $1 $2 $3 $4 $5 $6 $7 $8 $9"
+EXE="$1 $2 $3 $4 $5 $6 $7 $8 $9"
 TEN_PLUSS=++++++++++
 #
 # Test default case: read a CSV file and output stats with default number of digits

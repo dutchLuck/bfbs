@@ -23,7 +23,7 @@ echo -e "\tcd test; ./check_perl" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "chk: $TRGT" >> $OP_FILE_NAME
-echo -e "\tcd test; ./chk_perl" >> $OP_FILE_NAME
+echo -e "\tcd test; ./chk_decimal perl ../bfbs.pl" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "clean:" >> $OP_FILE_NAME

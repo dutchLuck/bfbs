@@ -1,6 +1,6 @@
 #! /bin/sh
 #
-# check last edited on Sat Mar  7 09:25:18 2026 
+# check last edited on Wed Apr 29 22:40:44 2026 
 #
 # Test known data
 #
@@ -9,6 +9,6 @@ echo 1. Test predefined test against known correct results
 rm -f tstResults_tcl
 #
 # redirect both stdout and stderr output to tstResults file
-./chk_tcl --quiet > tstResults_tcl 2>&1
+./chk_decimal tclsh ../bfbs.tcl --quiet > tstResults_tcl 2>&1
 diff -s tstResults_tcl correctResults_tcl
 #

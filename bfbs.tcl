@@ -2,7 +2,7 @@
 #
 # B F B S . T C L
 #
-# bfbs.tcl last edited on Wed Apr  8 21:15:04 2026 as 0.1.1
+# bfbs.tcl last edited on Wed Apr 29 23:13:55 2026 as 0.1.2
 
 # This script reads the columns of data contained in one or more
 # CSV files and outputs the basic statistics of each column. It
@@ -31,6 +31,7 @@
 # 2. AI seems to have over-developed it and included excess lines of code
 # 3. May prove to be tcl version 8.5 or 8.6 specific
 
+# 0.1.2  Fixed sample variance and standard deviation calculation for sample size of 1
 # 0.1.1  Tweaked the format of the print-out statements
 # 0.1.0  Original version of bfbs.tcl
 
@@ -41,7 +42,7 @@ package require math::bigfloat
 set start_time [clock milliseconds]
 
 # script version
-set script_version "0.1.1"
+set script_version "0.1.2"
 
 # ---- Command line argument processing ----
 
@@ -63,7 +64,6 @@ proc helpMsg {cmd} {
     puts stderr "   -q / --quiet     suppress timing and header output"
     puts stderr "   -v / --version   print version message and exit\n"
 }
-
 
 for {set i 0} {$i < $argc} {incr i} {
     set arg [lindex $argv $i]
@@ -348,8 +348,13 @@ proc processFile {fname precision} {
             set mean2 [math::bigfloat::mul $sum $sum]
             set ex2 [math::bigfloat::div $mean2 $n]
             set mean2  [math::bigfloat::sub $sumsq $ex2]
-            set var  [math::bigfloat::div $mean2 $n_m_1]
-            set var [math::bigfloat::add [math::bigfloat::fromstr "0.0" $precision] $var]
+            if {$count == 1} {
+                set var [math::bigfloat::fromstr "0.0" $precision]
+                puts "Column [expr {$i+1}]: Insufficient numeric data to calculate sample variance and standard deviation"
+            } else {
+                set var  [math::bigfloat::div $mean2 $n_m_1]
+                set var [math::bigfloat::add [math::bigfloat::fromstr "0.0" $precision] $var]
+            }
         }
 
         # std deviation = sqrt(variance)

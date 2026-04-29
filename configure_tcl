@@ -15,7 +15,7 @@ SRC1=$NAME1.tcl
 #
 #
 echo "$TRGT: configure_tcl Makefile" > $OP_FILE_NAME
-echo -e "\ttclsh $SRC1 --version" >> $OP_FILE_NAME
+echo -e "\t${COMPILER} ${SRC1} --version" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "check: $TRGT" >> $OP_FILE_NAME
@@ -23,7 +23,7 @@ echo -e "\tcd test; ./check_tcl" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "chk: $TRGT" >> $OP_FILE_NAME
-echo -e "\tcd test; ./chk_tcl" >> $OP_FILE_NAME
+echo -e "\tcd test; ./chk_decimal ${COMPILER} ../${SRC1}" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "clean:" >> $OP_FILE_NAME
@@ -31,14 +31,14 @@ echo -e "\trm -f *.tmp" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "debug:" >> $OP_FILE_NAME
-echo -e "\t$COMPILER $SRC1 --debug --verbose" >> $OP_FILE_NAME
+echo -e "\t${COMPILER} ${SRC1} --debug --verbose" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "version:" >> $OP_FILE_NAME
-echo -e "\t$COMPILER $SRC1 --version" >> $OP_FILE_NAME
+echo -e "\t${COMPILER} ${SRC1} --version" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "help:" >> $OP_FILE_NAME
-echo -e "\t$COMPILER $SRC1 --help" >> $OP_FILE_NAME
+echo -e "\t${COMPILER} ${SRC1} --help" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #

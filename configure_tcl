@@ -2,7 +2,12 @@
 #
 # C O N F I G U R E _ T C L
 #
-# configure_tcl last edited on Sat Mar  7 10:21:19 2026 
+# configure_tcl last edited on Wed Apr 29 23:57:27 2026 
+#
+# This file is used to generate a Makefile for the tcl implementation of bfbs.
+#
+# 0v1 - updated to use chk_decimal for make check and make chk targets
+# 0v0 - initial version
 #
 NAME1=bfbs
 #

@@ -1,6 +1,6 @@
 #! /bin/sh
 #
-# check_ruby last edited on Sat Feb 28 15:27:29 2026 
+# check_ruby last edited on Wed Apr 29 23:59:46 2026 
 #
 # Test against known data
 #
@@ -10,6 +10,6 @@ rm -f tstResults_ruby
 #
 # redirect both stdout and stderr output to tstResults file
 #
-./tst_ruby > tstResults_ruby 2>&1
+./chk_decimal ruby ../bfbs.rb --quiet > tstResults_ruby 2>&1
 diff -s tstResults_ruby correctResults_ruby
 #

@@ -2,7 +2,12 @@
 #
 # C O N F I G U R E _ R U B Y
 #
-# configure_ruby last edited on Sat Feb 28 16:16:15 2026 
+# configure_ruby last edited on Wed Apr 29 23:58:25 2026 
+#
+# This file is used to generate a Makefile for the ruby implementation of bfbs.
+#
+# 0v1 - updated to use chk_decimal for make check and make chk targets
+# 0v0 - initial version
 #
 NAME1=bfbs
 #
@@ -15,7 +20,7 @@ SRC1=$NAME1.rb
 #
 #
 echo "$TRGT: configure_ruby Makefile" > $OP_FILE_NAME
-echo -e "\truby --version" >> $OP_FILE_NAME
+echo -e "\t${COMPILER} --version" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "check: $TRGT" >> $OP_FILE_NAME
@@ -23,7 +28,7 @@ echo -e "\tcd test; ./check_ruby" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "chk: $TRGT" >> $OP_FILE_NAME
-echo -e "\tcd test; ./chk_ruby" >> $OP_FILE_NAME
+echo -e "\tcd test; ./chk_decimal ${COMPILER} ../${SRC1}" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "clean:" >> $OP_FILE_NAME
@@ -31,14 +36,14 @@ echo -e "\trm -f *.tmp" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "debug:" >> $OP_FILE_NAME
-echo -e "\t$COMPILER $SRC1 --debug --verbose" >> $OP_FILE_NAME
+echo -e "\t${COMPILER} ${SRC1} --debug --verbose" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "version:" >> $OP_FILE_NAME
-echo -e "\t$COMPILER $SRC1 --version" >> $OP_FILE_NAME
+echo -e "\t${COMPILER} ${SRC1} --version" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #
 echo "help:" >> $OP_FILE_NAME
-echo -e "\t$COMPILER $SRC1 --help" >> $OP_FILE_NAME
+echo -e "\t${COMPILER} ${SRC1} --help" >> $OP_FILE_NAME
 echo "" >> $OP_FILE_NAME
 #

@@ -4,7 +4,7 @@
 #
 # Big Float Basic Statistics
 #
-# bfbs.jl last updated on Mon Mar 30 23:01:45 2026 by O.H. as 0v13
+# bfbs.jl last updated on Mon May 11 11:18:25 2026 by O.H. as 0v14
 #
 # Descendant of readdatafile.jl 0v1
 #
@@ -36,6 +36,7 @@
 ##
 
 #
+# 0v14 removed duplicate calc of median for row stats
 # 0v13 added information on mantissa bits and approx equivalent decimal digits
 # 0v12 added --quiet option to suppress output of time and version information
 #      and added population variance & standard deviation calculations to output
@@ -161,7 +162,6 @@ function row_stats(mat::Matrix{BigFloat})
     row_stds  = [std(row; corrected = true) for row in eachrow(mat)]	# n-1 divisor for sample standard deviation
     row_varn  = [var(row; corrected = false) for row in eachrow(mat)]	# n divisor for population variance
     row_stdn  = [std(row; corrected = false) for row in eachrow(mat)]	# n divisor for population standard deviation
-    row_medians  = [median(row) for row in eachrow(mat)]
     return row_cnts, row_mins, row_medians, row_maxs, row_ranges, row_means, row_sums, row_vars, row_stds, row_varn, row_stdn, row_medians
 end
 
@@ -278,7 +278,7 @@ function main()
 		verbose = false		# --quiet command line argument overrides --verbose
 	else
 		# Announce bfbs version if --quiet is not active
-		println("bfbs version 0v13 (2026-03-30)")
+		println("bfbs version 0v14 (2026-05-11)")
 		verbose = args["verbose"]	# --verbose command line argument
 	end
 	comment_delimiter_string = get(args, "comment_char", nothing)	# --comment_char command line argument
